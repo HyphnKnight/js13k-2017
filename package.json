@@ -4,8 +4,8 @@
   "description": "js13k Game Submission Edit",
   "main": "index.js",
   "scripts": {
-    "compile": "rollup src/index.js --format iife --output .output/script.js",
-    "compress": "minify .output -d dist",
+    "compile": "rollup src/index.js --format iife --output docs/script.js",
+    "compress": "minify docs -d dist",
     "zip": "zip -r Alter.zip dist",
     "test-size": "du -h Alter.zip",
     "build": "npm run compile && npm run compress && npm run zip && npm run test-size"
