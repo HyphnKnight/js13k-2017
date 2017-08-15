@@ -1,6 +1,4 @@
-import { lerp as nLerp, round, sign, sqr } from '../math';
-import { is, isNumber } from '../is';
-export const isVector2d = is(u => isNumber(u[0]) && isNumber(u[1]));
+import { lerp as nLerp, round, sign, sqr } from '../math/index.js';
 export const add = (vecA, vecB) => ([
     vecA[0] + vecB[0],
     vecA[1] + vecB[1]

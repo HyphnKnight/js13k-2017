@@ -1,12 +1,6 @@
-import { rotate, scaleSet, subtractListSet, averageList, rotateList, addListSet } from '../vector/tuple';
-import { uniqueId } from '../string';
-import { times, flatten } from '../array';
-import { is } from '../is';
-/* isGeometry */
-export const isPoint = is(x => x.shape === 'Point');
-export const isCircle = is(x => x.shape === 'Circle');
-export const isRectangle = is(x => x.shape === 'Rectangle');
-export const isPolygon = is(x => x.shape === 'Polygon');
+import { rotate, scaleSet, subtractListSet, averageList, rotateList, addListSet } from '../vector/index';
+import { uniqueId } from '../string/index';
+import { times, flatten } from '../array/index';
 /* Utilities */
 export const getRectanglePoints = (width, height) => ([
     -width / 2, +height / 2,

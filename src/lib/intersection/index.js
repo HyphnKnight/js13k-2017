@@ -1,5 +1,5 @@
-import { subtract, magnitudeSqr, add, addSet, dot, cross, scale, lerp, } from '../vector';
-import { sign, round, sqr } from '../math';
+import { subtract, magnitudeSqr, add, addSet, dot, cross, scale, lerp, } from '../vector/index';
+import { sign, round, sqr } from '../math/index';
 /* -1 === left, 0 === aligned, 1 === right */
 export const pointRelationToLine = (point, line) => sign((line[2] - line[0]) * (point[1] - line[1]) - (line[3] - line[1]) * (point[0] - line[0]));
 export const isPointInCircle = (point, position, radius) => magnitudeSqr(subtract(point, position)) <= sqr(radius);

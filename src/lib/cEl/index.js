@@ -2,10 +2,10 @@
     Nestable UI elements that instead of being dom nodes are instead
     are rendered to a canvas element.
  */
-import { createRectangle, } from '../geometry';
-import { createPalette, Transform } from '../canvas';
-import { rotateListAround, addListSet, rotate as rotateVec, addSet, } from '../vector';
-import { isPointInCircle, isPointInAlignedRectangle, isPointInPolygon, isCircleInAlignedRectangle, isAlignedRectangleInAlignedRectangle, isPolygonInPolygon, } from '../intersection';
+import { createRectangle, } from '../geometry/index.js';
+import { createPalette, Transform } from '../canvas/index.js';
+import { rotateListAround, addListSet, rotate as rotateVec, addSet, } from '../vector/index.js';
+import { isPointInCircle, isPointInAlignedRectangle, isPointInPolygon, isCircleInAlignedRectangle, isAlignedRectangleInAlignedRectangle, isPolygonInPolygon, } from '../intersection/index.js';
 export const onMouseDownCollection = new Map();
 export const onMouseMoveCollection = new Map();
 export const onMouseUpCollection = new Map();
@@ -77,27 +77,32 @@ const isInside = (point) => (geometry) => {
         default: return false;
     }
 };
-const interactionHandler = (collection) => (evt) => {
-    if (!!collection.size) {
-        const position = convertEventsToPosition(evt);
-        const isPositionInside = isInside(position);
-        [...collection.values()]
-            .filter(([_cEl, geometry]) => isPositionInside(geometry))
-            .forEach(([cEl, _geo, effect]) => effect(cEl, position));
-    }
-};
+const interactionHandler =
+    (collection) =>
+        (evt) => {
+            if (!!collection.size) {
+                const position = convertEventsToPosition(evt);
+                const isPositionInside = isInside(position);
+                [...collection.values()]
+                    .filter(([_cEl, geometry]) => !geometry || isPositionInside(geometry))
+                    .forEach(([cEl, _geo, effect]) => effect(cEl, position));
+            }
+        };
 export const renderUI = (canvas, base) => {
     const palette = createPalette(canvas.getContext('2d'));
     palette.clear();
-    canvas.addEventListener(isTouch
-        ? 'ontouchstart'
-        : 'mousedown', interactionHandler(onMouseDownCollection));
-    canvas.addEventListener(isTouch
-        ? 'ontouchmove'
-        : 'mousedown', interactionHandler(onMouseMoveCollection));
-    canvas.addEventListener(isTouch
-        ? 'ontouchend'
-        : 'mousedown', interactionHandler(onMouseUpCollection));
+    canvas.addEventListener(
+        isTouch ? 'ontouchstart' : 'mousedown',
+        interactionHandler(onMouseDownCollection),
+    );
+    canvas.addEventListener(
+        isTouch ? 'ontouchmove' : 'mousemove',
+        interactionHandler(onMouseMoveCollection),
+    );
+    canvas.addEventListener(
+        isTouch ? 'ontouchend' : 'mouseup',
+        interactionHandler(onMouseUpCollection),
+    );
     return {
         palette,
         render: () => renderCEl(new Transform(), palette)(base),

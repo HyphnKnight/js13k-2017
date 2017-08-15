@@ -1,4 +1,6 @@
-import { subtractList, } from '../vector';
+import { round } from '../math/index.js';
+import { subtractList, } from '../vector/index.js';
+import { uniqueId } from '../string/index';
 const originVector = [0, 0];
 const translate = (ctx) => (vec) => ctx.translate(round(vec[0], 0), round(vec[1], 0));
 const rotate = (ctx) => (angle) => ctx.rotate(angle);
@@ -17,21 +19,20 @@ const drawLine = (ctx) => (points, angle = 0) => {
     ctx.save();
     translate(ctx)(origin);
     rotate(ctx)(angle);
-    moveTo(ctx)(originVector);
+    moveTo(ctx)([0, 0]);
     for (let i = 0; i < adjustedPoints.length; i += 2) {
         lineTo(ctx)([adjustedPoints[i], adjustedPoints[i + 1]]);
     }
     ctx.restore();
 };
 const drawPolygon = (ctx) => (position, points, angle = 0) => {
-    const first = [
-        points[points.length - 2],
-        points[points.length - 1]
-    ];
     ctx.save();
     translate(ctx)(position);
     rotate(ctx)(angle);
-    moveTo(ctx)(first);
+    moveTo(ctx)([
+        points[points.length - 2],
+        points[points.length - 1]
+    ]);
     for (let i = 0; i < points.length; i += 2) {
         lineTo(ctx)([points[i], points[i + 1]]);
     }
@@ -77,6 +78,7 @@ const strokeLine = stroke(drawLine);
 const strokeArc = stroke(drawArc);
 const strokeText = (ctx) => (fontOptions, vec, text) => {
     ctx.save();
+    ctx.strokeStyle = fontOptions.style || '';
     ctx.font = fontOptions.font || ctx.font;
     ctx.textAlign = fontOptions.textAlign || ctx.textAlign;
     ctx.textBaseline = fontOptions.textBaseline || ctx.textBaseline;
@@ -85,6 +87,7 @@ const strokeText = (ctx) => (fontOptions, vec, text) => {
 };
 const fillText = (ctx) => (fontOptions, vec, text) => {
     ctx.save();
+    ctx.fillStyle = fontOptions.style || '';
     ctx.font = fontOptions.font || ctx.font;
     ctx.textAlign = fontOptions.textAlign || ctx.textAlign;
     ctx.textBaseline = fontOptions.textBaseline || ctx.textBaseline;
@@ -118,3 +121,34 @@ export const createPalette = (ctx) => ({
     clearRect: clearRect(ctx),
     clear: clear(ctx, ctx.canvas)
 });
+
+export class Transform {
+    constructor() {
+        this.position = originVector;
+        this.rotation = 0;
+        this.saved_positions = [];
+        this.saved_rotations = [];
+    }
+    apply(geometry) {
+        const position = [this.position[0], this.position[1]];
+        const rotation = this.rotation;
+        return Object.assign(Object.create(null), geometry, { id: uniqueId(), position, rotation });
+    }
+    save() {
+        this.saved_positions.push([this.position[0], this.position[1]]);
+        this.saved_rotations.push(this.rotation);
+    }
+    restore() {
+        if (this.saved_positions.length > 0) {
+            const pos = this.saved_positions.pop();
+            if (!!pos) {
+                this.position[0] = pos[0];
+                this.position[1] = pos[1];
+            }
+            const rot = this.saved_rotations.pop();
+            if (!!rot || rot === 0) {
+                this.rotation = rot;
+            }
+        }
+    }
+}
