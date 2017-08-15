@@ -1,0 +1,31 @@
+{
+  "name": "js13k-2017",
+  "version": "0.0.0",
+  "description": "js13k Game Submission Edit",
+  "main": "index.js",
+  "scripts": {
+    "compile": "rollup src/index.js --format iife --output .output/script.js",
+    "compress": "minify .output -d dist",
+    "zip": "zip -r Alter.zip dist",
+    "test-size": "du -h Alter.zip",
+    "build": "npm run compile && npm run compress && npm run zip && npm run test-size"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HyphnKnight/js13k-2017.git"
+  },
+  "keywords": [
+    "js13k"
+  ],
+  "author": "Rafe Lepre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HyphnKnight/js13k-2017/issues"
+  },
+  "homepage": "https://github.com/HyphnKnight/js13k-2017#readme",
+  "devDependencies": {
+    "babel-minify": "^0.2.0",
+    "rollup": "^0.47.4",
+    "rollup-plugin-node-resolve": "^3.0.0"
+  }
+}
