@@ -2,12 +2,10 @@
     Nestable UI elements that instead of being dom nodes are instead
     are rendered to a canvas element.
  */
-import { createRectangle, } from '../geometry/tuple';
-import { createPalette, Transform } from '../canvas/tuple';
-import { forEach, filter } from '../array';
-import { rotateListAround, addListSet, rotate as rotateVec, addSet, } from '../vector/tuple';
-import { is } from '../is';
-import { isPointInCircle, isPointInAlignedRectangle, isPointInPolygon, isCircleInAlignedRectangle, isAlignedRectangleInAlignedRectangle, isPolygonInPolygon, } from '../intersection/tuple';
+import { createRectangle, } from '../geometry';
+import { createPalette, Transform } from '../canvas';
+import { rotateListAround, addListSet, rotate as rotateVec, addSet, } from '../vector';
+import { isPointInCircle, isPointInAlignedRectangle, isPointInPolygon, isCircleInAlignedRectangle, isAlignedRectangleInAlignedRectangle, isPolygonInPolygon, } from '../intersection';
 export const onMouseDownCollection = new Map();
 export const onMouseMoveCollection = new Map();
 export const onMouseUpCollection = new Map();
@@ -38,7 +36,7 @@ const renderCEl = (transform, palette) => (el) => {
     ctx.save();
     render && (!geometry || isInWindow(transform.apply(geometry))) && render(palette, el);
     ctx.restore();
-    children && forEach(children, renderCEl(transform, palette));
+    children && children.forEach(renderCEl(transform, palette));
     if (interact) {
         if (interact.onMouseDown) {
             onMouseDownCollection.set(el, [el, geometry && transform.apply(geometry), interact.onMouseDown]);
@@ -64,10 +62,9 @@ const renderCEl = (transform, palette) => (el) => {
 };
 const isTouch = ('ontouchstart' in window);
 const convertEventsToPosition = (evt) => {
-    if (is(evt => !!evt.clientX)(evt)) {
+    if (!!evt.clientX) {
         return [evt.clientX, evt.clientY];
-    }
-    else {
+    } else {
         const touch = evt.touches[0];
         return [touch.clientX, touch.clientY];
     }
@@ -84,29 +81,25 @@ const interactionHandler = (collection) => (evt) => {
     if (!!collection.size) {
         const position = convertEventsToPosition(evt);
         const isPositionInside = isInside(position);
-        forEach(filter([...collection.values()], ([_cEl, geometry]) => isPositionInside(geometry)), ([cEl, _geo, effect]) => effect(cEl, position));
+        [...collection.values()]
+            .filter(([_cEl, geometry]) => isPositionInside(geometry))
+            .forEach(([cEl, _geo, effect]) => effect(cEl, position));
     }
 };
 export const renderUI = (canvas, base) => {
-    if (is(x => !!x)(canvas)) {
-        const context = canvas.getContext('2d');
-        if (is(x => !!x)(context)) {
-            const palette = createPalette(context);
-            palette.clear();
-            canvas.addEventListener(isTouch
-                ? 'ontouchstart'
-                : 'mousedown', interactionHandler(onMouseDownCollection));
-            canvas.addEventListener(isTouch
-                ? 'ontouchmove'
-                : 'mousedown', interactionHandler(onMouseMoveCollection));
-            canvas.addEventListener(isTouch
-                ? 'ontouchend'
-                : 'mousedown', interactionHandler(onMouseUpCollection));
-            return {
-                palette,
-                render: () => renderCEl(new Transform(), palette)(base),
-            };
-        }
-    }
+    const palette = createPalette(canvas.getContext('2d'));
+    palette.clear();
+    canvas.addEventListener(isTouch
+        ? 'ontouchstart'
+        : 'mousedown', interactionHandler(onMouseDownCollection));
+    canvas.addEventListener(isTouch
+        ? 'ontouchmove'
+        : 'mousedown', interactionHandler(onMouseMoveCollection));
+    canvas.addEventListener(isTouch
+        ? 'ontouchend'
+        : 'mousedown', interactionHandler(onMouseUpCollection));
+    return {
+        palette,
+        render: () => renderCEl(new Transform(), palette)(base),
+    };
 };
-//# sourceMappingURL=index.js.map
