@@ -125,6 +125,15 @@ export const VMD = (func) => (...args) => {
     return result;
 };
 export const distance = VMD((vecA, vecB) => magnitude(subtract(vecA, vecB)));
+export const mapList = (list, mod) => {
+    const result = [];
+    for (let i = 0, len = list.length; i < len; i += 2) {
+        const [x, y] = mod([list[i], list[i + 1]]);
+        result[i] = x;
+        result[i + 1] = y;
+    }
+    return result;
+}
 export const addList = (list, mod) => {
     const result = [];
     for (let i = 0, len = list.length; i < len; i += 2) {
