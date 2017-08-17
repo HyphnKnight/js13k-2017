@@ -25,6 +25,7 @@
   "homepage": "https://github.com/HyphnKnight/js13k-2017#readme",
   "devDependencies": {
     "babel-minify": "^0.2.0",
+    "eslint": "^4.4.1",
     "rollup": "^0.47.4",
     "rollup-plugin-node-resolve": "^3.0.0"
   }
