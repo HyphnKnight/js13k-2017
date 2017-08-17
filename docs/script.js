@@ -526,16 +526,16 @@ const renderUI = (canvas, base) => {
 
 // colors
 
-const white = '#fff';
+const white = `#fff`;
 
 // fonts
-const header = 'Arial Black, Gadget, sans-serif';
-const mono = '"Lucida Console", Monaco, monospace';
+const header = `Arial Black, Gadget, sans-serif`;
+const mono = `"Lucida Console", Monaco, monospace`;
 
 // text style
-const title_text = '24px ' + header;
+const title_text = `24px ${  header}`;
 
-const base_text = '12px ' + mono;
+const base_text = `12px ${  mono}`;
 
 const keyCodes = {
 
@@ -671,7 +671,6 @@ const Menu = {
 };
 
 // Reused DOM elements and objects.
-
 
 const c = document.querySelector(`canvas`);
 const ctx = c.getContext(`2d`);
