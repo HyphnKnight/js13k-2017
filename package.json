@@ -4,6 +4,7 @@
   "description": "js13k Game Submission Edit",
   "main": "index.js",
   "scripts": {
+    "start": "rollup --config --watch",
     "compile": "rollup src/index.js --format iife --output docs/script.js",
     "compress": "minify docs -d dist",
     "zip": "zip -r Alter.zip dist",
@@ -26,7 +27,9 @@
   "devDependencies": {
     "babel-minify": "^0.2.0",
     "eslint": "^4.4.1",
-    "rollup": "^0.47.4",
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "rollup": "^0.47.6",
+    "rollup-plugin-livereload": "^0.4.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-serve": "^0.4.0"
   }
 }
