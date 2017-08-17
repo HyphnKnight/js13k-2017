@@ -4,6 +4,6 @@ export const perspective =
     // 2d point
     ([pX, pY]) => ([
       pX + pY * (cX - pX) / (pY + cY) - cX + 160,
-      240 - ((cY + pY) === 0 ? 0 : cZ * pY / (cY + pY)),
+      192 - ((cY + pY) === 0 ? 0 : cZ * pY / (cY + pY)),
       Math.sqrt(Math.pow(cY + pY, 2) + Math.pow((cX - pX), 2)),
     ]);

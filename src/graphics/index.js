@@ -3,11 +3,9 @@ import { createRectangle } from '../lib/geometry/index';
 
 import { Menu } from './menu.js';
 
-const canvas = document.querySelector('canvas');
-canvas.width = 320;
-canvas.height = 240;
+import * as dom from '../dom.js';
 
-const { palette, render } = renderUI(canvas, {
+const { palette, render } = renderUI(dom.c, {
   geometry: createRectangle([0, 0], 0, window.innerWidth, window.innerHeight),
   children: [Menu],
 });

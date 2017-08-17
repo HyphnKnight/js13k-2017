@@ -148,7 +148,18 @@ const rotateList = (list, rotation) => {
 
 const rotateListAround = (list, point, rotation) => addList(rotateList(subtractList(list, point), rotation), point);
 
+
+
+
+
+
+//# sourceMappingURL=tuple.js.map
+
 const uniqueId = () => Math.random().toString(36).substr(2, 9) + Math.random().toString(36).substr(2, 9);
+
+//# sourceMappingURL=quickSort.js.map
+
+//# sourceMappingURL=mergeSort.js.map
 
 function find(array, func) {
     let i = -1;
@@ -160,7 +171,38 @@ function find(array, func) {
     return null;
 }
 
-/* Utilities */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//# sourceMappingURL=index.js.map
+
 const getRectanglePoints = (width, height) => ([
     -width / 2, +height / 2,
     -width / 2, -height / 2,
@@ -185,6 +227,8 @@ const createRectangle = (position, rotation = 0, width = 1, height = 1, label = 
 
 
 /* Utility Funcs */
+
+//# sourceMappingURL=tuple.js.map
 
 const originVector = [0, 0];
 const translate = (ctx) => (vec) => ctx.translate(round(vec[0], 0), round(vec[1], 0));
@@ -338,7 +382,6 @@ class Transform {
     }
 }
 
-/* -1 === left, 0 === aligned, 1 === right */
 const pointRelationToLine = (point, line) => sign((line[2] - line[0]) * (point[1] - line[1]) - (line[3] - line[1]) * (point[0] - line[0]));
 const isPointInCircle = (point, position, radius) => magnitudeSqr(subtract(point, position)) <= sqr(radius);
 const isPointInAlignedRectangle = (point, position, width, height) => Math.abs(point[0] - position[0]) <= width / 2 &&
@@ -371,6 +414,8 @@ const isPolygonInPolygon = (positionA, pointsA, positionB, pointsB) => {
     }
     return false;
 };
+
+//# sourceMappingURL=tuple.js.map
 
 /*
     Nestable UI elements that instead of being dom nodes are instead
@@ -481,9 +526,16 @@ const renderUI = (canvas, base) => {
 
 // colors
 
+const white = '#fff';
 
+// fonts
+const header = 'Arial Black, Gadget, sans-serif';
+const mono = '"Lucida Console", Monaco, monospace';
 
 // text style
+const title_text = '24px ' + header;
+
+const base_text = '12px ' + mono;
 
 const keyCodes = {
 
@@ -571,73 +623,73 @@ const parseKeyInfo =
 document.body.onkeyup = ({ keyCode }) => parseKeyInfo(keyCode, false);
 document.body.onkeydown = ({ keyCode }) => parseKeyInfo(keyCode, true);
 
-const perspective =
-  ([cX, cY, cZ]) =>
-    ([pX, pY]) => ([
-      (cZ * pY) / (pY + cY),
-      pY / ((cY + pY) / cX - pX),
-    ]);
+let selected_index = 0;
 
-const testRect$1 = createRectangle([0, 0], 0, 100, 100);
-
-const camera = [50, 20, 10];
-
-const calcScreenPosition = perspective(camera);
+const createOption = (index, text, pos) => ({
+  geometry: createRectangle(pos, 0, 140, 14),
+  render: (palette, el) => {
+    const { fillRectangle, strokeRectangle, fillText, ctx } = palette;
+    ctx.font = base_text;
+    const { width } = ctx.measureText(text);
+    el.geometry.width = width + 10;
+    el.geometry.points = getRectanglePoints(el.geometry.width, el.geometry.height);
+    fillText({
+      textBaseline: `middle`,
+      font: base_text,
+      style: white,
+    }, [-width / 2, 0], text);
+  },
+  interact: {
+    onMouseMove: () => selected_index = index,
+    onMouseDown: () => selected_index = index,
+  }
+});
 
 const Menu = {
-  geometry: createRectangle([320 / 2, 120], 0, 140, 40),
+  geometry: createRectangle([160 / 2, 120], 0, 140, 40),
   children: [
-    // createOption(0, 'new game', [0, 48]),
-    // createOption(1, 'continue', [0, 72]),
+    createOption(0, `new game`, [0, 48]),
+    createOption(1, `continue game`, [0, 72]),
   ],
   render: (palette, el) => {
-    const { fillText, fillPolygon, strokePolygon } = palette;
-    strokePolygon(
-      'red',
-      [0, 0],
-      addList(testRect$1.points, testRect$1.position),
+    const { fillText, fillPolygon } = palette;
+    fillText({
+      textBaseline: `middle`,
+      style: white,
+      font: title_text,
+    }, [-65, -8], `A L T E R`);
+    (Date.now() % 600 > 400) && fillPolygon(
+      `white`,
+      selected_index === 0
+        ? [-42, 48]
+        : [-60, 72],
+      [-5, 3, 5, 0, -5, -3]
     );
-    strokePolygon(
-      'green',
-      [0, 0],
-      mapList(
-        addList(testRect$1.points, testRect$1.position),
-        calcScreenPosition,
-      ),
-    );
-    // fillText({
-    //   textBaseline: 'middle',
-    //   style: white,
-    //   font: title_text,
-    // }, [-65, -8], `A L T E R`);
-    // (Date.now() % 600 > 400) && fillPolygon(
-    //   'white',
-    //   [-42, selected_index === 0 ? 48 : 72],
-    //   [-5, 3, 5, 0, -5, -3]
-    // );
-    // (inputs.up || inputs.w) && (selected_index = 0);
-    // (inputs.down || inputs.s) && (selected_index = 1);
+    (inputs.up || inputs.w) && (selected_index = 0);
+    (inputs.down || inputs.s) && (selected_index = 1);
   },
 };
 
-const canvas = document.querySelector('canvas');
-canvas.width = 320;
-canvas.height = 240;
+// Reused DOM elements and objects.
 
-const { palette, render } = renderUI(canvas, {
+
+const c = document.querySelector(`canvas`);
+const ctx = c.getContext(`2d`);
+
+const { palette, render } = renderUI(c, {
   geometry: createRectangle([0, 0], 0, window.innerWidth, window.innerHeight),
   children: [Menu],
 });
 
 palette.ctx.imageSmoothingEnabled = false;
 
-const perspective$1 =
+const perspective =
   // camera coords in 3d space
   ([cX, cY, cZ]) =>
     // 2d point
     ([pX, pY]) => ([
       pX + pY * (cX - pX) / (pY + cY) - cX + 160,
-      240 - ((cY + pY) === 0 ? 0 : cZ * pY / (cY + pY)),
+      192 - ((cY + pY) === 0 ? 0 : cZ * pY / (cY + pY)),
       Math.sqrt(Math.pow(cY + pY, 2) + Math.pow((cX - pX), 2)),
     ]);
 
@@ -695,7 +747,7 @@ while (--i > 0) {
 
 requestAnimationFrame(function main() {
   palette.clear();
-  const calcScreenPosition = perspective$1(getCamera());
+  const calcScreenPosition = perspective(getCamera());
   fillPolygon(
     skyGradient,
     [0, 0],

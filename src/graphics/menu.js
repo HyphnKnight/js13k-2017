@@ -13,7 +13,7 @@ const createOption = (index, text, pos) => ({
     el.geometry.width = width + 10;
     el.geometry.points = getRectanglePoints(el.geometry.width, el.geometry.height);
     fillText({
-      textBaseline: 'middle',
+      textBaseline: `middle`,
       font: base_text,
       style: white,
     }, [-width / 2, 0], text);
@@ -25,20 +25,20 @@ const createOption = (index, text, pos) => ({
 });
 
 export const Menu = {
-  geometry: createRectangle([320 / 2, 120], 0, 140, 40),
+  geometry: createRectangle([160 / 2, 120], 0, 140, 40),
   children: [
-    createOption(0, 'new game', [0, 48]),
-    createOption(1, 'continue game', [0, 72]),
+    createOption(0, `new game`, [0, 48]),
+    createOption(1, `continue game`, [0, 72]),
   ],
   render: (palette, el) => {
     const { fillText, fillPolygon } = palette;
     fillText({
-      textBaseline: 'middle',
+      textBaseline: `middle`,
       style: white,
       font: title_text,
-    }, [-65, -8], 'A L T E R');
+    }, [-65, -8], `A L T E R`);
     (Date.now() % 600 > 400) && fillPolygon(
-      'white',
+      `white`,
       selected_index === 0
         ? [-42, 48]
         : [-60, 72],

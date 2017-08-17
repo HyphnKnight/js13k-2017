@@ -3,26 +3,32 @@
 <head>
   <style>
     html,
-    body {
+    body,
+    canvas {
       padding: 0;
       margin: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
+      text-align: center;
       background-color: black;
-    }
-
-    canvas {
-      background-color: black;
-      letter-spacing: 0.1em;
-      height: 100%;
-      width: 100%;
       image-rendering: pixelated;
+    }
+    canvas {
+      width: auto;
+    }
+    @media (orientation: portrait) {
+      canvas {
+        position: relative;
+        top: calc(50vh - 100vw / 160 * 192 / 2);
+        width: 100vw;
+        height: auto;
+      }
     }
   </style>
 </head>
 
 <body>
-  <canvas></canvas>
+  <canvas width="160" height="192"></canvas>
   <script src="script.js"></script>
 </body>
 
