@@ -96,6 +96,15 @@ function rotate(vec, rotation) {
 
 
 
+const mapList = (list, mod) => {
+    const result = [];
+    for (let i = 0, len = list.length; i < len; i += 2) {
+        const [x, y] = mod([list[i], list[i + 1]]);
+        result[i] = x;
+        result[i + 1] = y;
+    }
+    return result;
+};
 const addList = (list, mod) => {
     const result = [];
     for (let i = 0, len = list.length; i < len; i += 2) {
@@ -244,11 +253,11 @@ const stroke = (draw) => (ctx) => (style, ...args) => {
     ctx.stroke();
     ctx.restore();
 };
-const fillPolygon = fill(drawPolygon);
+const fillPolygon$1 = fill(drawPolygon);
 const fillRectangle = fill(drawRectangle);
 const fillLine = fill(drawLine);
-const fillArc = fill(drawArc);
-const strokePolygon = stroke(drawPolygon);
+const fillArc$1 = fill(drawArc);
+const strokePolygon$1 = stroke(drawPolygon);
 const strokeRectangle = stroke(drawRectangle);
 const strokeLine = stroke(drawLine);
 const strokeArc = stroke(drawArc);
@@ -261,7 +270,7 @@ const strokeText = (ctx) => (fontOptions, vec, text) => {
     ctx.strokeText(text, round(vec[0], 0), round(vec[1], 0), fontOptions.maxWidth);
     ctx.restore();
 };
-const fillText = (ctx) => (fontOptions, vec, text) => {
+const fillText$1 = (ctx) => (fontOptions, vec, text) => {
     ctx.save();
     ctx.fillStyle = fontOptions.style || '';
     ctx.font = fontOptions.font || ctx.font;
@@ -285,11 +294,11 @@ const createPalette = (ctx) => ({
     drawImage: drawImage(ctx),
     drawSlicedImage: drawSlicedImage(ctx),
     fillRectangle: fillRectangle(ctx),
-    fillPolygon: fillPolygon(ctx),
+    fillPolygon: fillPolygon$1(ctx),
     fillLine: fillLine(ctx),
-    fillArc: fillArc(ctx),
-    fillText: fillText(ctx),
-    strokePolygon: strokePolygon(ctx),
+    fillArc: fillArc$1(ctx),
+    fillText: fillText$1(ctx),
+    strokePolygon: strokePolygon$1(ctx),
     strokeRectangle: strokeRectangle(ctx),
     strokeLine: strokeLine(ctx),
     strokeArc: strokeArc(ctx),
@@ -472,17 +481,9 @@ const renderUI = (canvas, base) => {
 
 // colors
 
-const white = '#fff';
 
-// fonts
-// const mono = 'Lucida Console, Monaco5, monospace';
-const arial = 'Arial Black, Gadget, sans-serif';
-const helvetica = 'Helvetica, sans-serif';
 
 // text style
-const title_text = '24px ' + arial;
-
-const base_text = '12px ' + helvetica;
 
 const keyCodes = {
 
@@ -570,78 +571,53 @@ const parseKeyInfo =
 document.body.onkeyup = ({ keyCode }) => parseKeyInfo(keyCode, false);
 document.body.onkeydown = ({ keyCode }) => parseKeyInfo(keyCode, true);
 
-let selected_index = 0;
+const perspective =
+  ([cX, cY, cZ]) =>
+    ([pX, pY]) => ([
+      (cZ * pY) / (pY + cY),
+      pY / ((cY + pY) / cX - pX),
+    ]);
 
-const createOption = (index, text, pos) => ({
-  geometry: createRectangle(pos, 0, 140, 14),
-  render: (palette, el) => {
-    const { fillRectangle, strokeRectangle, fillText, ctx } = palette;
-    ctx.font = base_text;
-    const { width } = ctx.measureText(text);
-    el.geometry.width = width + 10;
-    el.geometry.points = getRectanglePoints(el.geometry.width, el.geometry.height);
-    fillText({
-      textBaseline: 'middle',
-      font: base_text,
-      style: white,
-    }, [-width / 2, 0], text);
-  },
-  interact: {
-    onMouseMove: () => selected_index = index,
-    onMouseDown: () => selected_index = index,
-  }
-});
+const testRect$1 = createRectangle([0, 0], 0, 100, 100);
+
+const camera = [50, 20, 10];
+
+const calcScreenPosition = perspective(camera);
 
 const Menu = {
   geometry: createRectangle([320 / 2, 120], 0, 140, 40),
   children: [
-    createOption(0, 'new game', [0, 48]),
-    createOption(1, 'continue game', [0, 72]),
+    // createOption(0, 'new game', [0, 48]),
+    // createOption(1, 'continue', [0, 72]),
   ],
   render: (palette, el) => {
-    const { fillText, fillPolygon } = palette;
-    fillText({
-      textBaseline: 'middle',
-      style: white,
-      font: title_text,
-    }, [-65, -8], 'A L T E R');
-    (Date.now() % 600 > 400) && fillPolygon(
-      'white',
-      selected_index === 0
-        ? [-42, 48]
-        : [-60, 72],
-      [-5, 3, 5, 0, -5, -3]
+    const { fillText, fillPolygon, strokePolygon } = palette;
+    strokePolygon(
+      'red',
+      [0, 0],
+      addList(testRect$1.points, testRect$1.position),
     );
-    (inputs.up || inputs.w) && (selected_index = 0);
-    (inputs.down || inputs.s) && (selected_index = 1);
+    strokePolygon(
+      'green',
+      [0, 0],
+      mapList(
+        addList(testRect$1.points, testRect$1.position),
+        calcScreenPosition,
+      ),
+    );
+    // fillText({
+    //   textBaseline: 'middle',
+    //   style: white,
+    //   font: title_text,
+    // }, [-65, -8], `A L T E R`);
+    // (Date.now() % 600 > 400) && fillPolygon(
+    //   'white',
+    //   [-42, selected_index === 0 ? 48 : 72],
+    //   [-5, 3, 5, 0, -5, -3]
+    // );
+    // (inputs.up || inputs.w) && (selected_index = 0);
+    // (inputs.down || inputs.s) && (selected_index = 1);
   },
-};
-
-let cursor_position = [0, 0];
-
-const Cursor = {
-  render: (palette) => {
-
-    const { strokeArc, fillText, ctx, moveTo, lineTo } = palette;
-    /* Default cursor */
-
-    strokeArc('white', cursor_position, 0, 4);
-
-    ctx.strokeStyle = 'white';
-
-    ctx.beginPath();
-    moveTo(subtract(cursor_position, [0, -10]));
-    lineTo(subtract(cursor_position, [0, 10]));
-    ctx.stroke();
-    ctx.beginPath();
-    moveTo(subtract(cursor_position, [-10, 0]));
-    lineTo(subtract(cursor_position, [10, 0]));
-    ctx.stroke();
-
-  },
-  interact: {
-    onMouseMove: (_, position) => cursor_position = [position.x, position.y],
-  }
 };
 
 const canvas = document.querySelector('canvas');
@@ -650,25 +626,116 @@ canvas.height = 240;
 
 const { palette, render } = renderUI(canvas, {
   geometry: createRectangle([0, 0], 0, window.innerWidth, window.innerHeight),
-  children: [Menu, Cursor],
+  children: [Menu],
 });
 
 palette.ctx.imageSmoothingEnabled = false;
 
-let dt = 0;
-let t = 0;
+const perspective$1 =
+  // camera coords in 3d space
+  ([cX, cY, cZ]) =>
+    // 2d point
+    ([pX, pY]) => ([
+      pX + pY * (cX - pX) / (pY + cY) - cX + 160,
+      240 - ((cY + pY) === 0 ? 0 : cZ * pY / (cY + pY)),
+      Math.sqrt(Math.pow(cY + pY, 2) + Math.pow((cX - pX), 2)),
+    ]);
+
+const avenger = '\uD83D\uDC69\uD83C\uDFFB\u200D\uD83C\uDFA4';
+
+const tree = '\uD83C\uDF32';
+const treeAlt = '\uD83C\uDF33';
+const cloud = '\u2601\uFE0F';
+
+const createSprite = (emoji) => ([x, y], offset = 0) => ([x, y, emoji, offset]);
+const mkTree = createSprite(tree);
+const mkTreeAlt = createSprite(treeAlt);
+
+const mkCloud = createSprite(cloud);
+
+const testRect = createRectangle([0, 1600 / 2], 0, 10000, 1600);
+const windowRect = createRectangle([0, 0], 0, window.innerWidth, window.innerHeight);
+
+
+const { fillText, fillPolygon, strokePolygon, fillArc } = palette;
+const getX = () => Date.now() % 6000 / 20 - 150;
+const getY = () => 120;
+const getZ = () => Date.now() % 6000 / 30 - 20;//200;
+const getCamera = () => ([
+  getX(),
+  getY(),
+  getZ(),
+]);
+
+const groundGradient = palette.ctx.createLinearGradient(0, 0, 200, 200);
+groundGradient.addColorStop(0, '#5E8C6A');
+groundGradient.addColorStop(1, '#BFB35A');
+
+const skyGradient = palette.ctx.createLinearGradient(0, 0, 200, 200);
+skyGradient.addColorStop(0, '#69D2E7');
+skyGradient.addColorStop(1, '#A7DBD8');
+
+// Generate Trees
+const objects = [];
+let i = 1000;
+while (--i > 0) {
+  objects.push((Math.random() > 0.5 ? mkTree : mkTreeAlt)([
+    Math.random() * 5120 - 2560,
+    Math.random() * 1280,
+  ], 0));
+}
+
+i = 25;
+while (--i > 0) {
+  objects.push(mkCloud([
+    Math.random() * 10000 - 5000,
+    Math.random() * 1000 + 3500,
+  ], Math.random() * 30 + 10));
+}
+
 requestAnimationFrame(function main() {
-  dt = Math.min(16, Date.now() - t);
-  // console.log(dt);
-
-  // Compute Logic
-
-  // Render Graphics
   palette.clear();
-  render();
+  const calcScreenPosition = perspective$1(getCamera());
+  fillPolygon(
+    skyGradient,
+    [0, 0],
+    windowRect.points,
+  );
+  fillPolygon(
+    groundGradient,
+    [0, 0],
+    mapList(
+      addList(testRect.points, testRect.position),
+      calcScreenPosition,
+    ),
+  );
 
-  t = Date.now();
+  [...objects]
+    .map(point => [...calcScreenPosition(point), point[2], point[3], point[4]])
+    .sort((a, b) => b[2] - a[2])
+    .forEach(([x, y, d, emoji, offset]) => fillText({}, [x, y - offset], emoji));
+
+  fillText({ font: `16px` }, calcScreenPosition([20, 20]), avenger);
+
   requestAnimationFrame(main);
 });
+
+// requestAnimationFrame(function main() {
+//   dt = Math.min(16, Date.now() - t);
+//   // console.log(dt);
+
+//   // Compute Logic
+
+//   // Render Graphics
+//   // palette.clear();
+//   console.log(mapList(
+//     addList(testRect.points, testRect.position),
+//     calcScreenPosition,
+//   ))
+//   // render();
+
+//   t = Date.now();
+//   // requestAnimationFrame(main);
+// });
 
 }());
