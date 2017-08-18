@@ -28,7 +28,11 @@
     "babel-minify": "^0.2.0",
     "eslint": "^4.4.1",
     "rollup": "^0.47.6",
+    "rollup-analyzer": "^1.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-serve": "^0.4.0"
+  },
+  "dependencies": {
+    "nearest-color": "^0.4.0"
   }
 }
