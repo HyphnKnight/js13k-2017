@@ -140,18 +140,7 @@ const rotateList = (list, rotation) => {
 
 const rotateListAround = (list, point, rotation) => addList(rotateList(subtractList(list, point), rotation), point);
 
-
-
-
-
-
-//# sourceMappingURL=tuple.js.map
-
 const uniqueId = () => Math.random().toString(36).substr(2, 9) + Math.random().toString(36).substr(2, 9);
-
-//# sourceMappingURL=quickSort.js.map
-
-//# sourceMappingURL=mergeSort.js.map
 
 function find(array, func) {
     let i = -1;
@@ -163,38 +152,7 @@ function find(array, func) {
     return null;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//# sourceMappingURL=index.js.map
-
+/* Utilities */
 const getRectanglePoints = (width, height) => ([
   -width / 2, +height / 2,
   -width / 2, -height / 2,
@@ -219,8 +177,6 @@ const createRectangle = (position, rotation = 0, width = 1, height = 1, label = 
 
 
 /* Utility Funcs */
-
-//# sourceMappingURL=tuple.js.map
 
 const originVector = [0, 0];
 const translate = (ctx) => (vec) => ctx.translate(round(vec[0], 0), round(vec[1], 0));
@@ -374,6 +330,7 @@ class Transform {
     }
 }
 
+/* -1 === left, 0 === aligned, 1 === right */
 const pointRelationToLine = (point, line) => sign((line[2] - line[0]) * (point[1] - line[1]) - (line[3] - line[1]) * (point[0] - line[0]));
 const isPointInCircle = (point, position, radius) => magnitudeSqr(subtract(point, position)) <= sqr(radius);
 const isPointInAlignedRectangle = (point, position, width, height) => Math.abs(point[0] - position[0]) <= width / 2 &&
@@ -406,8 +363,6 @@ const isPolygonInPolygon = (positionA, pointsA, positionB, pointsB) => {
     }
     return false;
 };
-
-//# sourceMappingURL=tuple.js.map
 
 /*
     Nestable UI elements that instead of being dom nodes are instead

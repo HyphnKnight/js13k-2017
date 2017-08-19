@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "rollup --config --watch",
-    "compile": "rollup src/index.js --format iife --output docs/script.js",
+    "compile": "rollup src/index.js --format iife -c node:rollup-analyzer-config --output docs/script.js",
     "compress": "minify docs -d dist",
     "zip": "zip -r Alter.zip dist",
     "test-size": "du -h Alter.zip",
@@ -26,9 +26,9 @@
   "homepage": "https://github.com/HyphnKnight/js13k-2017#readme",
   "devDependencies": {
     "babel-minify": "^0.2.0",
-    "eslint": "^4.4.1",
+    "eslint": "^4.5.0",
     "rollup": "^0.47.6",
-    "rollup-analyzer": "^1.0.2",
+    "rollup-analyzer-config": "^1.0.1",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-serve": "^0.4.0"
   },
