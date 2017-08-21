@@ -52,7 +52,7 @@ export const createPolygon = (position, rotation = 0, points, label = ``) => ({
 });
 /* Custom Geometry */
 export const createSquare = (position, rotation, size, label) => createRectangle(position, rotation, size, size, label);
-const createEqualLateralPolygonPoints = (sides, radius) => flatten(times(sides, i => scaleSet(rotate([0, 1], i * (Math.PI / sides)), radius)));
+const createEqualLateralPolygonPoints = (sides, radius) => flatten(times(sides, i => scaleSet(rotate([0, 1], i * (2 * Math.PI / sides)), radius)));
 export const createEqualLateralPolygon = (position, rotation, sides, radius, label) => createPolygon(position, rotation, createEqualLateralPolygonPoints(sides, radius), label);
 /* Utility Funcs */
 export const getPolygonPoints = (polygon) => addListSet(rotateList(polygon.points, polygon.rotation), polygon.position);
