@@ -5,3 +5,4 @@ export const treeAlt = `\uD83C\uDF33`;
 export const cloud = `\u2601\uFE0F`;
 export const mountain = `\uD83C\uDFD4`;
 export const pointRight = `\uD83D\uDC49\uD83C\uDFFB`;
+export const ghost = `\uD83D\uDC7B`;

@@ -4,6 +4,7 @@ import {
   avenger,
   cloud,
   mountain,
+  ghost,
 } from './emoji';
 
 export const createSprite = (emoji) => ([x, y], offset = 0) => ([x, y, emoji, offset]);
@@ -12,3 +13,4 @@ export const mkTreeAlt = createSprite(treeAlt);
 export const mkAvenger = createSprite(avenger);
 export const mkCloud = createSprite(cloud);
 export const mkMountain = createSprite(mountain);
+export const mkGhost = createSprite(ghost);
