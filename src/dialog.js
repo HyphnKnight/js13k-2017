@@ -2,16 +2,16 @@
 
 import { renderUI } from './lib/cEl/index.js';
 import { createRectangle } from './lib/geometry/index.js';
-import * as dom from './dom.js';
+import { canvas, viewHeight, viewWidth } from './dom.js';
 import { inputs } from './graphics/controls.js';
 
 // Dialog box traits.
 // Renders over bottom half of screen.
 const stroke = 2;
-const width = dom.w - stroke;
-const height = dom.h/2;
+const width = viewWidth - stroke;
+const height = viewHeight/2;
 const x = width/2 + stroke/2;
-const y = dom.h - height/2 - stroke*2;
+const y = viewHeight - height/2 - stroke*2;
 const strokeColor = `#fff`;
 const bgColor = `#00f`;
 
@@ -70,9 +70,9 @@ const Dialog = (script)=> {
   const muhText = wrapText(dom.ctx);
 
   // Hook into cEl.
-  const { palette, render } = renderUI(dom.c, {
+  const { palette, render } = renderUI(dom.canvas, {
     // Whole screen.
-    geometry: createRectangle([0, 0], 0, dom.w, dom.h),
+    geometry: createRectangle([0, 0], 0, dom.viewWidth, dom.viewHeight),
 
     render: (palette)=> {
       const { ctx, fillRectangle, strokeRectangle, fillText } = palette;
