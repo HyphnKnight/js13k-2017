@@ -9,7 +9,6 @@ import { tree, treeAlt, avenger, cloud, mountain } from './graphics/emoji';
 let dt = 0;
 let t = 0;
 
-console.log(viewHeight, viewWidth);
 const groundPlane = createRectangle([0, 1600 / 2], 0, 10000, 1600);
 const windowRect = createRectangle([0, 0], 0, viewWidth * 2, viewHeight * 2);
 
