@@ -85,7 +85,6 @@ const interactionHandler =
         const position = subtractSet(convertEventsToPosition(evt), [canvasOffsetLeft, canvasOffsetTop]);
         position[0] *= scaleX;
         position[1] *= scaleY;
-        console.log(position);
         const isPositionInside = isInside(position);
         [...collection.values()]
           .filter(([_cEl, geometry]) => !geometry || isPositionInside(geometry))
