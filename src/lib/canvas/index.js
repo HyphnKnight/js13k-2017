@@ -49,7 +49,7 @@ const drawArc = (ctx) => (vec, angle, radius = 100, startAngle = 0, endAngle = 2
     ctx.save();
     translate(ctx)(vec);
     rotate(ctx)(angle);
-    arc(ctx)(originVector, radius, startAngle, endAngle, counterClockwise);
+    arc(ctx)([0, 0], radius, startAngle, endAngle, counterClockwise);
     ctx.restore();
 };
 const fill = (draw) => (ctx) => (style, ...args) => {
