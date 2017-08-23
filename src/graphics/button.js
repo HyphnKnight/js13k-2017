@@ -11,7 +11,7 @@ export const createButton = (text, pos, onClick) => ({
     el.geometry.width = width + 10;
 
     const fontStyle = {
-      textBaseline: 'middle',
+      textBaseline: `middle`,
       font: button_text,
       style: white,
     };

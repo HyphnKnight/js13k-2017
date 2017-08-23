@@ -1,3 +1,6 @@
+export const child = `\uD83D\uDC69\uD83C\uDFFC\u200D\uD83C\uDF3E`;
+export const protector = `\uD83D\uDC6E\uD83C\uDFFF\u200D\u2640\uFE0F`;
+export const persecutor = `\uD83D\uDD75\uD83C\uDFFD`;
 export const avenger = `\uD83D\uDC69\uD83C\uDFFB\u200D\uD83C\uDFA4`;
 export const demon = `\uD83D\uDC79`;
 export const tree = `\uD83C\uDF32`;
@@ -6,3 +9,5 @@ export const cloud = `\u2601\uFE0F`;
 export const mountain = `\uD83C\uDFD4`;
 export const pointRight = `\uD83D\uDC49\uD83C\uDFFB`;
 export const ghost = `\uD83D\uDC7B`;
+export const pool = `\uD83C\uDF75`;
+export const diamond = `\uD83D\uDD37`;

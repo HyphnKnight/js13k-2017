@@ -1,6 +1,6 @@
 export const createNode = (id, data, resist, priority, cameFrom) => ({
-    id, data, resist, priority,
-    cameFrom: cameFrom || null,
-    hasBeenRoot: false,
+  id, data, resist, priority,
+  cameFrom: cameFrom || null,
+  hasBeenRoot: false,
 });
 //# sourceMappingURL=node.js.map

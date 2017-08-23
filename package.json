@@ -9,7 +9,8 @@
     "compress": "minify docs -d dist",
     "zip": "zip -r Alter.zip dist",
     "test-size": "du -h Alter.zip",
-    "build": "npm run compile && npm run compress && npm run zip && npm run test-size"
+    "build": "npm run compile && npm run compress && npm run zip && npm run test-size",
+    "lint": "eslint src --fix"
   },
   "repository": {
     "type": "git",

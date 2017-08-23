@@ -18,7 +18,7 @@ const calcCanvasSize = () => {
   canvasOffsetTop = top;
   scaleX = viewWidth / width;
   scaleY = viewHeight / height;
-}
+};
 
 calcCanvasSize();
 

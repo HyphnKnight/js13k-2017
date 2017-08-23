@@ -7,6 +7,8 @@ import { canvas, viewHeight, viewWidth } from '../dom.js';
 import state from '../state.js';
 
 let justDeleted = false;
+let textStart = null;
+const textSpeed = 50;
 
 
 // Dialog box traits.
@@ -28,7 +30,7 @@ const textColor = `#fff`;
 // Formatted text is an array of lineData
 // lineData is an array of the following values
 // [x,y,text]
-const formatText = (ctx, text) => {
+const formatText = (ctx, text, maxChar) => {
   const formattedText = [];
   text = text.toUpperCase();
 
@@ -38,15 +40,25 @@ const formatText = (ctx, text) => {
   const words = text.split(` `);
   let line = ``;
   let lineY = 0;
+  let charCount = 0;
   // Add words to line one-by-one, test width.
   // Store when wide enough.
-  for (const [index, word] of words.entries()) {
+  for(const [index, word] of words.entries()) {
     const currLine = `${line + word} `;
     const metrics = ctx.measureText(currLine);
     const currWidth = metrics.width;
-
-    if (currWidth > textWidth && index > 0) {
+    if(charCount + currLine.length > maxChar) {
+      if(currWidth > textWidth) {
+        formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, line]);
+        charCount += line.length;
+        formattedText.push([-textWidth / 2, -textHeight / 2 + lineY + lineHeight, word.substr(0, maxChar - charCount)]);
+      } else {
+        formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, currLine.substr(0, maxChar - charCount)]);
+      }
+      return formattedText;
+    } else if(currWidth > textWidth && index > 0) {
       formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, line]);
+      charCount += line.length;
       line = `${word} `;
       lineY += lineHeight;
     } else {
@@ -61,23 +73,23 @@ const formatText = (ctx, text) => {
 };
 
 export const Dialog = {
-  // Whole screen.
   geometry: createRectangle([viewWidth / 2, viewHeight - dialogHeight / 2], 0, dialogWidth, dialogHeight),
-
   render: (palette, { geometry }) => {
     const { dialog } = state;
-    if (!dialog.length) return;
+    const [currentDialog] = dialog;
+    if(!currentDialog) return;
+    if(!textStart) textStart = Date.now();
 
     const { ctx, fillRectangle, strokeRectangle, fillText } = palette;
-
+    const maxChar = Math.floor((Date.now() - textStart) / textSpeed);
     fillRectangle(bgColor, [0, 0], geometry.width, geometry.height);
     strokeRectangle(strokeColor, [0, 0], geometry.width, geometry.height);
 
     // Render text
-    const [text, author] = dialog[0];
-    const formattedText = formatText(ctx, text);
+    const [text, author] = currentDialog;
+    const formattedText = formatText(ctx, text, maxChar);
     let offset = 0;
-    if (author) {//author) {
+    if(author) {//author) {
       const [emoji, name] = author;
       const { width: nameWidth } = ctx.measureText(name);
       const boxWidth = nameWidth + 16 + stroke * 4;
@@ -94,14 +106,20 @@ export const Dialog = {
       fillText({ style: textColor }, [x, y + offset], line);
     });
 
-    if (inputs.space && !justDeleted) {
+    if(maxChar >= text.length && inputs.space && !justDeleted) {
       state.dialog.shift();
+      textStart = null;
       justDeleted = true;
-    } else if (!inputs.space && justDeleted) {
+    } else if(!inputs.space && justDeleted) {
       justDeleted = false;
     }
   },
   interact: {
-    onMouseDown: () => state.dialog.shift(),
+    onMouseDown: () => {
+      if(maxChar >= text.length) {
+        state.dialog.shift();
+        textStart = null;
+      }
+    },
   }
 };
