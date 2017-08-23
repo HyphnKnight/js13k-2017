@@ -56,7 +56,11 @@ const subtract = (vecA, vecB) => ([
     vecA[0] - vecB[0],
     vecA[1] - vecB[1]
 ]);
-
+const subtractSet = (base, mod) => {
+    base[0] -= mod[0];
+    base[1] -= mod[1];
+    return base;
+};
 
 
 
@@ -96,7 +100,15 @@ function rotate(vec, rotation) {
 
 
 
-
+const mapList = (list, mod) => {
+    const result = [];
+    for (let i = 0, len = list.length; i < len; i += 2) {
+        const [x, y] = mod([list[i], list[i + 1]]);
+        result[i] = x;
+        result[i + 1] = y;
+    }
+    return result;
+};
 const addList = (list, mod) => {
     const result = [];
     for (let i = 0, len = list.length; i < len; i += 2) {
@@ -178,6 +190,32 @@ const createRectangle = (position, rotation = 0, width = 1, height = 1, label = 
 
 /* Utility Funcs */
 
+// Reused DOM elements and objects.
+
+const canvas = document.querySelector(`canvas`);
+const ctx = canvas.getContext(`2d`);
+const viewWidth = 320;
+const viewHeight = 240;
+let canvasOffsetLeft = canvas.offsetWidth;
+let canvasOffsetTop = canvas.offsetHeight;
+let scaleX = 1;
+let scaleY = 1;
+
+canvas.width = viewWidth;
+canvas.height = viewHeight;
+
+const calcCanvasSize = () => {
+  const { top, left, width, height } = canvas.getBoundingClientRect();
+  canvasOffsetLeft = left;
+  canvasOffsetTop = top;
+  scaleX = viewWidth / width;
+  scaleY = viewHeight / height;
+};
+
+calcCanvasSize();
+
+window.addEventListener(`resize`, calcCanvasSize);
+
 const originVector = [0, 0];
 const translate = (ctx) => (vec) => ctx.translate(round(vec[0], 0), round(vec[1], 0));
 const rotate$1 = (ctx) => (angle) => ctx.rotate(angle);
@@ -226,7 +264,7 @@ const drawArc = (ctx) => (vec, angle, radius = 100, startAngle = 0, endAngle = 2
     ctx.save();
     translate(ctx)(vec);
     rotate$1(ctx)(angle);
-    arc(ctx)(originVector, radius, startAngle, endAngle, counterClockwise);
+    arc(ctx)([0, 0], radius, startAngle, endAngle, counterClockwise);
     ctx.restore();
 };
 const fill = (draw) => (ctx) => (style, ...args) => {
@@ -237,7 +275,7 @@ const fill = (draw) => (ctx) => (style, ...args) => {
     ctx.fill();
     ctx.restore();
 };
-const stroke$1 = (draw) => (ctx) => (style, ...args) => {
+const stroke = (draw) => (ctx) => (style, ...args) => {
     ctx.save();
     ctx.beginPath();
     ctx.strokeStyle = style;
@@ -245,14 +283,14 @@ const stroke$1 = (draw) => (ctx) => (style, ...args) => {
     ctx.stroke();
     ctx.restore();
 };
-const fillPolygon = fill(drawPolygon);
+const fillPolygon$1 = fill(drawPolygon);
 const fillRectangle = fill(drawRectangle);
 const fillLine = fill(drawLine);
-const fillArc = fill(drawArc);
-const strokePolygon = stroke$1(drawPolygon);
-const strokeRectangle = stroke$1(drawRectangle);
-const strokeLine = stroke$1(drawLine);
-const strokeArc = stroke$1(drawArc);
+const fillArc$1 = fill(drawArc);
+const strokePolygon$1 = stroke(drawPolygon);
+const strokeRectangle = stroke(drawRectangle);
+const strokeLine = stroke(drawLine);
+const strokeArc = stroke(drawArc);
 const strokeText = (ctx) => (fontOptions, vec, text) => {
     ctx.save();
     ctx.strokeStyle = fontOptions.style || '';
@@ -262,7 +300,7 @@ const strokeText = (ctx) => (fontOptions, vec, text) => {
     ctx.strokeText(text, round(vec[0], 0), round(vec[1], 0), fontOptions.maxWidth);
     ctx.restore();
 };
-const fillText = (ctx) => (fontOptions, vec, text) => {
+const fillText$1 = (ctx) => (fontOptions, vec, text) => {
     ctx.save();
     ctx.fillStyle = fontOptions.style || '';
     ctx.font = fontOptions.font || ctx.font;
@@ -286,11 +324,11 @@ const createPalette = (ctx) => ({
     drawImage: drawImage(ctx),
     drawSlicedImage: drawSlicedImage(ctx),
     fillRectangle: fillRectangle(ctx),
-    fillPolygon: fillPolygon(ctx),
+    fillPolygon: fillPolygon$1(ctx),
     fillLine: fillLine(ctx),
-    fillArc: fillArc(ctx),
-    fillText: fillText(ctx),
-    strokePolygon: strokePolygon(ctx),
+    fillArc: fillArc$1(ctx),
+    fillText: fillText$1(ctx),
+    strokePolygon: strokePolygon$1(ctx),
     strokeRectangle: strokeRectangle(ctx),
     strokeLine: strokeLine(ctx),
     strokeArc: strokeArc(ctx),
@@ -373,10 +411,10 @@ const onMouseMoveCollection = new Map();
 const onMouseUpCollection = new Map();
 const windowGeometry = createRectangle([0, 0], 0, window.innerWidth, window.innerHeight, `window`);
 window.onresize =
-    () => Object.assign(windowGeometry, createRectangle([0, 0], 0, window.innerWidth, window.innerHeight, `window`));
+  () => Object.assign(windowGeometry, createRectangle([0, 0], 0, window.innerWidth, window.innerHeight, `window`));
 const isInViewport = (viewport = windowGeometry) => (cEl) => {
   const { geometry = { shape: null } } = cEl;
-  switch(geometry.shape) {
+  switch (geometry.shape) {
     case `Circle`: return isCircleInAlignedRectangle(geometry.position, geometry.radius, viewport.position, viewport.width, viewport.height);
     case `Rectangle`: return isAlignedRectangleInAlignedRectangle(geometry.position, geometry.width, geometry.height, viewport.position, viewport.width, viewport.height);
     case `Polygon`: return isPolygonInPolygon(geometry.position, addListSet(rotateListAround(geometry.points, [0, 0], geometry.rotation), geometry.position), viewport.position, addListSet(rotateListAround(viewport.points, [0, 0], viewport.rotation), viewport.position));
@@ -386,45 +424,45 @@ const isInViewport = (viewport = windowGeometry) => (cEl) => {
 const isInWindow = isInViewport(windowGeometry);
 const renderCEl = (transform, palette) => (el) => {
   const { geometry, children, render, interact } = el;
-  const { ctx, translate, rotate: rotate$$1 } = palette;
-  ctx.save();
+  const { ctx: ctx$$1, translate, rotate: rotate$$1 } = palette;
+  ctx$$1.save();
   transform.save();
-  if(geometry) {
+  if (geometry) {
     translate(geometry.position);
     addSet(transform.position, rotate(geometry.position, transform.rotation));
     rotate$$1(geometry.rotation);
     transform.rotation += geometry.rotation;
   }
-  ctx.save();
+  ctx$$1.save();
   render && (!geometry || isInWindow(transform.apply(geometry))) && render(palette, el);
-  ctx.restore();
+  ctx$$1.restore();
   children && children.forEach(renderCEl(transform, palette));
-  if(interact) {
-    if(interact.onMouseDown) {
+  if (interact) {
+    if (interact.onMouseDown) {
       onMouseDownCollection.set(el, [el, geometry && transform.apply(geometry), interact.onMouseDown]);
     }
     else {
       onMouseDownCollection.delete(el);
     }
-    if(interact.onMouseMove) {
+    if (interact.onMouseMove) {
       onMouseMoveCollection.set(el, [el, geometry && transform.apply(geometry), interact.onMouseMove]);
     }
     else {
       onMouseMoveCollection.delete(el);
     }
-    if(interact.onMouseUp) {
+    if (interact.onMouseUp) {
       onMouseUpCollection.set(el, [el, geometry && transform.apply(geometry), interact.onMouseUp]);
     }
     else {
       onMouseUpCollection.delete(el);
     }
   }
-  ctx.restore();
+  ctx$$1.restore();
   transform.restore();
 };
 const isTouch = (`ontouchstart` in window);
 const convertEventsToPosition = (evt) => {
-  if(evt.clientX) {
+  if (evt.clientX) {
     return [evt.clientX, evt.clientY];
   } else {
     const touch = evt.touches[0];
@@ -432,7 +470,7 @@ const convertEventsToPosition = (evt) => {
   }
 };
 const isInside = (point) => (geometry) => {
-  switch(geometry.shape) {
+  switch (geometry.shape) {
     case `Circle`: return isPointInCircle(point, geometry.position, geometry.radius);
     case `Rectangle`: return isPointInAlignedRectangle(point, geometry.position, geometry.width, geometry.height);
     case `Polygon`: return isPointInPolygon(point, addListSet(rotateListAround(geometry.points, [0, 0], geometry.rotation), geometry.position));
@@ -440,28 +478,31 @@ const isInside = (point) => (geometry) => {
   }
 };
 const interactionHandler =
-    (collection) =>
-      (evt) => {
-        if(collection.size) {
-          const position = convertEventsToPosition(evt);
-          const isPositionInside = isInside(position);
-          [...collection.values()]
-            .filter(([_cEl, geometry]) => !geometry || isPositionInside(geometry))
-            .forEach(([cEl, _geo, effect]) => effect(cEl, position));
-        }
-      };
-const renderUI = (canvas, base) => {
-  const palette = createPalette(canvas.getContext(`2d`));
+  (collection) =>
+    (evt) => {
+      if (collection.size) {
+        const position = subtractSet(convertEventsToPosition(evt), [canvasOffsetLeft, canvasOffsetTop]);
+        position[0] *= scaleX;
+        position[1] *= scaleY;
+        console.log(position);
+        const isPositionInside = isInside(position);
+        [...collection.values()]
+          .filter(([_cEl, geometry]) => !geometry || isPositionInside(geometry))
+          .forEach(([cEl, _geo, effect]) => effect(cEl, position));
+      }
+    };
+const renderUI = (canvas$$1, base) => {
+  const palette = createPalette(canvas$$1.getContext(`2d`));
   palette.clear();
-  canvas.addEventListener(
+  canvas$$1.addEventListener(
     isTouch ? `ontouchstart` : `mousedown`,
     interactionHandler(onMouseDownCollection),
   );
-  canvas.addEventListener(
+  canvas$$1.addEventListener(
     isTouch ? `ontouchmove` : `mousemove`,
     interactionHandler(onMouseMoveCollection),
   );
-  canvas.addEventListener(
+  canvas$$1.addEventListener(
     isTouch ? `ontouchend` : `mouseup`,
     interactionHandler(onMouseUpCollection),
   );
@@ -471,20 +512,18 @@ const renderUI = (canvas, base) => {
   };
 };
 
-// Reused DOM elements and objects.
+// colors
 
-const c = document.querySelector(`canvas`);
-const ctx = c.getContext(`2d`);
-const w = 160;
-const h = 192;
-let cw = c.offsetWidth;
-let ch = c.offsetHeight;
+const white = `#fff`;
 
+// fonts
+const header = `Arial Black, Gadget, sans-serif`;
+const mono = `"Lucida Console", Monaco, monospace`;
 
-window.addEventListener(`resize`, ()=> {
-  cw = c.offsetWidth;
-  ch = c.offsetHeight;
-});
+// text style
+const title_text = `24px ${  header}`;
+
+const base_text = `12px ${  mono}`;
 
 const keyCodes = {
 
@@ -572,203 +611,274 @@ const parseKeyInfo =
 document.body.onkeyup = ({ keyCode }) => parseKeyInfo(keyCode, false);
 document.body.onkeydown = ({ keyCode }) => parseKeyInfo(keyCode, true);
 
+let selected_index = 0;
+
+const createOption = (index, text, pos) => ({
+  geometry: createRectangle(pos, 0, 140, 14),
+  render: (palette, el) => {
+    const { fillRectangle, fillText, ctx: ctx$$1 } = palette;
+    ctx$$1.font = base_text;
+    const { width } = ctx$$1.measureText(text);
+    el.geometry.width = width + 10;
+    el.geometry.points = getRectanglePoints(el.geometry.width, el.geometry.height);
+    fillText({
+      textBaseline: `middle`,
+      font: base_text,
+      style: white,
+    }, [-width / 2, 0], text);
+  },
+  interact: {
+    onMouseMove: () => selected_index = index,
+    onMouseDown: () => selected_index = index,
+  }
+});
+
+const Menu = {
+  geometry: createRectangle([viewWidth / 2, viewHeight / 2], 0, 140, 40),
+  children: [
+    createOption(0, `new game`, [0, 48]),
+    createOption(1, `continue game`, [0, 72]),
+  ],
+  render: (palette, el) => {
+    const { fillText, fillPolygon } = palette;
+    fillText({
+      textBaseline: `middle`,
+      style: white,
+      font: title_text,
+    }, [-59, 0], `A L T E R`);
+    (Date.now() % 600 > 400) && fillPolygon(
+      `white`,
+      selected_index === 0
+        ? [-42, 48]
+        : [-60, 72],
+      [-5, 3, 5, 0, -5, -3]
+    );
+    (inputs.up || inputs.w) && (selected_index = 0);
+    (inputs.down || inputs.s) && (selected_index = 1);
+  },
+};
+
+const state = {
+  // Dialog is an array of dialog data
+  // dialog data is an array with the following values
+  // [text:string,author?:[emoji:string,name:string]];
+  // [
+  //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris mattis purus sed luctus dignissim. Phasellus hendrerit quam et urna tempor, eu porttitor dui feugiat. Praesent vestibulum est lectus, et vehicula velit laoreet non.',
+  //   [avenger, `Avenger${Math.floor(Math.random() * 10)}`],
+  // ]
+  dialog: [
+      [
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris mattis purus sed luctus dignissim. Phasellus hendrerit quam et urna tempor, eu porttitor dui feugiat. Praesent vestibulum est lectus, et vehicula velit laoreet non.',
+  ]
+  ],
+};
+
 // Display modal text.
+
+let justDeleted = false;
+
 
 // Dialog box traits.
 // Renders over bottom half of screen.
-const stroke = 2;
-const width = w - stroke;
-const height = h/2;
-const x = width/2 + stroke/2;
-const y = h - height/2 - stroke*2;
+const stroke$1 = 2;
+const dialogWidth = viewWidth - stroke$1;
+const dialogHeight = viewHeight / 4;
 const strokeColor = `#fff`;
 const bgColor = `#00f`;
 
 // Text traits.
 const textSize = 12;
-const lineHeight = textSize*1.2;
-const textWidth = width - stroke*4;
-const textHeight = height - stroke*4;
-const textX = 0 + stroke*2.5;
-const textY = y - height/2 + stroke;
+const lineHeight = textSize * 1.2;
+const textWidth = dialogWidth - stroke$1 * 4;
+const textHeight = dialogHeight - stroke$1 * 4;
 const textColor = `#fff`;
 
-const Dialog = (script)=> {
-  // Render text that wraps, as well as advances upon input.
-  const wrapText = function* (ctx$$1) {
-    for(let text of script) {
-      ctx$$1.textBaseline = `top`;
-      ctx$$1.font = `${textSize}px monospace`;
-      ctx$$1.fillStyle = textColor;
 
-      // Stylize text as all-uppercase.
-      text = text.toUpperCase();
+// Formatted text is an array of lineData
+// lineData is an array of the following values
+// [x,y,text]
+const formatText = (ctx$$1, text) => {
+  const formattedText = [];
+  text = text.toUpperCase();
 
-      const words = text.split(` `);
-      let line = ``;
-      let lineY = textY;
+  ctx$$1.textBaseline = `top`;
+  ctx$$1.font = `${textSize}px monospace`;
 
-      // Add words to line one-by-one, test width.
-      // Print when wide enough.
-      for(const [index, word] of words.entries()) {
-        const currLine = `${line + word} `;
-        const metrics = ctx$$1.measureText(currLine);
-        const currWidth = metrics.width;
+  const words = text.split(` `);
+  let line = ``;
+  let lineY = 0;
+  // Add words to line one-by-one, test width.
+  // Store when wide enough.
+  for (const [index, word] of words.entries()) {
+    const currLine = `${line + word} `;
+    const metrics = ctx$$1.measureText(currLine);
+    const currWidth = metrics.width;
 
-        if(currWidth > textWidth && index > 0) {
-          ctx$$1.fillText(line, textX, lineY);
-          line = `${word} `;
-          lineY += lineHeight;
-        }
-        else {
-          line = currLine;
-        }
-      }
-      ctx$$1.fillText(line, textX, lineY);
-
-      // Gotta yield something...
-      yield text;
-
-      // Blank out text.
-      ctx$$1.fillStyle = bgColor;
-      // Fill needs to be a bit bigger than text area due to antialias artifacts.
-      ctx$$1.fillRect(textX-1, textY-1, textWidth+2, textHeight+2);
+    if (currWidth > textWidth && index > 0) {
+      formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, line]);
+      line = `${word} `;
+      lineY += lineHeight;
+    } else {
+      line = currLine;
     }
-  };
 
-  const muhText = wrapText(ctx);
+  }
 
-  // Hook into cEl.
-  const { palette, render } = renderUI(c, {
-    // Whole screen.
-    geometry: createRectangle([0, 0], 0, w, h),
+  formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, line]);
 
-    render: (palette)=> {
-      const { ctx: ctx$$1, fillRectangle, strokeRectangle, fillText } = palette;
-
-      // Render dialog box.
-      ctx$$1.lineWidth = stroke;
-      fillRectangle(bgColor, [x,y], width, height);
-      strokeRectangle(strokeColor, [x,y], width, height);
-
-      // Render text.
-      muhText.next();
-
-      // Advance text upon click.
-      const advance = ()=>
-        muhText.next().done
-        && palette.clear()
-        && document.body.removeEventListener(advance);
-
-      document.body.addEventListener(`mousedown`, advance);
-    }
-  });
-
-  render();
+  return formattedText;
 };
 
-// import { createRectangle, getRectanglePoints } from './lib/geometry/index';
-// import { mapList, addList } from './lib/vector/index';
-// import { render, palette } from './graphics/index';
-// import { perspective } from './graphics/perspective';
-// import { mkTree, mkTreeAlt, mkCloud } from './graphics/sprite';
-// import { tree, treeAlt, avenger, cloud, mountain } from './graphics/emoji';
-Dialog([
-  `I am the very model of a modern major general!`,
-  `I have the information: animal, vegetable, mineral!`,
-  `It's 2AM and I need to sleep.`,
-  `Fuh`,
-  `Wuh tuh fuhhh`,
-  `My cat's breth smels liek cat food`,
-  `Hi rafe`
-]);
+const Dialog = {
+  // Whole screen.
+  geometry: createRectangle([viewWidth / 2, viewHeight - dialogHeight / 2], 0, dialogWidth, dialogHeight),
 
-// const dt = 0;
-// const t = 0;
+  render: (palette, { geometry }) => {
+    const { dialog } = state;
+    if (!dialog.length) return;
 
-// const testRect = createRectangle([0, 1600 / 2], 0, 10000, 1600);
-// const windowRect = createRectangle([0, 0], 0, window.innerWidth, window.innerHeight);
+    const { ctx: ctx$$1, fillRectangle, strokeRectangle, fillText } = palette;
+
+    fillRectangle(bgColor, [0, 0], geometry.width, geometry.height);
+    strokeRectangle(strokeColor, [0, 0], geometry.width, geometry.height);
+
+    // Render text
+    const [text, author] = dialog[0];
+    const formattedText = formatText(ctx$$1, text);
+    let offset = 0;
+    if (author) {//author) {
+      const [emoji, name] = author;
+      const { width: nameWidth } = ctx$$1.measureText(name);
+      const boxWidth = nameWidth + 16 + stroke$1 * 4;
+      const leftOffset = -dialogWidth / 2 + nameWidth;
+      const topOffset = -dialogHeight / 2 - stroke$1 * 2;
+      fillRectangle(bgColor, [leftOffset, topOffset], boxWidth, lineHeight + stroke$1 * 4);
+      strokeRectangle(strokeColor, [leftOffset, topOffset], boxWidth, lineHeight + stroke$1 * 4);
+      ctx$$1.font = `${textSize}px monospace`;
+      fillText({ style: textColor }, [leftOffset - 6 + stroke$1 * 4 - boxWidth / 2, topOffset - lineHeight / 2], emoji);
+      fillText({ style: textColor }, [leftOffset - 6 + stroke$1 * 4 - boxWidth / 2 + 16, topOffset - lineHeight / 2], name);
+      offset = lineHeight / 2;
+    }
+    formattedText.forEach(([x, y, line]) => {
+      fillText({ style: textColor }, [x, y + offset], line);
+    });
+
+    if (inputs.space && !justDeleted) {
+      state.dialog.shift();
+      justDeleted = true;
+    } else if (!inputs.space && justDeleted) {
+      justDeleted = false;
+    }
+  },
+  interact: {
+    onMouseDown: () => state.dialog.shift(),
+  }
+};
+
+const { palette, render } = renderUI(canvas, {
+  geometry: createRectangle([0, 0], 0, window.innerWidth, window.innerHeight),
+  children: [Dialog],
+});
+
+palette.ctx.imageSmoothingEnabled = false;
+
+const perspective =
+  // camera coords in 3d space
+  ([cX, cY, cZ]) =>
+    // 2d point
+    ([pX, pY]) => ([
+      pX + pY * (cX - pX) / (pY + cY) - cX + viewWidth / 2,
+      viewHeight - ((cY + pY) === 0 ? 0 : cZ * pY / (cY + pY)),
+      Math.sqrt(Math.pow(cY + pY, 2) + Math.pow((cX - pX), 2)),
+    ]);
+
+const avenger = '\uD83D\uDC69\uD83C\uDFFB\u200D\uD83C\uDFA4';
+
+const tree = '\uD83C\uDF32';
+const treeAlt = '\uD83C\uDF33';
+const cloud = '\u2601\uFE0F';
+
+const createSprite = (emoji) => ([x, y], z = 0) => ([x, y, z, emoji]);
+const mkTree = createSprite(tree);
+const mkTreeAlt = createSprite(treeAlt);
+
+const mkCloud = createSprite(cloud);
+
+let dt = 0;
+let t = 0;
+
+const groundPlane = createRectangle([0, 1600 / 2], 0, 10000, 1600);
+const windowRect = createRectangle([0, 0], 0, viewWidth * 2, viewHeight * 2);
+
+const { fillText, fillPolygon, strokePolygon, fillArc } = palette;
+const getX = () => Date.now() % 6000 / 20 - 150;
+const getY = () => 120;
+const getZ = () => Date.now() % 6000 / 30 - 20;//200;
+const getCamera = () => ([getX(), getY(), getZ()]);
+
+const groundGradient = palette.ctx.createLinearGradient(0, 0, 200, 200);
+groundGradient.addColorStop(0, `#5E8C6A`);
+groundGradient.addColorStop(1, `#BFB35A`);
+
+const skyGradient = palette.ctx.createLinearGradient(0, 0, 200, 200);
+skyGradient.addColorStop(0, `#69D2E7`);
+skyGradient.addColorStop(1, `#A7DBD8`);
+
+// Generate Trees
+const objects = [];
+let i = 1000;
+while (--i > 0) {
+  objects.push((Math.random() > 0.5 ? mkTree : mkTreeAlt)([
+    Math.random() * 5120 - 2560,
+    Math.random() * 1280,
+  ], 0));
+}
+
+i = 25;
+while (--i > 0) {
+  objects.push(mkCloud([
+    Math.random() * 10000 - 5000,
+    Math.random() * 1000 + 3500,
+  ], Math.random() * 30 + 10));
+}
+
+requestAnimationFrame(function main() {
+  dt = Math.min(16, Date.now() - t);
+
+  // Game Logic
+
+  // Render Graphics
+  palette.clear();
+  const calcScreenPosition = perspective(getCamera());
+
+  fillPolygon(
+    skyGradient,
+    [0, 0],
+    windowRect.points,
+  );
+
+  fillPolygon(
+    groundGradient,
+    [0, 0],
+    mapList(
+      addList(groundPlane.points, groundPlane.position),
+      calcScreenPosition,
+    ),
+  );
+
+  [...objects]
+    .map(point => [...calcScreenPosition(point), point[2], point[3], point[4]])
+    .sort((a, b) => b[2] - a[2])
+    .forEach(([x, y, d, z, emoji]) => fillText({}, [x, y - z], emoji));
+
+  fillText({ font: `16px` }, calcScreenPosition([20, 20]), avenger);
+
+  // Render UI
+  render();
 
 
-// const { fillText, fillPolygon, strokePolygon, fillArc } = palette;
-// const getX = () => Date.now() % 6000 / 20 - 150;
-// const getY = () => 120;
-// const getZ = () => Date.now() % 6000 / 30 - 20;//200;
-// const getCamera = () => ([
-//   getX(),
-//   getY(),
-//   getZ(),
-// ]);
-
-// const groundGradient = palette.ctx.createLinearGradient(0, 0, 200, 200);
-// groundGradient.addColorStop(0, `#5E8C6A`);
-// groundGradient.addColorStop(1, `#BFB35A`);
-
-// const skyGradient = palette.ctx.createLinearGradient(0, 0, 200, 200);
-// skyGradient.addColorStop(0, `#69D2E7`);
-// skyGradient.addColorStop(1, `#A7DBD8`);
-
-// // Generate Trees
-// const objects = [];
-// let i = 1000;
-// while(--i > 0) {
-//   objects.push((Math.random() > 0.5 ? mkTree : mkTreeAlt)([
-//     Math.random() * 5120 - 2560,
-//     Math.random() * 1280,
-//   ], 0));
-// }
-
-// i = 25;
-// while(--i > 0) {
-//   objects.push(mkCloud([
-//     Math.random() * 10000 - 5000,
-//     Math.random() * 1000 + 3500,
-//   ], Math.random() * 30 + 10));
-// }
-
-// requestAnimationFrame(function main() {
-//   palette.clear();
-//   const calcScreenPosition = perspective(getCamera());
-//   fillPolygon(
-//     skyGradient,
-//     [0, 0],
-//     windowRect.points,
-//   );
-//   fillPolygon(
-//     groundGradient,
-//     [0, 0],
-//     mapList(
-//       addList(testRect.points, testRect.position),
-//       calcScreenPosition,
-//     ),
-//   );
-
-//   [...objects]
-//     .map(point => [...calcScreenPosition(point), point[2], point[3], point[4]])
-//     .sort((a, b) => b[2] - a[2])
-//     .forEach(([x, y, d, emoji, offset]) => fillText({}, [x, y - offset], emoji));
-
-//   fillText({ font: `16px` }, calcScreenPosition([20, 20]), avenger);
-
-//   requestAnimationFrame(main);
-// });
-
-// requestAnimationFrame(function main() {
-//   dt = Math.min(16, Date.now() - t);
-//   // console.log(dt);
-
-//   // Compute Logic
-
-//   // Render Graphics
-//   // palette.clear();
-//   console.log(mapList(
-//     addList(testRect.points, testRect.position),
-//     calcScreenPosition,
-//   ))
-//   // render();
-
-//   t = Date.now();
-//   // requestAnimationFrame(main);
-// });
+  t = Date.now();
+  requestAnimationFrame(main);
+});
 
 }());
