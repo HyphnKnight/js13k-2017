@@ -1,4 +1,5 @@
 import { createRectangle, getRectanglePoints } from '../lib/geometry/index';
+import { viewWidth, viewHeight } from '../dom.js';
 import { title_text, base_text, white, black } from './style';
 import { inputs } from './controls';
 
@@ -7,7 +8,7 @@ let selected_index = 0;
 const createOption = (index, text, pos) => ({
   geometry: createRectangle(pos, 0, 140, 14),
   render: (palette, el) => {
-    const { fillRectangle, strokeRectangle, fillText, ctx } = palette;
+    const { fillRectangle, fillText, ctx } = palette;
     ctx.font = base_text;
     const { width } = ctx.measureText(text);
     el.geometry.width = width + 10;
@@ -25,7 +26,7 @@ const createOption = (index, text, pos) => ({
 });
 
 export const Menu = {
-  geometry: createRectangle([160 / 2, 120], 0, 140, 40),
+  geometry: createRectangle([viewWidth / 2, viewHeight / 2], 0, 140, 40),
   children: [
     createOption(0, `new game`, [0, 48]),
     createOption(1, `continue game`, [0, 72]),
@@ -36,7 +37,7 @@ export const Menu = {
       textBaseline: `middle`,
       style: white,
       font: title_text,
-    }, [-65, -8], `A L T E R`);
+    }, [-59, 0], `A L T E R`);
     (Date.now() % 600 > 400) && fillPolygon(
       `white`,
       selected_index === 0
