@@ -325,10 +325,11 @@ const fill = (draw) => (ctx) => (style, ...args) => {
   ctx.fill();
   ctx.restore();
 };
-const stroke = (draw) => (ctx) => (style, ...args) => {
+const stroke = (draw) => (ctx) => (style, thickness, ...args) => {
   ctx.save();
   ctx.beginPath();
   ctx.strokeStyle = style;
+  ctx.lineWidth = thickness;
   draw(ctx)(...args);
   ctx.stroke();
   ctx.restore();
@@ -817,8 +818,8 @@ const Dialog = {
 
     const { ctx: ctx$$1, fillRectangle, strokeRectangle, fillText } = palette;
     const maxChar = Math.floor((Date.now() - textStart) / textSpeed);
-    fillRectangle(bgColor, [0, 0], geometry.width, geometry.height);
-    strokeRectangle(strokeColor, [0, 0], geometry.width, geometry.height);
+    fillRectangle(bgColor, [0, -stroke$1], geometry.width, geometry.height);
+    strokeRectangle(strokeColor, stroke$1, [0, -stroke$1], geometry.width, geometry.height);
 
     // Render text
     const [text, author] = currentDialog;
@@ -829,9 +830,9 @@ const Dialog = {
       const { width: nameWidth } = ctx$$1.measureText(name);
       const boxWidth = nameWidth + 16 + stroke$1 * 4;
       const leftOffset = -dialogWidth / 2 + nameWidth;
-      const topOffset = -dialogHeight / 2 - stroke$1 * 2;
+      const topOffset = -dialogHeight / 2 - stroke$1 * 4;
       fillRectangle(bgColor, [leftOffset, topOffset], boxWidth, lineHeight + stroke$1 * 4);
-      strokeRectangle(strokeColor, [leftOffset, topOffset], boxWidth, lineHeight + stroke$1 * 4);
+      strokeRectangle(strokeColor, stroke$1, [leftOffset, topOffset], boxWidth, lineHeight + stroke$1 * 4);
       ctx$$1.font = `${textSize}px monospace`;
       fillText({ style: textColor }, [leftOffset - 6 + stroke$1 * 4 - boxWidth / 2, topOffset - lineHeight / 2], emoji);
       fillText({ style: textColor }, [leftOffset - 6 + stroke$1 * 4 - boxWidth / 2 + 16, topOffset - lineHeight / 2], name);
@@ -890,33 +891,6 @@ const mkPool = createSprite(pool);
 const mkDiamond = createSprite(diamond);
 
 const camera = [0, 120, 200];
-
-// state.dialog.push(
-//   [
-//     `I thought what I'd do was, I'd pretend I was one of those deaf-mutes.`,
-//     [avenger, `Avenger`],
-//   ], [
-//     `Of polished desert-quarried marble were its walls, in height 300 cubits and in breadth 75,`,
-//     [child, `Child`]
-//   ], [
-//     `so that chariots might pass each other as men drave them along the top.`,
-//     [child, `Child`]
-//   ], [
-//     `For full 500 stadia did they run, being open only on the side toward the lake;`,
-//     [protector, `Protector`]
-//   ], [
-//     `where a green stone sea-wall kept back the waves that rose oddly once a year`,
-//     [protector, `Protector`]
-//   ], [
-//     `at the festival of the destroying of Ib.`,
-//     [protector, `Protector`]
-//   ], [
-//     `In Sarnath were fifty streets from the lake to the gates of the caravans,`,
-//     [persecutor, `Persecutor`]
-//   ], [
-//     `and fifty more intersecting them.`,
-//     [persecutor, `Persecutor`]
-//   ]);
 
 let dt = 0;
 let t = 0;

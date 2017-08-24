@@ -60,10 +60,11 @@ const fill = (draw) => (ctx) => (style, ...args) => {
   ctx.fill();
   ctx.restore();
 };
-const stroke = (draw) => (ctx) => (style, ...args) => {
+const stroke = (draw) => (ctx) => (style, thickness, ...args) => {
   ctx.save();
   ctx.beginPath();
   ctx.strokeStyle = style;
+  ctx.lineWidth = thickness;
   draw(ctx)(...args);
   ctx.stroke();
   ctx.restore();

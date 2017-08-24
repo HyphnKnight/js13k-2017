@@ -82,8 +82,8 @@ export const Dialog = {
 
     const { ctx, fillRectangle, strokeRectangle, fillText } = palette;
     const maxChar = Math.floor((Date.now() - textStart) / textSpeed);
-    fillRectangle(bgColor, [0, 0], geometry.width, geometry.height);
-    strokeRectangle(strokeColor, [0, 0], geometry.width, geometry.height);
+    fillRectangle(bgColor, [0, -stroke], geometry.width, geometry.height);
+    strokeRectangle(strokeColor, stroke, [0, -stroke], geometry.width, geometry.height);
 
     // Render text
     const [text, author] = currentDialog;
@@ -94,9 +94,9 @@ export const Dialog = {
       const { width: nameWidth } = ctx.measureText(name);
       const boxWidth = nameWidth + 16 + stroke * 4;
       const leftOffset = -dialogWidth / 2 + nameWidth;
-      const topOffset = -dialogHeight / 2 - stroke * 2;
+      const topOffset = -dialogHeight / 2 - stroke * 4;
       fillRectangle(bgColor, [leftOffset, topOffset], boxWidth, lineHeight + stroke * 4);
-      strokeRectangle(strokeColor, [leftOffset, topOffset], boxWidth, lineHeight + stroke * 4);
+      strokeRectangle(strokeColor, stroke, [leftOffset, topOffset], boxWidth, lineHeight + stroke * 4);
       ctx.font = `${textSize}px monospace`;
       fillText({ style: textColor }, [leftOffset - 6 + stroke * 4 - boxWidth / 2, topOffset - lineHeight / 2], emoji);
       fillText({ style: textColor }, [leftOffset - 6 + stroke * 4 - boxWidth / 2 + 16, topOffset - lineHeight / 2], name);
