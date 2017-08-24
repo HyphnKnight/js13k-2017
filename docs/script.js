@@ -200,8 +200,8 @@ const createRectangle = (position, rotation = 0, width = 1, height = 1, label = 
 
 const canvas = document.querySelector(`canvas`);
 const ctx = canvas.getContext(`2d`);
-const viewWidth = 320;
-const viewHeight = 240;
+const viewWidth = 160;
+const viewHeight = 192;
 let canvasOffsetLeft = canvas.offsetWidth;
 let canvasOffsetTop = canvas.offsetHeight;
 let scaleX = 1;
@@ -517,6 +517,19 @@ const renderUI = (canvas$$1, base) => {
   };
 };
 
+// colors
+
+const white = `#fff`;
+
+// fonts
+const header = `Arial Black, Gadget, sans-serif`;
+const mono = `"Lucida Console", Monaco, monospace`;
+
+// text style
+const title_text = `24px ${  header}`;
+
+const base_text = `12px ${  mono}`;
+
 const keyCodes = {
 
   '38': `up`,
@@ -603,7 +616,52 @@ const parseKeyInfo =
 document.body.onkeyup = ({ keyCode }) => parseKeyInfo(keyCode, false);
 document.body.onkeydown = ({ keyCode }) => parseKeyInfo(keyCode, true);
 
-// Display modal command selection.
+let selected_index = 0;
+
+const createOption = (index, text, pos) => ({
+  geometry: createRectangle(pos, 0, 140, 14),
+  render: (palette, el) => {
+    const { fillRectangle, fillText, ctx: ctx$$1 } = palette;
+    ctx$$1.font = base_text;
+    const { width } = ctx$$1.measureText(text);
+    el.geometry.width = width + 10;
+    el.geometry.points = getRectanglePoints(el.geometry.width, el.geometry.height);
+    fillText({
+      textBaseline: `middle`,
+      font: base_text,
+      style: white,
+    }, [-width / 2, 0], text);
+  },
+  interact: {
+    onMouseMove: () => selected_index = index,
+    onMouseDown: () => selected_index = index,
+  }
+});
+
+const Menu = {
+  geometry: createRectangle([viewWidth / 2, viewHeight / 2], 0, 140, 40),
+  children: [
+    createOption(0, `new game`, [0, 48]),
+    createOption(1, `continue game`, [0, 72]),
+  ],
+  render: (palette, el) => {
+    const { fillText, fillPolygon } = palette;
+    fillText({
+      textBaseline: `middle`,
+      style: white,
+      font: title_text,
+    }, [-59, 0], `A L T E R`);
+    (Date.now() % 600 > 400) && fillPolygon(
+      `white`,
+      selected_index === 0
+        ? [-42, 48]
+        : [-60, 72],
+      [-5, 3, 5, 0, -5, -3]
+    );
+    (inputs.up || inputs.w) && (selected_index = 0);
+    (inputs.down || inputs.s) && (selected_index = 1);
+  },
+};
 
 const state = {
   // Dialog is an array of dialog data
@@ -626,18 +684,18 @@ const textSpeed = 50;
 
 // Dialog box traits.
 // Renders over bottom half of screen.
-const stroke$2 = 2;
-const dialogWidth = viewWidth - stroke$2;
+const stroke$1 = 2;
+const dialogWidth = viewWidth - stroke$1;
 const dialogHeight = viewHeight / 4;
-const strokeColor$1 = `#fff`;
-const bgColor$1 = `#00f`;
+const strokeColor = `#fff`;
+const bgColor = `#00f`;
 
 // Text traits.
-const textSize$1 = 12;
-const lineHeight$1 = textSize$1 * 1.2;
-const textWidth$1 = dialogWidth - stroke$2 * 4;
-const textHeight$1 = dialogHeight - stroke$2 * 4;
-const textColor$1 = `#fff`;
+const textSize = 12;
+const lineHeight = textSize * 1.2;
+const textWidth = dialogWidth - stroke$1 * 4;
+const textHeight = dialogHeight - stroke$1 * 4;
+const textColor = `#fff`;
 
 
 // Formatted text is an array of lineData
@@ -648,7 +706,7 @@ const formatText = (ctx$$1, text, maxChar) => {
   text = text.toUpperCase();
 
   ctx$$1.textBaseline = `top`;
-  ctx$$1.font = `${textSize$1}px monospace`;
+  ctx$$1.font = `${textSize}px monospace`;
 
   const words = text.split(` `);
   let line = ``;
@@ -661,31 +719,31 @@ const formatText = (ctx$$1, text, maxChar) => {
     const metrics = ctx$$1.measureText(currLine);
     const currWidth = metrics.width;
     if(charCount + currLine.length > maxChar) {
-      if(currWidth > textWidth$1) {
-        formattedText.push([-textWidth$1 / 2, -textHeight$1 / 2 + lineY, line]);
+      if(currWidth > textWidth) {
+        formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, line]);
         charCount += line.length;
-        formattedText.push([-textWidth$1 / 2, -textHeight$1 / 2 + lineY + lineHeight$1, word.substr(0, maxChar - charCount)]);
+        formattedText.push([-textWidth / 2, -textHeight / 2 + lineY + lineHeight, word.substr(0, maxChar - charCount)]);
       } else {
-        formattedText.push([-textWidth$1 / 2, -textHeight$1 / 2 + lineY, currLine.substr(0, maxChar - charCount)]);
+        formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, currLine.substr(0, maxChar - charCount)]);
       }
       return formattedText;
-    } else if(currWidth > textWidth$1 && index > 0) {
-      formattedText.push([-textWidth$1 / 2, -textHeight$1 / 2 + lineY, line]);
+    } else if(currWidth > textWidth && index > 0) {
+      formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, line]);
       charCount += line.length;
       line = `${word} `;
-      lineY += lineHeight$1;
+      lineY += lineHeight;
     } else {
       line = currLine;
     }
 
   }
 
-  formattedText.push([-textWidth$1 / 2, -textHeight$1 / 2 + lineY, line]);
+  formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, line]);
 
   return formattedText;
 };
 
-const Dialog$2 = {
+const Dialog = {
   geometry: createRectangle([viewWidth / 2, viewHeight - dialogHeight / 2], 0, dialogWidth, dialogHeight),
   render: (palette, { geometry }) => {
     const { dialog } = state;
@@ -695,8 +753,8 @@ const Dialog$2 = {
 
     const { ctx: ctx$$1, fillRectangle, strokeRectangle, fillText } = palette;
     const maxChar = Math.floor((Date.now() - textStart) / textSpeed);
-    fillRectangle(bgColor$1, [0, 0], geometry.width, geometry.height);
-    strokeRectangle(strokeColor$1, [0, 0], geometry.width, geometry.height);
+    fillRectangle(bgColor, [0, 0], geometry.width, geometry.height);
+    strokeRectangle(strokeColor, [0, 0], geometry.width, geometry.height);
 
     // Render text
     const [text, author] = currentDialog;
@@ -705,18 +763,18 @@ const Dialog$2 = {
     if(author) {//author) {
       const [emoji, name] = author;
       const { width: nameWidth } = ctx$$1.measureText(name);
-      const boxWidth = nameWidth + 16 + stroke$2 * 4;
+      const boxWidth = nameWidth + 16 + stroke$1 * 4;
       const leftOffset = -dialogWidth / 2 + nameWidth;
-      const topOffset = -dialogHeight / 2 - stroke$2 * 2;
-      fillRectangle(bgColor$1, [leftOffset, topOffset], boxWidth, lineHeight$1 + stroke$2 * 4);
-      strokeRectangle(strokeColor$1, [leftOffset, topOffset], boxWidth, lineHeight$1 + stroke$2 * 4);
-      ctx$$1.font = `${textSize$1}px monospace`;
-      fillText({ style: textColor$1 }, [leftOffset - 6 + stroke$2 * 4 - boxWidth / 2, topOffset - lineHeight$1 / 2], emoji);
-      fillText({ style: textColor$1 }, [leftOffset - 6 + stroke$2 * 4 - boxWidth / 2 + 16, topOffset - lineHeight$1 / 2], name);
-      offset = lineHeight$1 / 2;
+      const topOffset = -dialogHeight / 2 - stroke$1 * 2;
+      fillRectangle(bgColor, [leftOffset, topOffset], boxWidth, lineHeight + stroke$1 * 4);
+      strokeRectangle(strokeColor, [leftOffset, topOffset], boxWidth, lineHeight + stroke$1 * 4);
+      ctx$$1.font = `${textSize}px monospace`;
+      fillText({ style: textColor }, [leftOffset - 6 + stroke$1 * 4 - boxWidth / 2, topOffset - lineHeight / 2], emoji);
+      fillText({ style: textColor }, [leftOffset - 6 + stroke$1 * 4 - boxWidth / 2 + 16, topOffset - lineHeight / 2], name);
+      offset = lineHeight / 2;
     }
     formattedText.forEach(([x, y, line]) => {
-      fillText({ style: textColor$1 }, [x, y + offset], line);
+      fillText({ style: textColor }, [x, y + offset], line);
     });
 
     if(maxChar >= text.length && inputs.space && !justDeleted) {
@@ -739,7 +797,7 @@ const Dialog$2 = {
 
 const { palette, render } = renderUI(canvas, {
   geometry: createRectangle([0, 0], 0, window.innerWidth, window.innerHeight),
-  children: [Dialog$2],
+  children: [Dialog],
 });
 
 palette.ctx.imageSmoothingEnabled = false;

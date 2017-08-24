@@ -1,7 +1,7 @@
 import { renderUI } from './lib/cEl/index.js';
 import { createRectangle } from './lib/geometry/index';
 
-import { Menu } from './menu.js';
+import { Menu } from './title.js';
 import { Dialog } from './dialog.js';
 
 import { canvas } from './dom.js';
