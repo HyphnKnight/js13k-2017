@@ -2,8 +2,8 @@
 
 export const canvas = document.querySelector(`canvas`);
 export const ctx = canvas.getContext(`2d`);
-export const viewWidth = 320;
-export const viewHeight = 240;
+export const viewWidth = 160;
+export const viewHeight = 192;
 export let canvasOffsetLeft = canvas.offsetWidth;
 export let canvasOffsetTop = canvas.offsetHeight;
 export let scaleX = 1;
