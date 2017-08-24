@@ -158,7 +158,18 @@ const rotateList = (list, rotation) => {
 
 const rotateListAround = (list, point, rotation) => addList(rotateList(subtractList(list, point), rotation), point);
 
+
+
+
+
+
+//# sourceMappingURL=tuple.js.map
+
 const uniqueId = () => Math.random().toString(36).substr(2, 9) + Math.random().toString(36).substr(2, 9);
+
+//# sourceMappingURL=quickSort.js.map
+
+//# sourceMappingURL=mergeSort.js.map
 
 function find(array, func) {
   let i = -1;
@@ -170,7 +181,38 @@ function find(array, func) {
   return null;
 }
 
-/* Utilities */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//# sourceMappingURL=index.js.map
+
 const getRectanglePoints = (width, height) => ([
   -width / 2, +height / 2,
   -width / 2, -height / 2,
@@ -195,6 +237,8 @@ const createRectangle = (position, rotation = 0, width = 1, height = 1, label = 
 
 
 /* Utility Funcs */
+
+//# sourceMappingURL=tuple.js.map
 
 // Reused DOM elements and objects.
 
@@ -374,7 +418,6 @@ class Transform {
   }
 }
 
-/* -1 === left, 0 === aligned, 1 === right */
 const pointRelationToLine = (point, line) => sign((line[2] - line[0]) * (point[1] - line[1]) - (line[3] - line[1]) * (point[0] - line[0]));
 const isPointInCircle = (point, position, radius) => magnitudeSqr(subtract(point, position)) <= sqr(radius);
 const isPointInAlignedRectangle = (point, position, width, height) => Math.abs(point[0] - position[0]) <= width / 2 &&
@@ -407,6 +450,8 @@ const isPolygonInPolygon = (positionA, pointsA, positionB, pointsB) => {
   }
   return false;
 };
+
+//# sourceMappingURL=tuple.js.map
 
 /*
     Nestable UI elements that instead of being dom nodes are instead
@@ -663,6 +708,20 @@ const Menu = {
   },
 };
 
+const child = `\uD83D\uDC69\uD83C\uDFFC\u200D\uD83C\uDF3E`;
+const protector = `\uD83D\uDC6E\uD83C\uDFFF\u200D\u2640\uFE0F`;
+const persecutor = `\uD83D\uDD75\uD83C\uDFFD`;
+const avenger = `\uD83D\uDC69\uD83C\uDFFB\u200D\uD83C\uDFA4`;
+
+const tree = `\uD83C\uDF32`;
+const treeAlt = `\uD83C\uDF33`;
+const cloud = `\u2601\uFE0F`;
+
+
+
+const pool = `\uD83C\uDF75`;
+const diamond = `\uD83D\uDD37`;
+
 const state = {
   // Dialog is an array of dialog data
   // dialog data is an array with the following values
@@ -671,7 +730,12 @@ const state = {
   //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris mattis purus sed luctus dignissim. Phasellus hendrerit quam et urna tempor, eu porttitor dui feugiat. Praesent vestibulum est lectus, et vehicula velit laoreet non.',
   //   [avenger, `Avenger${Math.floor(Math.random() * 10)}`],
   // ]
-  dialog: [],
+  dialog: [
+    [
+      `yolo`,
+      [avenger, `ya mum`]
+    ]
+  ],
   position: [0, 0],
 };
 
@@ -787,10 +851,10 @@ const Dialog = {
   },
   interact: {
     onMouseDown: () => {
-      if(maxChar >= text.length) {
-        state.dialog.shift();
-        textStart = null;
-      }
+      //if(maxChar >= text.length) {
+      state.dialog.shift();
+      textStart = null;
+      //}
     },
   }
 };
@@ -811,20 +875,6 @@ const perspective =
       viewHeight - ((cY + pY) === 0 ? 0 : cZ * pY / (cY + pY)),
       Math.sqrt(Math.pow(cY + pY, 2) + Math.pow((cX - pX), 2)),
     ]);
-
-const child = `\uD83D\uDC69\uD83C\uDFFC\u200D\uD83C\uDF3E`;
-const protector = `\uD83D\uDC6E\uD83C\uDFFF\u200D\u2640\uFE0F`;
-const persecutor = `\uD83D\uDD75\uD83C\uDFFD`;
-const avenger = `\uD83D\uDC69\uD83C\uDFFB\u200D\uD83C\uDFA4`;
-
-const tree = `\uD83C\uDF32`;
-const treeAlt = `\uD83C\uDF33`;
-const cloud = `\u2601\uFE0F`;
-
-
-
-const pool = `\uD83C\uDF75`;
-const diamond = `\uD83D\uDD37`;
 
 const createSprite = (emoji) => ([x, y], z = 0) => ([x, y, z, emoji]);
 const mkTree = createSprite(tree);
@@ -930,7 +980,7 @@ objects.push(avngSprite, chldSprite, protSprite, persSprite, diamondSprite);
 
 requestAnimationFrame(function main() {
   dt = Math.min(16, Date.now() - t);
-  camera[2] = 40 + (Date.now() % 3000) / 3000 * 120;
+  camera[2] = 90; //+ (Date.now() % 3000) / 3000 * 120;
 
   // Game Logic
   direction[0] = 0;

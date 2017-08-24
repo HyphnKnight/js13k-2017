@@ -116,10 +116,10 @@ export const Dialog = {
   },
   interact: {
     onMouseDown: () => {
-      if(maxChar >= text.length) {
-        state.dialog.shift();
-        textStart = null;
-      }
+      //if(maxChar >= text.length) {
+      state.dialog.shift();
+      textStart = null;
+      //}
     },
   }
 };

@@ -99,7 +99,7 @@ objects.push(avngSprite, chldSprite, protSprite, persSprite, diamondSprite);
 
 requestAnimationFrame(function main() {
   dt = Math.min(16, Date.now() - t);
-  camera[2] = 40 + (Date.now() % 3000) / 3000 * 120;
+  camera[2] = 90; //+ (Date.now() % 3000) / 3000 * 120;
 
   // Game Logic
   direction[0] = 0;
