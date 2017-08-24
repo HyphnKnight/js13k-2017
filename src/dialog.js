@@ -106,7 +106,7 @@ export const Dialog = {
       fillText({ style: textColor }, [x, y + offset], line);
     });
 
-    if(maxChar >= text.length && inputs.space && !justDeleted) {
+    if(/*maxChar >= text.length &&*/ inputs.space && !justDeleted) {
       state.dialog.shift();
       textStart = null;
       justDeleted = true;

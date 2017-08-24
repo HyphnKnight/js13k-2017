@@ -46,7 +46,7 @@ export function times(length, func) {
 }
 export const difference = (array, targetArray) => filter(array, (val) => targetArray.indexOf(val) === -1);
 export const intersection = (array, targetArray) => filter(array, (val) => targetArray.indexOf(val) !== -1);
-export const flatten = (array) => [].concat.apply([], array);
+export const flatten = (array) => [].concat(...array);
 export const unique = (array) => filter(array, (value, index, self) => self.indexOf(value) === index);
 export function uniqueBy(array, func) {
   const result = [];
