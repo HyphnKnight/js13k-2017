@@ -27,5 +27,3 @@ export const mkMountain = createSprite(mountain);
 export const mkGhost = createSprite(ghost);
 export const mkPool = createSprite(pool);
 export const mkDiamond = createSprite(diamond);
-
-export const drawSprite = ([x, y, _d, _z, emoji]) => fillText({}, [x, y], emoji);
