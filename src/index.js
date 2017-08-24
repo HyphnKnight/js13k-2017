@@ -1,6 +1,3 @@
-import { playCanonD } from 'audio';
-playCanonD();
-
 import { createRectangle, getRectanglePoints } from 'lib/geometry';
 import { mapList, addList, scaleToSet, addSet, subtract, magnitude } from 'lib/vector';
 import { sign } from 'lib/math';
@@ -60,7 +57,7 @@ skyGradient.addColorStop(1, `#A7DBD8`);
 // Generate Trees
 const objects = [];
 let i = 1000;
-while (--i > 0) {
+while(--i > 0) {
   objects.push((Math.random() > 0.5 ? mkTree : mkTreeAlt)([
     Math.random() * 5120 - 2560,
     Math.random() * 1280,
@@ -68,7 +65,7 @@ while (--i > 0) {
 }
 
 i = 25;
-while (--i > 0) {
+while(--i > 0) {
   objects.push(mkCloud([
     Math.random() * 10000 - 5000,
     Math.random() * 1000 + 3500,
@@ -76,7 +73,7 @@ while (--i > 0) {
 }
 
 i = 5;
-while (--i > 0) {
+while(--i > 0) {
   objects.push(mkPool([
     Math.random() * 5120 - 2560,
     Math.random() * 1280,
@@ -93,7 +90,7 @@ const diamondSprite = mkDiamond([Math.random() * 20 - 10, Math.random() * 20 - 1
 
 const calcFollow = (followPos) => (sprite, distance) => {
   const relativePos = subtract(state.position, sprite);
-  if (magnitude(relativePos) > distance) {
+  if(magnitude(relativePos) > distance) {
     addSet(sprite, scaleToSet(relativePos, charSpeed));
   }
 };
@@ -107,18 +104,10 @@ requestAnimationFrame(function main() {
   // Game Logic
   direction[0] = 0;
   direction[1] = 0;
-  if (inputs.w || inputs.up) {
-    direction[1] += 1;
-  }
-  if (inputs.s || inputs.down) {
-    direction[1] -= 1;
-  }
-  if (inputs.d || inputs.right) {
-    direction[0] += 1;
-  }
-  if (inputs.a || inputs.left) {
-    direction[0] -= 1;
-  }
+  if(inputs.w || inputs.up) direction[1] += 1;
+  if(inputs.s || inputs.down) direction[1] -= 1;
+  if(inputs.d || inputs.right) direction[0] += 1;
+  if(inputs.a || inputs.left) direction[0] -= 1;
   addSet(state.position, scaleToSet(direction, charSpeed));
   state.position[1] = Math.max(state.position[1], 5);
   avngSprite[0] = state.position[0];
@@ -129,7 +118,7 @@ requestAnimationFrame(function main() {
   follow(persSprite, 70 + Date.now() % 300 / 30);
   follow(diamondSprite, 90 + Date.now() % 300 / 30);
   const xDiff = state.position[0] - camera[0];
-  if (Math.abs(xDiff) > viewWidth * 0.2) {
+  if(Math.abs(xDiff) > viewWidth * 0.2) {
     camera[0] += xDiff - sign(xDiff) * viewWidth * 0.2;
   }
 

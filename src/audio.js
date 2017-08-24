@@ -3,13 +3,13 @@ const context = new AudioContext();
 const wait = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
 
 async function playNote(note, length) {
-  if (note === '') return await wait(length * 1000 * 0.75);
+  if(note === ``) return await wait(length * 1000 * 0.75);
   const oscillator = context.createOscillator();
   const gain = context.createGain();
 
   oscillator.connect(gain);
 
-  oscillator.type = 'sawtooth';
+  oscillator.type = `sawtooth`;
   oscillator.frequency.value = note;
   gain.connect(context.destination);
   oscillator.start(0);
@@ -24,10 +24,10 @@ async function playNote(note, length) {
 async function playSong(music) {
   let i = -1;
   let h = -1;
-  while (++i < music.length) {
+  while(++i < music.length) {
     const [note, length] = music[i];
-    if (Array.isArray(note)) {
-      while (++h < note.length - 1) {
+    if(Array.isArray(note)) {
+      while(++h < note.length - 1) {
         playNote(note[h], Array.isArray(length) ? length[h] : length);
       }
       playNote(note[h], Array.isArray(length) ? length[h] : length);
@@ -178,7 +178,7 @@ const A7 = 3520.00;
 const As7 = 3729.31;
 const Bb7 = 3729.31;
 const B7 = 3951.07;
-const C8 = 4186.01
+const C8 = 4186.01;
 
 export const playCanonD = async () => await playSong([
 
@@ -261,7 +261,7 @@ export const playCanonD = async () => await playSong([
 
 
   // line 5
-  [['', E5, C5], [0.5, 1, 1]],
+  [[``, E5, C5], [0.5, 1, 1]],
   [C6, 0.5],
   [[D6, G4], [0.5, 1, 1]],
   [B5, 0.5],
