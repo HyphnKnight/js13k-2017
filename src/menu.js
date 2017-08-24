@@ -3,13 +3,13 @@
 import { renderUI } from './lib/cEl/index.js';
 import { createRectangle } from './lib/geometry/index.js';
 import { inputs } from './controls.js';
-import { canvas, viewHeight, viewWidth } from './dom.js';
+import { canvas, ctx, viewHeight, viewWidth } from './dom.js';
 
 // Menu box traits.
-// Renders over bottom half of screen.
+// Flexible size.
 const stroke = 2;
-const menuWidth = viewWidth - stroke;
-const menuHeight = viewHeight / 4;
+let menuWidth = 0;
+let menuHeight = 0;
 const strokeColor = `#fff`;
 const bgColor = `#00f`;
 
@@ -20,17 +20,21 @@ const textWidth = menuWidth - stroke * 4;
 const textHeight = menuHeight - stroke * 4;
 const textColor = `#fff`;
 
-const Command = (label, handler)=> ({
-  geometry: createRectangle([viewWidth / 2, viewHeight - menuHeight / 2], 0, menuWidth, menuHeight),
+const Command = (label, handler)=> {
+  menuWidth = Math.max(menuWidth, ctx.measureText(label).width);
 
-  render: ({ fillText }, { geometry })=> {
-    fillText({ style: textColor }, [0, 0], label);
-  },
+  return {
+    geometry: createRectangle([viewWidth / 2, viewHeight - menuHeight / 2], 0, menuWidth, menuHeight),
 
-  interact: {
-    onMouseDown: handler
-  }
-});
+    render: ({ fillText }, { geometry })=> {
+      fillText({ style: textColor }, [0, 0], label);
+    },
+
+    interact: {
+      onMouseDown: handler
+    }
+  };
+};
 
 export class Menu {
   constructor() {
@@ -38,9 +42,15 @@ export class Menu {
   }
 
   add(label, handler) {
+    menuHeight += lineHeight;
     const cmd = Command(label, handler);
     this.commands.add(cmd);
     return cmd;
+  }
+
+  delete(cmd) {
+    menuHeight -= lineHeight;
+    this.commands.delete(cmd);
   }
 
   render() {
