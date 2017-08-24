@@ -1,4 +1,4 @@
-import { viewWidth, viewHeight } from '../dom.js';
+import { viewWidth, viewHeight } from './dom.js';
 
 export const perspective =
   // camera coords in 3d space

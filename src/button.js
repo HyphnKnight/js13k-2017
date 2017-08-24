@@ -1,4 +1,4 @@
-import { createRectangle } from '../lib/geometry/index';
+import { createRectangle } from './lib/geometry/index';
 import { button_text, white } from './style';
 
 export const createButton = (text, pos, onClick) => ({

@@ -1,6 +1,6 @@
 import {
   palette
-} from './index';
+} from './render';
 import {
   tree,
   treeAlt,

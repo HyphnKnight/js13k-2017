@@ -1,5 +1,5 @@
-import { createRectangle, getRectanglePoints } from '../lib/geometry/index';
-import { viewWidth, viewHeight } from '../dom.js';
+import { createRectangle, getRectanglePoints } from './lib/geometry/index';
+import { viewWidth, viewHeight } from './dom.js';
 import { title_text, base_text, white, black } from './style';
 import { inputs } from './controls';
 

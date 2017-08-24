@@ -2,12 +2,12 @@ import { createRectangle, getRectanglePoints } from './lib/geometry/index';
 import { mapList, addList, scaleToSet, addSet, subtract, magnitude } from './lib/vector/index';
 import { sign } from './lib/math/index';
 import { viewWidth, viewHeight } from './dom.js';
-import { render, palette } from './graphics/index';
-import { perspective } from './graphics/perspective';
-import { mkTree, mkTreeAlt, mkCloud, mkAvenger, mkChild, mkProtector, mkPersecutor, mkPool, mkDiamond } from './graphics/sprite';
-import { tree, treeAlt, avenger, cloud, mountain, child, protector, persecutor } from './graphics/emoji';
-import { camera } from './graphics/camera';
-import { inputs } from './graphics/controls';
+import { render, palette } from './render';
+import { perspective } from './perspective';
+import { mkTree, mkTreeAlt, mkCloud, mkAvenger, mkChild, mkProtector, mkPersecutor, mkPool, mkDiamond } from './sprite';
+import { tree, treeAlt, avenger, cloud, mountain, child, protector, persecutor } from './emoji';
+import { camera } from './camera';
+import { inputs } from './controls';
 import state from './state';
 
 // state.dialog.push(
