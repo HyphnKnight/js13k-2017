@@ -818,8 +818,8 @@ const Dialog = {
 
     const { ctx: ctx$$1, fillRectangle, strokeRectangle, fillText } = palette;
     const maxChar = Math.floor((Date.now() - textStart) / textSpeed);
-    fillRectangle(bgColor, [0, -stroke$1], geometry.width, geometry.height);
-    strokeRectangle(strokeColor, stroke$1, [0, -stroke$1], geometry.width, geometry.height);
+    fillRectangle(bgColor, [0, -stroke$1/2], geometry.width, geometry.height);
+    strokeRectangle(strokeColor, stroke$1, [0, -stroke$1/2], geometry.width, geometry.height);
 
     // Render text
     const [text, author] = currentDialog;
@@ -830,7 +830,7 @@ const Dialog = {
       const { width: nameWidth } = ctx$$1.measureText(name);
       const boxWidth = nameWidth + 16 + stroke$1 * 4;
       const leftOffset = -dialogWidth / 2 + nameWidth;
-      const topOffset = -dialogHeight / 2 - stroke$1 * 4;
+      const topOffset = -dialogHeight / 2 - stroke$1 * 2;
       fillRectangle(bgColor, [leftOffset, topOffset], boxWidth, lineHeight + stroke$1 * 4);
       strokeRectangle(strokeColor, stroke$1, [leftOffset, topOffset], boxWidth, lineHeight + stroke$1 * 4);
       ctx$$1.font = `${textSize}px monospace`;
