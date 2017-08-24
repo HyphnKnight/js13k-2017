@@ -1,6 +1,6 @@
-import { rotate, scaleSet, subtractListSet, averageList, rotateList, addListSet } from '../vector/index';
-import { uniqueId } from '../string/index';
-import { times, flatten } from '../array/index';
+import { rotate, scaleSet, subtractListSet, averageList, rotateList, addListSet } from 'lib/vector';
+import { uniqueId } from 'lib/string';
+import { times, flatten } from 'lib/array';
 /* Utilities */
 export const getRectanglePoints = (width, height) => ([
   -width / 2, +height / 2,

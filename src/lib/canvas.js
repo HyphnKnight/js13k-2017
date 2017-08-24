@@ -1,6 +1,6 @@
-import { round } from '../math/index.js';
-import { subtractList, } from '../vector/index.js';
-import { uniqueId } from '../string/index';
+import { round } from 'lib/math';
+import { subtractList, } from 'lib/vector';
+import { uniqueId } from 'lib/string';
 const originVector = [0, 0];
 const translate = (ctx) => (vec) => ctx.translate(round(vec[0], 0), round(vec[1], 0));
 const rotate = (ctx) => (angle) => ctx.rotate(angle);

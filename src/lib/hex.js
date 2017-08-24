@@ -1,5 +1,5 @@
-import { flatten, any } from '../array/index';
-import { lerp as nLerp } from '../math/index';
+import { flatten, any } from 'lib/array';
+import { lerp as nLerp } from 'lib/math';
 const neighborPosition = [
   [0, 0, -1],
   [1, 0, -1],

@@ -1,6 +1,4 @@
-import {
-  palette
-} from './render';
+import { palette } from 'ui';
 import {
   tree,
   treeAlt,
@@ -13,7 +11,7 @@ import {
   ghost,
   pool,
   diamond,
-} from './emoji';
+} from 'emoji';
 
 const { fillText } = palette;
 

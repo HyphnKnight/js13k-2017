@@ -1,4 +1,4 @@
-import {avenger} from './emoji';
+import { avenger } from 'emoji';
 
 const state = {
   // Dialog is an array of dialog data

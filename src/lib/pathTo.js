@@ -1,4 +1,9 @@
-import { createNode } from './node';
+const createNode = (id, data, resist, priority, cameFrom) => ({
+  id, data, resist, priority,
+  cameFrom: cameFrom || null,
+  hasBeenRoot: false,
+});
+
 export function pathTo(pathingData) {
   const { start, destination, getUniqueId, getNeighbors, priorityFunc, resistFunc, maxResist } = pathingData;
   if(start === destination)

@@ -1,9 +1,9 @@
 // Display modal command selection.
 
-import { renderUI } from './lib/cEl/index.js';
-import { createRectangle } from './lib/geometry/index.js';
-import * as dom from './dom.js';
-import { inputs } from './controls.js';
+import { renderUI } from 'lib/cEl';
+import { createRectangle } from 'ib/geometry';
+import * as dom from 'dom';
+import { inputs } from 'controls';
 
 // Dialog box traits.
 // Renders over bottom half of screen.

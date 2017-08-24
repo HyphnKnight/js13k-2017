@@ -2,11 +2,11 @@
     Nestable UI elements that instead of being dom nodes are instead
     are rendered to a canvas element.
  */
-import { canvasOffsetLeft, canvasOffsetTop, scaleX, scaleY } from '../../dom.js';
-import { createRectangle, } from '../geometry/index.js';
-import { createPalette, Transform } from '../canvas/index.js';
-import { rotateListAround, addListSet, rotate as rotateVec, addSet, subtractSet } from '../vector/index.js';
-import { isPointInCircle, isPointInAlignedRectangle, isPointInPolygon, isCircleInAlignedRectangle, isAlignedRectangleInAlignedRectangle, isPolygonInPolygon, } from '../intersection/index.js';
+import { canvasOffsetLeft, canvasOffsetTop, scaleX, scaleY } from 'dom';
+import { createRectangle, } from 'lib/geometry';
+import { createPalette, Transform } from 'lib/canvas';
+import { rotateListAround, addListSet, rotate as rotateVec, addSet, subtractSet } from 'lib/vector';
+import { isPointInCircle, isPointInAlignedRectangle, isPointInPolygon, isCircleInAlignedRectangle, isAlignedRectangleInAlignedRectangle, isPolygonInPolygon, } from 'lib/intersection';
 export const onMouseDownCollection = new Map();
 export const onMouseMoveCollection = new Map();
 export const onMouseUpCollection = new Map();
