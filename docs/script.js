@@ -972,6 +972,175 @@ var logic = () => {
   // console.log(camera[0]);
 };
 
+const context = new AudioContext();
+
+const wait = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
+
+async function playNote(note, length) {
+  if(note === ``) return await wait(length * 1000 * 0.75);
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+
+  oscillator.connect(gain);
+
+  oscillator.type = `sawtooth`;
+  oscillator.frequency.value = note;
+  gain.connect(context.destination);
+  oscillator.start(0);
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.00001, context.currentTime + length
+  );
+
+  await wait(length * 1000 * 0.75);
+}
+
+async function playSong(music) {
+  let i = -1;
+  let h = -1;
+  while(++i < music.length) {
+    const [note, length] = music[i];
+    if(Array.isArray(note)) {
+      while(++h < note.length - 1) {
+        playNote(note[h], Array.isArray(length) ? length[h] : length);
+      }
+      playNote(note[h], Array.isArray(length) ? length[h] : length);
+      await wait((Array.isArray(length) ? Math.min(...length) : length) * 1000 * 0.75);
+      h = -1;
+    } else {
+      await playNote(note, length);
+    }
+  }
+  return await true;
+}
+
+const C4 = 261.63;
+const E4 = 329.63;
+const F4 = 349.23;
+const G4 = 392.00;
+const A4 = 440.00;
+const B4 = 493.88;
+const C5 = 523.25;
+const D5 = 587.33;
+const E5 = 659.26;
+const F5 = 698.46;
+const G5 = 783.99;
+const A5 = 880.00;
+const Bb5 = 932.33;
+const B5 = 987.77;
+const C6 = 1046.50;
+const D6 = 1174.66;
+const E6 = 1318.51;
+const F6 = 1396.91;
+const G6 = 1567.98;
+const A6 = 1760.00;
+const playCanonD = async () => await playSong([
+
+  // line 1
+  [[E5, C5], 1],
+  [[D5, G4], 1],
+
+  [[C5, A4], 1],
+  [[B4, E4], 1],
+
+  [[A4, F4], 1],
+  [[G4, C4], 1],
+
+  [[A4, F4], 1],
+  [[B4, G4], 1],
+
+  // line 2
+  [[E6, G5, C5], 1],
+  [[D6, B5, G4], 1],
+
+  [[C6, A4], 1],
+  [[B5, G5, E4], 1],
+
+  [[A5, C5, F4], 1],
+  [[G5, E5, C4], 1],
+
+  [[A5, F5, F4], 1],
+  [[B5, D5, G4], 1],
+
+  // line 3
+  [[C6, C5, E5], [0.5, 1, 1]],
+  [C6, 0.5],
+  [[D6, D5, G4], [0.5, 1, 1]],
+  [B5, 0.5],
+
+  [[C6, E5, A5], [0.5, 1, 1]],
+  [E6, 0.5],
+  [[G6, E4], [0.5, 1, 1]],
+  [G5, 0.5],
+
+  [[A5, A4, F4], [0.5, 1, 1]],
+  [F5, 0.5],
+  [[E5, C4], [0.5, 1, 1]],
+  [G5, 0.5],
+
+  [[F5, A4, F4], [0.5, 1, 1]],
+  [C6, 0.5],
+  [[B5, B4, G4], [0.5, 1, 1]],
+  [G5, 0.5],
+
+  // line 4
+  [[C6, E5, C5], [0.5, 1, 1]],
+  [E6, 0.25],
+  [G6, 0.25],
+  [[G6, G4], [0.25, 1, 1]],
+  [A6, 0.25],
+  [G6, 0.25],
+  [F6, 0.25],
+
+  [[E6, A4, C5], [0.75, 1, 1]],
+  [E6, 0.25],
+  [[E6, G4, E4], [0.25, 1, 1]],
+  [F6, 0.25],
+  [E6, 0.25],
+  [D6, 0.25],
+
+  [[C6, A4, F4], [0.25, 1, 1]],
+  [Bb5, 0.25],
+  [A5, 0.25],
+  [B5, 0.25],
+  [[G5, E4, C4], [0.5, 1, 1]],
+  [E5, 0.5],
+
+  [[C5, A4, F4], [0.5, 1, 1]],
+  [F5, 0.25],
+  [E5, 0.25],
+  [[D5, B4, G4], [0.5, 1, 1]],
+  [G5, 0.25],
+  [F5, 0.25],
+
+
+  // line 5
+  [[``, E5, C5], [0.5, 1, 1]],
+  [C6, 0.5],
+  [[D6, G4], [0.5, 1, 1]],
+  [B5, 0.5],
+
+  [[C6, C5, A4], [0.5, 1, 1]],
+  [E5, 0.5],
+  [[G5, B4, E4], [0.75, 1, 1]],
+  [A5, 0.25],
+
+  [[F5, A4, F4], [0.5, 1, 1]],
+  [C5, 0.5],
+  [[E5, G4, C4], [0.5, 1, 1]],
+  [G5, 0.5],
+
+  [[F5, A4, F4], [0.5, 1, 1]],
+  [E5, 0.5],
+  [[D5, B4, G4], [0.5, 1, 1]],
+  [G5, 0.5],
+
+  [[E5, C5, C4], [2, 2, 2]],
+
+]);
+
+playCanonD();
+
 loop(dt => {
 
   // Logic
