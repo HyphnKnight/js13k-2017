@@ -1,3 +1,6 @@
+import { playCanonD } from 'audio';
+playCanonD();
+
 import { createRectangle, getRectanglePoints } from 'lib/geometry';
 import { mapList, addList, scaleToSet, addSet, subtract, magnitude } from 'lib/vector';
 import { sign } from 'lib/math';
