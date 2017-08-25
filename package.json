@@ -4,8 +4,8 @@
   "description": "js13k Game Submission Edit",
   "main": "index.js",
   "scripts": {
-    "start": "rollup --config --watch",
-    "compile": "rollup --config",
+    "start": "rollup --config rollup.config.dev.js --watch",
+    "compile": "rollup --config rollup.config.prod.js",
     "compress": "minify docs -d dist",
     "zip": "bestzip Alter.zip dist",
     "test-size": "du -h Alter.zip",
