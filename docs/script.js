@@ -909,7 +909,7 @@ const direction = [0, 0];
 const charSpeed = 3;
 
 let i = 1000;
-while (--i > 0) {
+while(--i > 0) {
   graphics.push((Math.random() > 0.5 ? mkTree : mkTreeAlt)([
     Math.random() * 5120 - 2560,
     Math.random() * 1280,
@@ -917,7 +917,7 @@ while (--i > 0) {
 }
 
 i = 25;
-while (--i > 0) {
+while(--i > 0) {
   graphics.push(mkCloud([
     Math.random() * 10000 - 5000,
     Math.random() * 1000 + 3500,
@@ -925,7 +925,7 @@ while (--i > 0) {
 }
 
 i = 5;
-while (--i > 0) {
+while(--i > 0) {
   graphics.push(mkPool([
     Math.random() * 5120 - 2560,
     Math.random() * 1280,
@@ -942,7 +942,7 @@ const calcFollow =
   (followPos) =>
     (sprite, distance$$1) => {
       const relativePos = subtract(state.position, sprite);
-      if (magnitude(relativePos) > distance$$1) {
+      if(magnitude(relativePos) > distance$$1) {
         addSet(sprite, scaleToSet(relativePos, charSpeed));
       }
     };
@@ -954,10 +954,10 @@ var logic = () => {
   // Character Controls
   direction[0] = 0;
   direction[1] = 0;
-  if (inputs.w || inputs.up) direction[1] += 1;
-  if (inputs.s || inputs.down) direction[1] -= 1;
-  if (inputs.d || inputs.right) direction[0] += 1;
-  if (inputs.a || inputs.left) direction[0] -= 1;
+  if(inputs.w || inputs.up) direction[1] += 1;
+  if(inputs.s || inputs.down) direction[1] -= 1;
+  if(inputs.d || inputs.right) direction[0] += 1;
+  if(inputs.a || inputs.left) direction[0] -= 1;
   addSet(state.position, scaleToSet(direction, charSpeed));
   state.position[1] = Math.max(state.position[1], 5);
   avngSprite[0] = state.position[0];
@@ -968,7 +968,7 @@ var logic = () => {
   follow(persSprite, 70 + Date.now() % 300 / 30);
   follow(diamondSprite, 90 + Date.now() % 300 / 30);
   const xDiff = state.position[0] - camera[0];
-  if (Math.abs(xDiff) > viewWidth * 0.2) camera[0] += xDiff - sign(xDiff) * viewWidth * 0.2;
+  if(Math.abs(xDiff) > viewWidth * 0.2) camera[0] += xDiff - sign(xDiff) * viewWidth * 0.2;
   // console.log(camera[0]);
 };
 
