@@ -3,8 +3,11 @@ import resolve from 'rollup-plugin-node-resolve';
 import includePaths from 'rollup-plugin-includepaths';
 
 export default {
-  entry: `src/index.js`,
-  dest: `docs/script.js`,
+  input: `src/index.js`,
+  output: {
+    file: `docs/script.js`,
+    format: `iife`
+  },
 
   plugins: [
     includePaths({
@@ -18,7 +21,5 @@ export default {
       open: true,
       contentBase: `docs`,
     })
-  ],
-
-  format: `iife`
+  ]
 };
