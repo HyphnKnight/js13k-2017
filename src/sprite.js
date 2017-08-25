@@ -10,7 +10,7 @@ import {
   mountain,
   ghost,
   pool,
-  diamond,
+  gem,
 } from 'emoji';
 
 const { fillText } = palette;
@@ -26,4 +26,4 @@ export const mkCloud = createSprite(cloud);
 export const mkMountain = createSprite(mountain);
 export const mkGhost = createSprite(ghost);
 export const mkPool = createSprite(pool);
-export const mkDiamond = createSprite(diamond);
+export const mkGem = createSprite(gem);

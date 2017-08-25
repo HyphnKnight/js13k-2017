@@ -10,4 +10,4 @@ export const mountain = `\uD83C\uDFD4`;
 export const pointRight = `\uD83D\uDC49\uD83C\uDFFB`;
 export const ghost = `\uD83D\uDC7B`;
 export const pool = `\uD83C\uDF75`;
-export const diamond = `\uD83D\uDD37`;
+export const gem = `\uD83D\uDC8E`;

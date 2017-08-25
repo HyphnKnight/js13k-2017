@@ -13,7 +13,7 @@ import {
   mkProtector,
   mkPersecutor,
   mkPool,
-  mkDiamond,
+  mkGem,
 } from 'sprite';
 import { viewWidth } from 'dom';
 
@@ -49,7 +49,7 @@ export const avngSprite = mkAvenger([Math.random() * 20 - 10, Math.random() * 20
 export const chldSprite = mkChild([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
 export const protSprite = mkProtector([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
 export const persSprite = mkPersecutor([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
-export const diamondSprite = mkDiamond([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
+export const gemSprite = mkGem([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
 
 const calcFollow =
   (followPos) =>
@@ -60,7 +60,7 @@ const calcFollow =
       }
     };
 
-graphics.push(avngSprite, chldSprite, protSprite, persSprite, diamondSprite);
+graphics.push(avngSprite, chldSprite, protSprite, persSprite, gemSprite);
 
 export default () => {
 
@@ -79,7 +79,7 @@ export default () => {
   follow(chldSprite, 20 + Date.now() % 300 / 30);
   follow(protSprite, 45 + Date.now() % 300 / 30);
   follow(persSprite, 70 + Date.now() % 300 / 30);
-  follow(diamondSprite, 90 + Date.now() % 300 / 30);
+  follow(gemSprite, 90 + Date.now() % 300 / 30);
   const xDiff = state.position[0] - camera[0];
   if(Math.abs(xDiff) > viewWidth * 0.2) camera[0] += xDiff - sign(xDiff) * viewWidth * 0.2;
   // console.log(camera[0]);
