@@ -1,105 +1,76 @@
-// Display modal command selection.
+// Display modal text.
 
 import { renderUI } from 'lib/cEl';
-import { createRectangle } from 'ib/geometry';
-import * as dom from 'dom';
+import { createRectangle } from 'lib/geometry';
 import { inputs } from 'controls';
+import { canvas, ctx, viewHeight, viewWidth } from 'dom';
 
-// Dialog box traits.
-// Renders over bottom half of screen.
+// Menu box traits.
+// Flexible size.
 const stroke = 2;
-const width = dom.viewWidth - stroke;
-const height = dom.viewHeight/2;
-const x = width/2 + stroke/2;
-const y = dom.viewHeight - height/2 - stroke*2;
+let menuWidth = 0;
+let menuHeight = 0;
 const strokeColor = `#fff`;
 const bgColor = `#00f`;
 
 // Text traits.
 const textSize = 12;
-const lineHeight = textSize*1.2;
-const textWidth = width - stroke*4;
-const textHeight = height - stroke*4;
-const textX = 0 + stroke*2.5;
-const textY = y - height/2 + stroke;
+const lineHeight = textSize * 1.2;
+const textWidth = menuWidth - stroke * 4;
+const textHeight = menuHeight - stroke * 4;
 const textColor = `#fff`;
 
-const Menu = ()=> {
+const Command = (label, handler)=> {
+  menuWidth = Math.max(menuWidth, ctx.measureText(label).width);
 
-};
+  return {
+    geometry: createRectangle([viewWidth / 2, viewHeight - menuHeight / 2], 0, menuWidth, menuHeight),
 
-const Dialog = (script)=> {
-  // Render text that wraps, as well as advances upon input.
-  const wrapText = function* (ctx) {
-    for(let text of script) {
-      ctx.textBaseline = `top`;
-      ctx.font = `${textSize}px monospace`;
-      ctx.fillStyle = textColor;
+    render: ({ fillText }, { geometry })=> {
+      fillText({ style: textColor }, [0, 0], label);
+    },
 
-      // Stylize text as all-uppercase.
-      text = text.toUpperCase();
-
-      const words = text.split(` `);
-      let line = ``;
-      let lineY = textY;
-
-      // Add words to line one-by-one, test width.
-      // Print when wide enough.
-      for(const [index, word] of words.entries()) {
-        const currLine = `${line + word} `;
-        const metrics = ctx.measureText(currLine);
-        const currWidth = metrics.width;
-
-        if(currWidth > textWidth && index > 0) {
-          ctx.fillText(line, textX, lineY);
-          line = `${word} `;
-          lineY += lineHeight;
-        }
-        else {
-          line = currLine;
-        }
-      }
-      ctx.fillText(line, textX, lineY);
-
-      // Gotta yield something...
-      yield text;
-
-      // Blank out text.
-      ctx.fillStyle = bgColor;
-      // Fill needs to be a bit bigger than text area due to antialias artifacts.
-      ctx.fillRect(textX-1, textY-1, textWidth+2, textHeight+2);
+    interact: {
+      onMouseDown: handler
     }
   };
-
-  const muhText = wrapText(dom.ctx);
-
-  // Hook into cEl.
-  const { palette, render } = renderUI(dom.canvas, {
-    // Whole screen.
-    geometry: createRectangle([0, 0], 0, dom.viewWidth, dom.viewHeight),
-
-    render: (palette)=> {
-      const { ctx, fillRectangle, strokeRectangle, fillText } = palette;
-
-      // Render dialog box.
-      ctx.lineWidth = stroke;
-      fillRectangle(bgColor, [x,y], width, height);
-      strokeRectangle(strokeColor, [x,y], width, height);
-
-      // Render text.
-      muhText.next();
-
-      // Advance text upon click.
-      const advance = ()=>
-        muhText.next().done
-        && palette.clear()
-        && document.body.removeEventListener(advance);
-
-      document.body.addEventListener(`mousedown`, advance);
-    }
-  });
-
-  render();
 };
 
-export default Dialog;
+export class Menu {
+  constructor() {
+    this.commands = new Set();
+  }
+
+  add(label, handler) {
+    menuHeight += lineHeight;
+    const cmd = Command(label, handler);
+    this.commands.add(cmd);
+    return cmd;
+  }
+
+  delete(cmd) {
+    menuHeight -= lineHeight;
+    this.commands.delete(cmd);
+  }
+
+  render() {
+    return {
+      geometry: createRectangle([viewWidth / 2, viewHeight - menuHeight / 2], 0, menuWidth, menuHeight),
+
+      children: this.commands,
+
+      render: (palette, { geometry }) => {
+        const { ctx, fillRectangle, strokeRectangle, fillText } = palette;
+        fillRectangle(bgColor, [0, -stroke/2], geometry.width, geometry.height);
+        strokeRectangle(strokeColor, stroke, [0, -stroke/2], geometry.width, geometry.height);
+
+
+      },
+      interact: {
+        onMouseDown: () => {
+
+        },
+      }
+    };
+  }
+}

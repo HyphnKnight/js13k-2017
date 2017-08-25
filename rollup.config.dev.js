@@ -1,4 +1,4 @@
-// import serve from 'rollup-plugin-serve';
+import serve from 'rollup-plugin-serve';
 import resolve from 'rollup-plugin-node-resolve';
 import includePaths from 'rollup-plugin-includepaths';
 
@@ -9,11 +9,12 @@ export default {
   plugins: [
     includePaths({
       include: {},
-      paths: ['src/lib', 'src'],
+      paths: [`src/lib`, `src`],
       external: [],
-      extensions: ['.js']
+      extensions: [`.js`]
     }),
     resolve(),
+	serve()
   ],
 
   format: `iife`
