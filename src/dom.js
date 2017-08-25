@@ -2,6 +2,7 @@
 
 export const canvas = document.querySelector(`canvas`);
 export const ctx = canvas.getContext(`2d`);
+ctx.imageSmoothingEnabled = false;
 export const viewWidth = 160;
 export const viewHeight = 192;
 export let canvasOffsetLeft = canvas.offsetWidth;
