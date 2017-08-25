@@ -17,6 +17,4 @@ export default {
     }),
     resolve(),
   ],
-
-  format: `iife`
 };
