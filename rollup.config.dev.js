@@ -14,7 +14,10 @@ export default {
       extensions: [`.js`]
     }),
     resolve(),
-	serve()
+    serve({
+      open: true,
+      contentBase: `docs`,
+    })
   ],
 
   format: `iife`
