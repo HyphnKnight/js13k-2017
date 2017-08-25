@@ -19,6 +19,7 @@ var loop = func => {
 
 const canvas = document.querySelector(`canvas`);
 const ctx = canvas.getContext(`2d`);
+ctx.imageSmoothingEnabled = false;
 const viewWidth = 160;
 const viewHeight = 192;
 let canvasOffsetLeft = canvas.offsetWidth;
@@ -146,15 +147,7 @@ const scaleToSet = (vec, newMagnitude) => scaleSet(normalizeSet(vec), newMagnitu
 
 
 
-const mapList = (list, mod) => {
-  const result = [];
-  for(let i = 0, len = list.length; i < len; i += 2) {
-    const [x, y] = mod([list[i], list[i + 1]]);
-    result[i] = x;
-    result[i + 1] = y;
-  }
-  return result;
-};
+
 const addList = (list, mod) => {
   const result = [];
   for(let i = 0, len = list.length; i < len; i += 2) {
@@ -532,18 +525,69 @@ const renderUI = (canvas$$1, base) => {
   };
 };
 
-// colors
+const uiElements = [];
 
-const white = `#fff`;
+const clearUi = () => { while (uiElements.length) uiElements.pop(); };
 
-// fonts
-const header = `Arial Black, Gadget, sans-serif`;
-const mono = `"Lucida Console", Monaco, monospace`;
+const { palette, render } = renderUI(canvas, {
+  geometry: createRectangle([canvas.width / 2, canvas.height / 2], 0, canvas.width, canvas.height),
+  children: uiElements,
+  render({ canvas: canvas$$1 }, { geometry }) {
+    geometry.position[0] = canvas$$1.width / 2;
+    geometry.position[1] = canvas$$1.height / 2;
+    geometry.width = canvas$$1.width;
+    geometry.height = canvas$$1.height;
+    geometry.points = getRectanglePoints(geometry.width, geometry.height);
+  },
+});
 
-// text style
-const title_text = `24px ${  header}`;
+const child = `\uD83D\uDC69\uD83C\uDFFC\u200D\uD83C\uDF3E`;
+const protector = `\uD83D\uDC6E\uD83C\uDFFF\u200D\u2640\uFE0F`;
+const persecutor = `\uD83D\uDD75\uD83C\uDFFD`;
+const avenger = `\uD83D\uDC69\uD83C\uDFFB\u200D\uD83C\uDFA4`;
 
-const base_text = `12px ${  mono}`;
+const tree = `\uD83C\uDF32`;
+const treeAlt = `\uD83C\uDF33`;
+const cloud = `\u2601\uFE0F`;
+
+
+
+const pool = `\uD83C\uDF75`;
+const gem = `\uD83D\uDC8E`;
+
+const state = {
+  // Dialog is an array of dialog data
+  // dialog data is an array with the following values
+  // [text:string,author?:[emoji:string,name:string]];
+  // [
+  //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris mattis purus sed luctus dignissim. Phasellus hendrerit quam et urna tempor, eu porttitor dui feugiat. Praesent vestibulum est lectus, et vehicula velit laoreet non.',
+  //   [avenger, `Avenger${Math.floor(Math.random() * 10)}`],
+  // ]
+  dialog: [
+    [
+      `yolo`,
+      [avenger, `ya mum`]
+    ]
+  ],
+  position: [0, 0],
+};
+
+const camera = [0, 120, 200];
+
+const graphics = [];
+
+const { fillPolygon: fillPolygon$1, fillText: fillText$1, ctx: ctx$1 } = palette;
+
+const groundPlane = createRectangle([0, 1600 / 2], 0, 10000, 1600);
+const skyPlane = createRectangle([0, 0], 0, viewWidth * 2, viewHeight * 2);
+
+const groundGradient = ctx$1.createLinearGradient(0, 0, 200, 200);
+groundGradient.addColorStop(0, `#5E8C6A`);
+groundGradient.addColorStop(1, `#BFB35A`);
+
+const skyGradient = ctx$1.createLinearGradient(0, 0, 200, 200);
+skyGradient.addColorStop(0, `#69D2E7`);
+skyGradient.addColorStop(1, `#A7DBD8`);
 
 const keyCodes = {
 
@@ -631,267 +675,6 @@ const parseKeyInfo =
 document.body.onkeyup = ({ keyCode }) => parseKeyInfo(keyCode, false);
 document.body.onkeydown = ({ keyCode }) => parseKeyInfo(keyCode, true);
 
-let selected_index = 0;
-
-const createOption = (index, text, pos) => ({
-  geometry: createRectangle(pos, 0, 140, 14),
-  render: (palette, el) => {
-    const { fillRectangle, fillText, ctx: ctx$$1 } = palette;
-    ctx$$1.font = base_text;
-    const { width } = ctx$$1.measureText(text);
-    el.geometry.width = width + 10;
-    el.geometry.points = getRectanglePoints(el.geometry.width, el.geometry.height);
-    fillText({
-      textBaseline: `middle`,
-      font: base_text,
-      style: white,
-    }, [-width / 2, 0], text);
-  },
-  interact: {
-    onMouseMove: () => selected_index = index,
-    onMouseDown: () => selected_index = index,
-  }
-});
-
-const Menu = {
-  geometry: createRectangle([viewWidth / 2, viewHeight / 2], 0, 140, 40),
-  children: [
-    createOption(0, `new game`, [0, 48]),
-    createOption(1, `continue game`, [0, 72]),
-  ],
-  render: (palette, el) => {
-    const { fillText, fillPolygon } = palette;
-    fillText({
-      textBaseline: `middle`,
-      style: white,
-      font: title_text,
-    }, [-59, 0], `A L T E R`);
-    (Date.now() % 600 > 400) && fillPolygon(
-      `white`,
-      selected_index === 0
-        ? [-42, 48]
-        : [-60, 72],
-      [-5, 3, 5, 0, -5, -3]
-    );
-    (inputs.up || inputs.w) && (selected_index = 0);
-    (inputs.down || inputs.s) && (selected_index = 1);
-  },
-};
-
-const child = `\uD83D\uDC69\uD83C\uDFFC\u200D\uD83C\uDF3E`;
-const protector = `\uD83D\uDC6E\uD83C\uDFFF\u200D\u2640\uFE0F`;
-const persecutor = `\uD83D\uDD75\uD83C\uDFFD`;
-const avenger = `\uD83D\uDC69\uD83C\uDFFB\u200D\uD83C\uDFA4`;
-
-const tree = `\uD83C\uDF32`;
-const treeAlt = `\uD83C\uDF33`;
-const cloud = `\u2601\uFE0F`;
-
-
-
-const pool = `\uD83C\uDF75`;
-const diamond = `\uD83D\uDD37`;
-
-const state = {
-  // Dialog is an array of dialog data
-  // dialog data is an array with the following values
-  // [text:string,author?:[emoji:string,name:string]];
-  // [
-  //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris mattis purus sed luctus dignissim. Phasellus hendrerit quam et urna tempor, eu porttitor dui feugiat. Praesent vestibulum est lectus, et vehicula velit laoreet non.',
-  //   [avenger, `Avenger${Math.floor(Math.random() * 10)}`],
-  // ]
-  dialog: [
-    [
-      `yolo`,
-      [avenger, `ya mum`]
-    ]
-  ],
-  position: [0, 0],
-};
-
-// Display modal text.
-
-let justDeleted = false;
-let textStart = null;
-const textSpeed = 50;
-
-
-// Dialog box traits.
-// Renders over bottom half of screen.
-const stroke$1 = 2;
-const dialogWidth = viewWidth - stroke$1;
-const dialogHeight = viewHeight / 4;
-const strokeColor = `#fff`;
-const bgColor = `#00f`;
-
-// Text traits.
-const textSize = 12;
-const lineHeight = textSize * 1.2;
-const textWidth = dialogWidth - stroke$1 * 4;
-const textHeight = dialogHeight - stroke$1 * 4;
-const textColor = `#fff`;
-
-
-// Formatted text is an array of lineData
-// lineData is an array of the following values
-// [x,y,text]
-const formatText = (ctx$$1, text, maxChar) => {
-  const formattedText = [];
-  text = text.toUpperCase();
-
-  ctx$$1.textBaseline = `top`;
-  ctx$$1.font = `${textSize}px monospace`;
-
-  const words = text.split(` `);
-  let line = ``;
-  let lineY = 0;
-  let charCount = 0;
-  // Add words to line one-by-one, test width.
-  // Store when wide enough.
-  for(const [index, word] of words.entries()) {
-    const currLine = `${line + word} `;
-    const metrics = ctx$$1.measureText(currLine);
-    const currWidth = metrics.width;
-    if(charCount + currLine.length > maxChar) {
-      if(currWidth > textWidth) {
-        formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, line]);
-        charCount += line.length;
-        formattedText.push([-textWidth / 2, -textHeight / 2 + lineY + lineHeight, word.substr(0, maxChar - charCount)]);
-      } else {
-        formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, currLine.substr(0, maxChar - charCount)]);
-      }
-      return formattedText;
-    } else if(currWidth > textWidth && index > 0) {
-      formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, line]);
-      charCount += line.length;
-      line = `${word} `;
-      lineY += lineHeight;
-    } else {
-      line = currLine;
-    }
-
-  }
-
-  formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, line]);
-
-  return formattedText;
-};
-
-const Dialog = {
-  geometry: createRectangle([viewWidth / 2, viewHeight - dialogHeight / 2], 0, dialogWidth, dialogHeight),
-  render: (palette, { geometry }) => {
-    const { dialog } = state;
-    const [currentDialog] = dialog;
-    if(!currentDialog) return;
-    if(!textStart) textStart = Date.now();
-
-    const { ctx: ctx$$1, fillRectangle, strokeRectangle, fillText } = palette;
-    const maxChar = Math.floor((Date.now() - textStart) / textSpeed);
-    fillRectangle(bgColor, [0, -stroke$1/2], geometry.width, geometry.height);
-    strokeRectangle(strokeColor, stroke$1, [0, -stroke$1/2], geometry.width, geometry.height);
-
-    // Render text
-    const [text, author] = currentDialog;
-    const formattedText = formatText(ctx$$1, text, maxChar);
-    let offset = 0;
-    if(author) {//author) {
-      const [emoji, name] = author;
-      const { width: nameWidth } = ctx$$1.measureText(name);
-      const boxWidth = nameWidth + 16 + stroke$1 * 4;
-      const leftOffset = -dialogWidth / 2 + nameWidth;
-      const topOffset = -dialogHeight / 2 - stroke$1 * 2;
-      fillRectangle(bgColor, [leftOffset, topOffset], boxWidth, lineHeight + stroke$1 * 4);
-      strokeRectangle(strokeColor, stroke$1, [leftOffset, topOffset], boxWidth, lineHeight + stroke$1 * 4);
-      ctx$$1.font = `${textSize}px monospace`;
-      fillText({ style: textColor }, [leftOffset - 6 + stroke$1 * 4 - boxWidth / 2, topOffset - lineHeight / 2], emoji);
-      fillText({ style: textColor }, [leftOffset - 6 + stroke$1 * 4 - boxWidth / 2 + 16, topOffset - lineHeight / 2], name);
-      offset = lineHeight / 2;
-    }
-    formattedText.forEach(([x, y, line]) => {
-      fillText({ style: textColor }, [x, y + offset], line);
-    });
-
-    if(/*maxChar >= text.length &&*/ inputs.space && !justDeleted) {
-      state.dialog.shift();
-      textStart = null;
-      justDeleted = true;
-    } else if(!inputs.space && justDeleted) {
-      justDeleted = false;
-    }
-  },
-  interact: {
-    onMouseDown: () => {
-      //if(maxChar >= text.length) {
-      state.dialog.shift();
-      textStart = null;
-      //}
-    },
-  }
-};
-
-const { palette, render } = renderUI(canvas, {
-  geometry: createRectangle([0, 0], 0, window.innerWidth, window.innerHeight),
-  children: [Dialog],
-});
-
-palette.ctx.imageSmoothingEnabled = false;
-
-const perspective =
-  // camera coords in 3d space
-  (camera) =>
-    // 2d point
-    ([pX, pY]) => {
-      const [cX, cY, cZ] = camera;
-      return [
-        pX + pY * (cX - pX) / (pY + cY) - cX + viewWidth / 2,
-        viewHeight - ((cY + pY) === 0 ? 0 : cZ * pY / (cY + pY)),
-        Math.sqrt(Math.pow(cY + pY, 2) + Math.pow((cX - pX), 2)),
-      ];
-    };
-
-const camera = [0, 120, 200];
-
-const calcScreenPosition = perspective(camera);
-
-const graphics = [];
-
-const { fillPolygon: fillPolygon$1, fillText: fillText$1, ctx: ctx$1 } = palette;
-
-const groundPlane = createRectangle([0, 1600 / 2], 0, 10000, 1600);
-const skyPlane = createRectangle([0, 0], 0, viewWidth * 2, viewHeight * 2);
-
-const groundGradient = ctx$1.createLinearGradient(0, 0, 200, 200);
-groundGradient.addColorStop(0, `#5E8C6A`);
-groundGradient.addColorStop(1, `#BFB35A`);
-
-const skyGradient = ctx$1.createLinearGradient(0, 0, 200, 200);
-skyGradient.addColorStop(0, `#69D2E7`);
-skyGradient.addColorStop(1, `#A7DBD8`);
-
-const render$1 = dt => {
-  // Background
-  fillPolygon$1(
-    skyGradient,
-    [0, 0],
-    skyPlane.points,
-  );
-  fillPolygon$1(
-    groundGradient,
-    [0, 0],
-    mapList(
-      addList(groundPlane.points, groundPlane.position),
-      calcScreenPosition,
-    ),
-  );
-
-  // Dynamic
-  graphics
-    .map(point => [...calcScreenPosition(point), point[2], point[3], point[4]])
-    .sort((a, b) => b[2] - a[2])
-    .forEach(([x, y, d, z, emoji]) => fillText$1({}, [x, y - z], emoji));
-
-};
-
 const createSprite = (emoji) => ([x, y], z = 0) => ([x, y, z, emoji]);
 const mkTree = createSprite(tree);
 const mkTreeAlt = createSprite(treeAlt);
@@ -903,7 +686,7 @@ const mkCloud = createSprite(cloud);
 
 
 const mkPool = createSprite(pool);
-const mkDiamond = createSprite(diamond);
+const mkGem = createSprite(gem);
 
 const direction = [0, 0];
 const charSpeed = 3;
@@ -936,7 +719,7 @@ const avngSprite = mkAvenger([Math.random() * 20 - 10, Math.random() * 20 - 10],
 const chldSprite = mkChild([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
 const protSprite = mkProtector([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
 const persSprite = mkPersecutor([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
-const diamondSprite = mkDiamond([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
+const gemSprite = mkGem([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
 
 const calcFollow =
   (followPos) =>
@@ -947,7 +730,7 @@ const calcFollow =
       }
     };
 
-graphics.push(avngSprite, chldSprite, protSprite, persSprite, diamondSprite);
+graphics.push(avngSprite, chldSprite, protSprite, persSprite, gemSprite);
 
 var logic = () => {
 
@@ -966,7 +749,7 @@ var logic = () => {
   follow(chldSprite, 20 + Date.now() % 300 / 30);
   follow(protSprite, 45 + Date.now() % 300 / 30);
   follow(persSprite, 70 + Date.now() % 300 / 30);
-  follow(diamondSprite, 90 + Date.now() % 300 / 30);
+  follow(gemSprite, 90 + Date.now() % 300 / 30);
   const xDiff = state.position[0] - camera[0];
   if(Math.abs(xDiff) > viewWidth * 0.2) camera[0] += xDiff - sign(xDiff) * viewWidth * 0.2;
   // console.log(camera[0]);
@@ -1139,8 +922,78 @@ const playCanonD = async () => await playSong([
 
 ]);
 
-playCanonD();
+// colors
 
+
+
+// fonts
+const header = `Arial Black, Gadget, sans-serif`;
+const mono = `"Lucida Console", Monaco, monospace`;
+
+// text style
+const title_text = `24px ${  header}`;
+
+const base_text = `12px ${  mono}`;
+
+let animationStart = null;
+let animState = 0;
+
+const fontStyle = { textBaseline: `middle`, style: 'white', font: title_text, };
+
+const title = {
+  geometry: createRectangle([0, 0], 0, canvas.width, canvas.height),
+  render: ({ ctx: ctx$$1, fillText, fillPolygon }, el) => {
+
+    if (!animationStart) {
+      animationStart = Date.now();
+      playCanonD();
+    }
+
+    animState = Math.min((Date.now() - animationStart) / 24000, 1);
+
+    fillText(
+      fontStyle,
+      [
+        animTime / 24000 > 1 ? -11 : (Math.abs(((animTime - 1500) % 6000 / 600) - 5) - 2.5) * 10 - 11,
+        height - Math.min(animTime / 24000, 1) * height * 1.125,
+      ],
+      gem
+    );
+
+    fillText(
+      fontStyle,
+      [-59, -canvas.height / 2 + Math.min(animState * 2, 1) * canvas.height / 2],
+      `A L T E R`
+    );
+
+    if (animState > 1.1) {
+      ctx$$1.font = base_text;
+      const { width } = ctx$$1.measureText(`new game`);
+      fillText({ style: 'white', font: base_text }, [-width / 2 - 2, 48], `new game`);
+      (Date.now() % 600 > 400) && fillPolygon(`white`, [-42, 44], [-5, 3, 5, 0, -5, -3]);
+    }
+
+    if (inputs.space && animState < 1) animationStart /= 2;
+    else if (inputs.space) console.log('Start Game');
+
+  },
+  interact: {
+    onMouseDown() {
+      if (animState < 1) animationStart /= 2;
+      else console.log('Start Game');
+    }
+  }
+};
+
+var loadTitleScreen = () => {
+  animationStart = null;
+  clearUi();
+  uiElements.push(title);
+};
+
+// import { render as renderGraphics } from 'overworld/graphics';
+// playCanonD();
+loadTitleScreen();
 loop(dt => {
 
   // Logic
@@ -1149,7 +1002,7 @@ loop(dt => {
   // Graphics
   palette.clear();
 
-  render$1();
+  // renderGraphics();
   render();
 
 });
