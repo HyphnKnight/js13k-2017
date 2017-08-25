@@ -181,38 +181,6 @@ function find(array, func) {
   return null;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//# sourceMappingURL=index.js.map
-
 const getRectanglePoints = (width, height) => ([
   -width / 2, +height / 2,
   -width / 2, -height / 2,
@@ -842,7 +810,7 @@ const Dialog = {
       fillText({ style: textColor }, [x, y + offset], line);
     });
 
-    if(maxChar >= text.length && inputs.space && !justDeleted) {
+    if(/*maxChar >= text.length &&*/ inputs.space && !justDeleted) {
       state.dialog.shift();
       textStart = null;
       justDeleted = true;

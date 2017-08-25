@@ -1,4 +1,4 @@
-export { sum, noise, gridNoise } from './noise.js';
+export { sum, noise, gridNoise } from 'lib/noise';
 export const clamp = (num, lower, upper) => num > upper
   ? upper
   : (num < lower

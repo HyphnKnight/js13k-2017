@@ -1,10 +1,10 @@
-import { renderUI } from './lib/cEl/index.js';
-import { createRectangle } from './lib/geometry/index';
+import { renderUI } from 'lib/cEl';
+import { createRectangle } from 'lib/geometry';
 
-import { Menu } from './title.js';
-import { Dialog } from './dialog.js';
+import { Menu } from 'title';
+import { Dialog } from 'dialog';
 
-import { canvas } from './dom.js';
+import { canvas } from 'dom';
 
 const { palette, render } = renderUI(canvas, {
   geometry: createRectangle([0, 0], 0, window.innerWidth, window.innerHeight),

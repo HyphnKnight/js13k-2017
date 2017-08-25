@@ -1,10 +1,10 @@
 // Display modal text.
 
-import { renderUI } from './lib/cEl/index.js';
-import { createRectangle } from './lib/geometry/index.js';
-import { inputs } from './controls.js';
-import { canvas, viewHeight, viewWidth } from './dom.js';
-import state from './state.js';
+import { renderUI } from 'lib/cEl';
+import { createRectangle } from 'lib/geometry';
+import { inputs } from 'controls';
+import { canvas, viewHeight, viewWidth } from 'dom';
+import state from 'state';
 
 let justDeleted = false;
 let textStart = null;

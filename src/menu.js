@@ -1,9 +1,9 @@
 // Display modal text.
 
-import { renderUI } from './lib/cEl/index.js';
-import { createRectangle } from './lib/geometry/index.js';
-import { inputs } from './controls.js';
-import { canvas, ctx, viewHeight, viewWidth } from './dom.js';
+import { renderUI } from 'lib/cEl';
+import { createRectangle } from 'lib/geometry';
+import { inputs } from 'controls';
+import { canvas, ctx, viewHeight, viewWidth } from 'dom';
 
 // Menu box traits.
 // Flexible size.

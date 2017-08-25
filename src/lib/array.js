@@ -1,5 +1,5 @@
-import quickSort from './quickSort';
-import mergeSort from './mergeSort';
+import quickSort from 'lib/quickSort';
+import mergeSort from 'lib/mergeSort';
 export function forEach(array, func) {
   let i = -1;
   while(++i < array.length)
@@ -33,7 +33,7 @@ export function find(array, func) {
     if(func(array[i], i, array))
       return array[i];
   }
-  
+
   return null;
 }
 export function times(length, func) {

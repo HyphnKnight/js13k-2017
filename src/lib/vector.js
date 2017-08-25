@@ -1,4 +1,4 @@
-import { lerp as nLerp, round, sign, sqr } from '../math/index.js';
+import { lerp as nLerp, round, sign, sqr } from 'lib/math';
 export const add = (vecA, vecB) => ([
   vecA[0] + vecB[0],
   vecA[1] + vecB[1]
