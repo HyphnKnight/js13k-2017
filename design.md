@@ -8,7 +8,6 @@ Mental health is a serious issue plaguing many peoples lives and the vast majori
 - **Child and adolescent alters**: Young alters are often the first discovered in therapy and are the most common type of alter. These alters emerge to handle the abuse that the original personality couldn't tolerate. A DID alter may be referred to as a "little" if the alter acts seven years or younger.
 - **Protector or rescuer alters**: These alters can be of any age and were created to save the original person from intolerable situations. These DID alters are often tougher and braver than the original personality.
 - **Persecutor alters**: These DID alters are modeled after the abuser. Persecutor alters create negative messages blaming the original identity for the abuse and telling them they need to die or pay for it. Often the host will act on these negative messages and self-harm or even attempt suicide. This is often when the person is first introduced to the mental health system.
-- **Perpetrator alters**: Modeled after the abuser, these dissociative identity disorder alters direct their hostility outward rather than inward towards other personalities.
 - **Avenger alters**: This dissociative identity disorder alter holds the rage from the childhood abuse and may seek retribution from the abuser. They tend to express the anger of the entire system and can be hostile.
 
 These are a small subset of all the possible alternate personalities a person can have. In truth, it's more like there are general traits of personalities that are mixed and matched to create alters. However, for the sake of simplicity, I decided to use the above alters as they represent the most common examples of alters that appear in people suffering from DID.
@@ -38,27 +37,15 @@ One of the aspects of DID is that different personalities are in control at diff
 - A personality can become suppressed, meaning it hits zero 'presence' and it no longer can act.
 
 ##### Alters
-Alters have 3 abilities and a passive ability and will sometimes act on their own.
-- Child(offense/defense/utility)
-  - Passive: *Takes presense damage from energy pool damage.*
-  - Regress: *Sacrifice presense to restore pool*
-  - Ignore: *Creates a defensive barrier.*
-  - Forget: *Remove one enemy from the match for several rounds.*
-- Protector(defense/utility)
-  - Passive: When pool takes damage gain presence.
-  - Shoulder the burden: *Switch places with the target unit.*
-  - Renew resolve: *Transfer presence at x2 ratio*.
-  - Guardian Angel: *If target takes fatal damage, instead have half that damage apply to the protector.*
-- Persecutor(utility/offense)
-  - Passive: *Drain presence from all nearby characters.*
-  - Abuse: *Attack in a line that can hit allies and enemies deals total damage dealt to allies x 2 to the first enemy hit.*
-  - Sap Will: *Drain presence of ally and gain x 1.5.*
-  - Self Harm: *Drains energy from the pool to gain presence.*
-- Avenger(offense)
-  - Passive: *Increase energy pool and presence on suppression of an ally.*
-  - Repost: *If attacked deal bonus damage back as a response.*
-  - Justify: *Deal damage x number of allies target has damaged this turn.*
-  - Avenging Angel: *If last alive refill energy pool and presence.*
+Alters have 2 abilities, move and one unique to their role in the psyche.
+- The child has the ability to forget passed trauma this manifests itself in game as the abilty to heal damage over time on allies and deal damage over time on enemies.
+- The protector has the ability to create a defensive bubble around adjacent allies that reduces the damage they take to zero.
+- The avenger can preform a basic attack but his ability is to take multiple turns.
+- The persecutor has a finite number of times he can use his abilities but has a range.
+    - Reset: Reset the match.
+    - Attack: an attack in straight line.
+    - Magic: weakend version of the child's HOT/DOT to all adjacent units.
+    - Defend: immunity on one unit anywhere.
 
 ### Graphics
 
