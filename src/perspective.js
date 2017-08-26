@@ -11,4 +11,4 @@ export const perspective =
         viewHeight - ((cY + pY) === 0 ? 0 : cZ * pY / (cY + pY)),
         Math.sqrt(Math.pow(cY + pY, 2) + Math.pow((cX - pX), 2)),
       ];
-    }
+    };

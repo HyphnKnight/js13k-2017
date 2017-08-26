@@ -5,7 +5,7 @@ import { canvas } from 'dom';
 
 export const uiElements = [];
 
-export const clearUi = () => { while (uiElements.length) uiElements.pop(); };
+export const clearUi = () => { while(uiElements.length) uiElements.pop(); };
 
 const { palette, render } = renderUI(canvas, {
   geometry: createRectangle([canvas.width / 2, canvas.height / 2], 0, canvas.width, canvas.height),
