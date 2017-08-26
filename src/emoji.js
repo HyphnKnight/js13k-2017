@@ -11,3 +11,5 @@ export const pointRight = `\uD83D\uDC49\uD83C\uDFFB`;
 export const ghost = `\uD83D\uDC7B`;
 export const pool = `\uD83C\uDF75`;
 export const gem = `\uD83D\uDC8E`;
+export const blackHeart = `\uD83D\uDDA4`;
+export const heart = `\u2764\uFE0F`;
