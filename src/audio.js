@@ -12,7 +12,7 @@ async function playNote(note, length) {
 
   oscillator.connect(gain);
 
-  oscillator.type = `sawtooth`;
+  oscillator.type = `square`;
   oscillator.frequency.value = note;
   gain.connect(context.destination);
   oscillator.start(0);
