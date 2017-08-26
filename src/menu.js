@@ -8,8 +8,10 @@ import { canvas, ctx, viewHeight, viewWidth } from 'dom';
 // Menu box traits.
 // Flexible size.
 const stroke = 2;
-let menuWidth = 0;
+let menuWidth = viewWidth/3;
 let menuHeight = 0;
+let menuX = -viewWidth/2 + menuWidth/2 + stroke/2;
+let menuY = viewHeight/2 - menuHeight/2 - stroke/2 | 0;
 const strokeColor = `#fff`;
 const bgColor = `#00f`;
 
@@ -20,13 +22,24 @@ const textWidth = menuWidth - stroke * 4;
 const textHeight = menuHeight - stroke * 4;
 const textColor = `#fff`;
 
-const Command = (label, handler)=> {
-  menuWidth = Math.max(menuWidth, ctx.measureText(label).width);
+const Command = (label, handler, index)=> {
+  label = label.toUpperCase();
+  const txtMetrics = ctx.measureText(label);
+  menuWidth = Math.max(menuWidth, txtMetrics.width + stroke*4);
+  menuX = -viewWidth/2 + menuWidth/2 + stroke/2;
 
   return {
-    geometry: createRectangle([viewWidth / 2, viewHeight - menuHeight / 2], 0, menuWidth, menuHeight),
+    geometry: createRectangle([
+      -menuWidth/2 + stroke*2,
+      lineHeight/4 + menuHeight/2 - lineHeight/2 - index*lineHeight | 0
+    ], 0, menuWidth, lineHeight),
 
     render: ({ fillText }, { geometry })=> {
+      geometry.position = [
+        -menuWidth/2 + stroke*2,
+        lineHeight/4 + menuHeight/2 - lineHeight/2 - index*lineHeight | 0
+      ];
+
       fillText({ style: textColor }, [0, 0], label);
     },
 
@@ -36,40 +49,37 @@ const Command = (label, handler)=> {
   };
 };
 
-export class Menu {
+export default class Menu {
   constructor() {
     this.commands = new Set();
   }
 
   add(label, handler) {
-    menuHeight += lineHeight;
-    const cmd = Command(label, handler);
+    const cmd = Command(label, handler, this.commands.size);
     this.commands.add(cmd);
+    menuHeight = lineHeight*this.commands.size + stroke | 0;
+    menuY = viewHeight/2 - menuHeight/2 - stroke/2 | 0;
     return cmd;
   }
 
   delete(cmd) {
-    menuHeight -= lineHeight;
     this.commands.delete(cmd);
+    menuHeight = lineHeight*this.commands.size + stroke | 0;
+    menuY = viewHeight/2 - menuHeight/2 - stroke/2 | 0;
   }
 
   render() {
     return {
-      geometry: createRectangle([viewWidth / 2, viewHeight - menuHeight / 2], 0, menuWidth, menuHeight),
+      geometry: createRectangle([menuX, menuY], 0, menuWidth, menuHeight),
 
       children: this.commands,
 
       render: (palette, { geometry }) => {
-        const { ctx, fillRectangle, strokeRectangle, fillText } = palette;
-        fillRectangle(bgColor, [0, -stroke/2], geometry.width, geometry.height);
-        strokeRectangle(strokeColor, stroke, [0, -stroke/2], geometry.width, geometry.height);
+        geometry.position = [menuX, menuY];
 
-
-      },
-      interact: {
-        onMouseDown: () => {
-
-        },
+        const { fillRectangle, strokeRectangle } = palette;
+        fillRectangle(bgColor, [0,0], menuWidth, menuHeight);
+        strokeRectangle(strokeColor, stroke, [0,0], menuWidth, menuHeight);
       }
     };
   }
