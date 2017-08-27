@@ -5,7 +5,7 @@ import includePaths from 'rollup-plugin-includepaths';
 export default {
   input: `src/index.js`,
   output: {
-    file: `docs/script.js`,
+    file: `dev/script.js`,
     format: `iife`
   },
 
@@ -19,7 +19,7 @@ export default {
     resolve(),
     serve({
       open: true,
-      contentBase: `docs`,
+      contentBase: `dev`,
     })
   ]
 };

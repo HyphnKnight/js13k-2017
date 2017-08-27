@@ -6,9 +6,9 @@
   "scripts": {
     "start": "rollup --config rollup.config.dev.js --watch",
     "compile": "rollup --config rollup.config.prod.js",
-    "compress": "minify docs -d dist",
-    "zip": "bestzip Alter.zip dist",
-    "test-size": "du -h Alter.zip",
+    "compress": "minify docs -d docs",
+    "zip": "bestzip Alter.zip docs",
+    "test-size": "stat Alter.zip | grep Size:",
     "build": "npm run compile && npm run compress && npm run zip && npm run test-size",
     "lint": "eslint src --fix"
   },
