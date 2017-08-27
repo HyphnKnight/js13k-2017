@@ -62,25 +62,26 @@ const calcFollow =
 
 graphics.push(avngSprite, chldSprite, protSprite, persSprite, gemSprite);
 
-export default () => {
-
-  // Character Controls
-  direction[0] = 0;
-  direction[1] = 0;
-  if(inputs.w || inputs.up) direction[1] += 1;
-  if(inputs.s || inputs.down) direction[1] -= 1;
-  if(inputs.d || inputs.right) direction[0] += 1;
-  if(inputs.a || inputs.left) direction[0] -= 1;
-  addSet(state.position, scaleToSet(direction, charSpeed));
-  state.position[1] = Math.max(state.position[1], 5);
-  avngSprite[0] = state.position[0];
-  avngSprite[1] = state.position[1];
-  const follow = calcFollow(avngSprite);
-  follow(chldSprite, 20 + Date.now() % 300 / 30);
-  follow(protSprite, 45 + Date.now() % 300 / 30);
-  follow(persSprite, 70 + Date.now() % 300 / 30);
-  follow(gemSprite, 90 + Date.now() % 300 / 30);
-  const xDiff = state.position[0] - camera[0];
-  if(Math.abs(xDiff) > viewWidth * 0.2) camera[0] += xDiff - sign(xDiff) * viewWidth * 0.2;
-  // console.log(camera[0]);
+export default {
+  init: ()=> {
+    // Character Controls
+    direction[0] = 0;
+    direction[1] = 0;
+    if(inputs.w || inputs.up) direction[1] += 1;
+    if(inputs.s || inputs.down) direction[1] -= 1;
+    if(inputs.d || inputs.right) direction[0] += 1;
+    if(inputs.a || inputs.left) direction[0] -= 1;
+    addSet(state.position, scaleToSet(direction, charSpeed));
+    state.position[1] = Math.max(state.position[1], 5);
+    avngSprite[0] = state.position[0];
+    avngSprite[1] = state.position[1];
+    const follow = calcFollow(avngSprite);
+    follow(chldSprite, 20 + Date.now() % 300 / 30);
+    follow(protSprite, 45 + Date.now() % 300 / 30);
+    follow(persSprite, 70 + Date.now() % 300 / 30);
+    follow(gemSprite, 90 + Date.now() % 300 / 30);
+    const xDiff = state.position[0] - camera[0];
+    if(Math.abs(xDiff) > viewWidth * 0.2) camera[0] += xDiff - sign(xDiff) * viewWidth * 0.2;
+    // console.log(camera[0]);
+  }
 };

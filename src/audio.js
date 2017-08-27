@@ -2,7 +2,9 @@ const context = new AudioContext();
 
 const wait = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
 
-let startTime = Date.now();
+const startTime = Date.now();
+
+export let stopPlayingAudio = false;
 
 async function playNote(note, length) {
   if(note === ``) return await wait(length * 1000 * 0.75);
@@ -16,7 +18,7 @@ async function playNote(note, length) {
   oscillator.frequency.value = note;
   gain.connect(context.destination);
   oscillator.start(0);
-  
+
   gain.gain.exponentialRampToValueAtTime(
     0.00001, context.currentTime + length
   );
@@ -25,9 +27,11 @@ async function playNote(note, length) {
 }
 
 async function playSong(music) {
+  stopPlayingAudio = false;
+
   let i = -1;
   let h = -1;
-  while(++i < music.length) {
+  while(!stopPlayingAudio && ++i < music.length) {
     const [note, length] = music[i];
     if(Array.isArray(note)) {
       while(++h < note.length - 1) {
@@ -288,3 +292,6 @@ export const playCanonD = async () => await playSong([
 
 ]);
 
+export const stopCanonD = ()=> {
+  stopPlayingAudio = true;
+};

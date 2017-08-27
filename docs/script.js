@@ -1,47 +1,6 @@
 (function () {
 'use strict';
 
-let dt = 0;
-let t = 0;
-
-var loop = func => {
-  let running = true;
-  requestAnimationFrame(function main() {
-    dt = Math.min(16, Date.now() - t);
-    running && func(dt);
-    t = Date.now();
-    requestAnimationFrame(main);
-  });
-  return () => running = !running;
-};
-
-// Reused DOM elements and objects.
-
-const canvas = document.querySelector(`canvas`);
-const ctx = canvas.getContext(`2d`);
-ctx.imageSmoothingEnabled = false;
-const viewWidth = 160;
-const viewHeight = 192;
-let canvasOffsetLeft = canvas.offsetWidth;
-let canvasOffsetTop = canvas.offsetHeight;
-let scaleX = 1;
-let scaleY = 1;
-
-canvas.width = viewWidth;
-canvas.height = viewHeight;
-
-const calcCanvasSize = () => {
-  const { top, left, width, height } = canvas.getBoundingClientRect();
-  canvasOffsetLeft = left;
-  canvasOffsetTop = top;
-  scaleX = viewWidth / width;
-  scaleY = viewHeight / height;
-};
-
-calcCanvasSize();
-
-window.addEventListener(`resize`, calcCanvasSize);
-
 const sum$1 = (...numbers) => {
   let num = 0;
   for(let i = numbers.length - 1; i >= 0; --i) {
@@ -147,7 +106,15 @@ const scaleToSet = (vec, newMagnitude) => scaleSet(normalizeSet(vec), newMagnitu
 
 
 
-
+const mapList = (list, mod) => {
+  const result = [];
+  for(let i = 0, len = list.length; i < len; i += 2) {
+    const [x, y] = mod([list[i], list[i + 1]]);
+    result[i] = x;
+    result[i + 1] = y;
+  }
+  return result;
+};
 const addList = (list, mod) => {
   const result = [];
   for(let i = 0, len = list.length; i < len; i += 2) {
@@ -191,7 +158,18 @@ const rotateList = (list, rotation) => {
 
 const rotateListAround = (list, point, rotation) => addList(rotateList(subtractList(list, point), rotation), point);
 
+
+
+
+
+
+//# sourceMappingURL=tuple.js.map
+
 const uniqueId = () => Math.random().toString(36).substr(2, 9) + Math.random().toString(36).substr(2, 9);
+
+//# sourceMappingURL=quickSort.js.map
+
+//# sourceMappingURL=mergeSort.js.map
 
 function find(array, func) {
   let i = -1;
@@ -203,7 +181,38 @@ function find(array, func) {
   return null;
 }
 
-/* Utilities */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//# sourceMappingURL=index.js.map
+
 const getRectanglePoints = (width, height) => ([
   -width / 2, +height / 2,
   -width / 2, -height / 2,
@@ -228,6 +237,35 @@ const createRectangle = (position, rotation = 0, width = 1, height = 1, label = 
 
 
 /* Utility Funcs */
+
+//# sourceMappingURL=tuple.js.map
+
+// Reused DOM elements and objects.
+
+const canvas = document.querySelector(`canvas`);
+const ctx = canvas.getContext(`2d`);
+ctx.imageSmoothingEnabled = false;
+const viewWidth = 160;
+const viewHeight = 192;
+let canvasOffsetLeft = canvas.offsetWidth;
+let canvasOffsetTop = canvas.offsetHeight;
+let scaleX = 1;
+let scaleY = 1;
+
+canvas.width = viewWidth;
+canvas.height = viewHeight;
+
+const calcCanvasSize = () => {
+  const { top, left, width, height } = canvas.getBoundingClientRect();
+  canvasOffsetLeft = left;
+  canvasOffsetTop = top;
+  scaleX = viewWidth / width;
+  scaleY = viewHeight / height;
+};
+
+calcCanvasSize();
+
+window.addEventListener(`resize`, calcCanvasSize);
 
 const originVector = [0, 0];
 const translate = (ctx) => (vec) => ctx.translate(round(vec[0], 0), round(vec[1], 0));
@@ -382,7 +420,6 @@ class Transform {
   }
 }
 
-/* -1 === left, 0 === aligned, 1 === right */
 const pointRelationToLine = (point, line) => sign((line[2] - line[0]) * (point[1] - line[1]) - (line[3] - line[1]) * (point[0] - line[0]));
 const isPointInCircle = (point, position, radius) => magnitudeSqr(subtract(point, position)) <= sqr(radius);
 const isPointInAlignedRectangle = (point, position, width, height) => Math.abs(point[0] - position[0]) <= width / 2 &&
@@ -415,6 +452,8 @@ const isPolygonInPolygon = (positionA, pointsA, positionB, pointsB) => {
   }
   return false;
 };
+
+//# sourceMappingURL=tuple.js.map
 
 /*
     Nestable UI elements that instead of being dom nodes are instead
@@ -527,7 +566,7 @@ const renderUI = (canvas$$1, base) => {
 
 const uiElements = [];
 
-const clearUi = () => { while (uiElements.length) uiElements.pop(); };
+const clearUi = () => { while(uiElements.length) uiElements.pop(); };
 
 const { palette, render } = renderUI(canvas, {
   geometry: createRectangle([canvas.width / 2, canvas.height / 2], 0, canvas.width, canvas.height),
@@ -541,53 +580,196 @@ const { palette, render } = renderUI(canvas, {
   },
 });
 
-const child = `\uD83D\uDC69\uD83C\uDFFC\u200D\uD83C\uDF3E`;
-const protector = `\uD83D\uDC6E\uD83C\uDFFF\u200D\u2640\uFE0F`;
-const persecutor = `\uD83D\uDD75\uD83C\uDFFD`;
-const avenger = `\uD83D\uDC69\uD83C\uDFFB\u200D\uD83C\uDFA4`;
+const context = new AudioContext();
 
-const tree = `\uD83C\uDF32`;
-const treeAlt = `\uD83C\uDF33`;
-const cloud = `\u2601\uFE0F`;
+const wait = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
+
+const startTime = Date.now();
+
+let stopPlayingAudio = false;
+
+async function playNote(note, length) {
+  if(note === ``) return await wait(length * 1000 * 0.75);
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+  gain.gain.value = 1.1 - Math.min(1,(Date.now()-startTime)/3000);
+
+  oscillator.connect(gain);
+
+  oscillator.type = `square`;
+  oscillator.frequency.value = note;
+  gain.connect(context.destination);
+  oscillator.start(0);
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.00001, context.currentTime + length
+  );
+
+  await wait(length * 1000 * 0.75);
+}
+
+async function playSong(music) {
+  stopPlayingAudio = false;
+
+  let i = -1;
+  let h = -1;
+  while(!stopPlayingAudio && ++i < music.length) {
+    const [note, length] = music[i];
+    if(Array.isArray(note)) {
+      while(++h < note.length - 1) {
+        playNote(note[h], Array.isArray(length) ? length[h] : length);
+      }
+      playNote(note[h], Array.isArray(length) ? length[h] : length);
+      await wait((Array.isArray(length) ? Math.min(...length) : length) * 1000 * 0.75);
+      h = -1;
+    } else {
+      await playNote(note, length);
+    }
+  }
+  return await true;
+}
+
+// Notes
+// These are free standing so that they can be optimized away.
+const C2 = 65.41;
+const E2 = 82.41;
+const F2 = 87.31;
+const G2 = 98.00;
+const A2 = 110.00;
+const B2 = 123.47;
+const C3 = 130.81;
+const D3 = 146.83;
+const E3 = 164.81;
+const F3 = 174.61;
+const G3 = 196.00;
+const A3 = 220.00;
+const Bb3 = 233.08;
+const B3 = 246.94;
+const C4 = 261.63;
+const D4 = 293.66;
+const E4 = 329.63;
+const F4 = 349.23;
+const G4 = 392.00;
+const A4 = 440.00;
+const B4 = 493.88;
+const C5 = 523.25;
+const D5 = 587.33;
+const E5 = 659.26;
+const F5 = 698.46;
+const G5 = 783.99;
+const A5 = 880.00;
+const B5 = 987.77;
+const C6 = 1046.50;
+const D6 = 1174.66;
+const E6 = 1318.51;
+const playCanonD = async () => await playSong([
+
+  // line 1
+  [[E4, C4], 1],
+  [[D4, G3], 1],
+
+  [[C4, A3], 1],
+  [[B3, E3], 1],
+
+  [[A3, F3], 1],
+  [[G3, C3], 1],
+
+  [[A3, F3], 1],
+  [[B3, G3], 1],
+
+  // line 2
+  [[E6, G5, C5], 1],
+  [[D6, B5, G4], 1],
+
+  [[C6, A4], 1],
+  [[B5, G5, E4], 1],
+
+  [[A5, C5, F4], 1],
+  [[G5, E5, C4], 1],
+
+  [[A5, F5, F4], 1],
+  [[B5, D5, G4], 1],
+
+  // line 3
+  [[C5, C4, E4], [0.5, 1, 1]],
+  [C5, 0.5],
+  [[D5, D4, G3], [0.5, 1, 1]],
+  [B4, 0.5],
+
+  [[C5, E4, A4], [0.5, 1, 1]],
+  [E5, 0.5],
+  [[G5, E3], [0.5, 1, 1]],
+  [G4, 0.5],
+
+  [[A4, A3, F3], [0.5, 1, 1]],
+  [F4, 0.5],
+  [[E4, C3], [0.5, 1, 1]],
+  [G4, 0.5],
+
+  [[F4, A3, F3], [0.5, 1, 1]],
+  [C5, 0.5],
+  [[B4, B3, G3], [0.5, 1, 1]],
+  [G4, 0.5],
+
+  // line 4
+  [[C4, E3, C3], [0.5, 1, 1]],
+  [E4, 0.25],
+  [G4, 0.25],
+  [[G4, G2], [0.25, 1, 1]],
+  [A4, 0.25],
+  [G4, 0.25],
+  [F4, 0.25],
+
+  [[E4, A2, C3], [0.75, 1, 1]],
+  [E4, 0.25],
+  [[E4, G2, E2], [0.25, 1, 1]],
+  [F4, 0.25],
+  [E4, 0.25],
+  [D4, 0.25],
+
+  [[C4, A2, F2], [0.25, 1, 1]],
+  [Bb3, 0.25],
+  [A3, 0.25],
+  [B3, 0.25],
+  [[G3, E2, C2], [0.5, 1, 1]],
+  [E3, 0.5],
+
+  [[C3, A2, F2], [0.5, 1, 1]],
+  [F3, 0.25],
+  [E3, 0.25],
+  [[D3, B2, G2], [0.5, 1, 1]],
+  [G3, 0.25],
+  [F3, 0.25],
 
 
+  // line 5
+  [[``, E4, C4], [0.5, 1, 1]],
+  [C5, 0.5],
+  [[D5, G3], [0.5, 1, 1]],
+  [B4, 0.5],
 
-const pool = `\uD83C\uDF75`;
-const gem = `\uD83D\uDC8E`;
+  [[C5, C4, A3], [0.5, 1, 1]],
+  [E4, 0.5],
+  [[G4, B3, E3], [0.75, 1, 1]],
+  [A4, 0.25],
 
-const state = {
-  // Dialog is an array of dialog data
-  // dialog data is an array with the following values
-  // [text:string,author?:[emoji:string,name:string]];
-  // [
-  //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris mattis purus sed luctus dignissim. Phasellus hendrerit quam et urna tempor, eu porttitor dui feugiat. Praesent vestibulum est lectus, et vehicula velit laoreet non.',
-  //   [avenger, `Avenger${Math.floor(Math.random() * 10)}`],
-  // ]
-  dialog: [
-    [
-      `yolo`,
-      [avenger, `ya mum`]
-    ]
-  ],
-  position: [0, 0],
+  [[F4, A3, F3], [0.5, 1, 1]],
+  [C4, 0.5],
+  [[E4, G3, C3], [0.5, 1, 1]],
+  [G4, 0.5],
+
+  [[F4, A3, F3], [0.5, 1, 1]],
+  [E4, 0.5],
+  [[D4, B3, G3], [0.5, 1, 1]],
+  [G4, 0.5],
+
+  [[E4, C4, C3], [2, 2, 2]],
+
+]);
+
+const stopCanonD = ()=> {
+  stopPlayingAudio = true;
 };
-
-const camera = [0, 120, 200];
-
-const graphics = [];
-
-const { fillPolygon: fillPolygon$1, fillText: fillText$1, ctx: ctx$1 } = palette;
-
-const groundPlane = createRectangle([0, 1600 / 2], 0, 10000, 1600);
-const skyPlane = createRectangle([0, 0], 0, viewWidth * 2, viewHeight * 2);
-
-const groundGradient = ctx$1.createLinearGradient(0, 0, 200, 200);
-groundGradient.addColorStop(0, `#5E8C6A`);
-groundGradient.addColorStop(1, `#BFB35A`);
-
-const skyGradient = ctx$1.createLinearGradient(0, 0, 200, 200);
-skyGradient.addColorStop(0, `#69D2E7`);
-skyGradient.addColorStop(1, `#A7DBD8`);
 
 const keyCodes = {
 
@@ -675,6 +857,132 @@ const parseKeyInfo =
 document.body.onkeyup = ({ keyCode }) => parseKeyInfo(keyCode, false);
 document.body.onkeydown = ({ keyCode }) => parseKeyInfo(keyCode, true);
 
+// colors
+
+
+
+// fonts
+const header = `Arial Black, Gadget, sans-serif`;
+const mono = `"Lucida Console", Monaco, monospace`;
+
+// text style
+const title_text = `24px ${  header}`;
+
+const base_text = `12px ${  mono}`;
+
+const child = `\uD83D\uDC69\uD83C\uDFFC\u200D\uD83C\uDF3E`;
+const protector = `\uD83D\uDC6E\uD83C\uDFFF\u200D\u2640\uFE0F`;
+const persecutor = `\uD83D\uDD75\uD83C\uDFFD`;
+const avenger = `\uD83D\uDC69\uD83C\uDFFB\u200D\uD83C\uDFA4`;
+
+const tree = `\uD83C\uDF32`;
+const treeAlt = `\uD83C\uDF33`;
+const cloud = `\u2601\uFE0F`;
+
+
+
+const pool = `\uD83C\uDF75`;
+const gem = `\uD83D\uDC8E`;
+
+let dt = 0;
+let t = 0;
+
+var loop = func => {
+  let running = true;
+  requestAnimationFrame(function main() {
+    dt = Math.min(16, Date.now() - t);
+    running && func(dt);
+    t = Date.now();
+    requestAnimationFrame(main);
+  });
+  return () => running = !running;
+};
+
+let activeScene;
+
+const Scene = (scene)=> {
+  clearUi();
+
+  scene.init();
+
+  activeScene && activeScene.dismiss();
+
+  activeScene = scene;
+};
+
+const perspective =
+  // camera coords in 3d space
+  (camera) =>
+    // 2d point
+    ([pX, pY]) => {
+      const [cX, cY, cZ] = camera;
+      return [
+        pX + pY * (cX - pX) / (pY + cY) - cX + viewWidth / 2,
+        viewHeight - ((cY + pY) === 0 ? 0 : cZ * pY / (cY + pY)),
+        Math.sqrt(Math.pow(cY + pY, 2) + Math.pow((cX - pX), 2)),
+      ];
+    };
+
+const camera = [0, 120, 200];
+
+const calcScreenPosition = perspective(camera);
+
+const graphics = [];
+
+const { fillPolygon: fillPolygon$1, fillText: fillText$1, ctx: ctx$1 } = palette;
+
+const groundPlane = createRectangle([0, 1600 / 2], 0, 10000, 1600);
+const skyPlane = createRectangle([0, 0], 0, viewWidth * 2, viewHeight * 2);
+
+const groundGradient = ctx$1.createLinearGradient(0, 0, 200, 200);
+groundGradient.addColorStop(0, `#5E8C6A`);
+groundGradient.addColorStop(1, `#BFB35A`);
+
+const skyGradient = ctx$1.createLinearGradient(0, 0, 200, 200);
+skyGradient.addColorStop(0, `#69D2E7`);
+skyGradient.addColorStop(1, `#A7DBD8`);
+
+const render$1 = dt => {
+  // Background
+  fillPolygon$1(
+    skyGradient,
+    [0, 0],
+    skyPlane.points,
+  );
+  fillPolygon$1(
+    groundGradient,
+    [0, 0],
+    mapList(
+      addList(groundPlane.points, groundPlane.position),
+      calcScreenPosition,
+    ),
+  );
+
+  // Dynamic
+  graphics
+    .map(point => [...calcScreenPosition(point), point[2], point[3], point[4]])
+    .sort((a, b) => b[2] - a[2])
+    .forEach(([x, y, d, z, emoji]) => fillText$1({}, [x, y - z], emoji));
+
+};
+
+const state = {
+  // Dialog is an array of dialog data
+  // dialog data is an array with the following values
+  // [text:string,author?:[emoji:string,name:string]];
+  // [
+  //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris mattis purus sed luctus dignissim. Phasellus hendrerit quam et urna tempor, eu porttitor dui feugiat. Praesent vestibulum est lectus, et vehicula velit laoreet non.',
+  //   [avenger, `Avenger${Math.floor(Math.random() * 10)}`],
+  // ]
+  dialog: [
+    [
+      `yolo`,
+      [avenger, `ya mum`]
+    ]
+  ],
+  position: [0, 0],
+};
+
 const createSprite = (emoji) => ([x, y], z = 0) => ([x, y, z, emoji]);
 const mkTree = createSprite(tree);
 const mkTreeAlt = createSprite(treeAlt);
@@ -732,230 +1040,73 @@ const calcFollow =
 
 graphics.push(avngSprite, chldSprite, protSprite, persSprite, gemSprite);
 
-var logic = () => {
-
-  // Character Controls
-  direction[0] = 0;
-  direction[1] = 0;
-  if(inputs.w || inputs.up) direction[1] += 1;
-  if(inputs.s || inputs.down) direction[1] -= 1;
-  if(inputs.d || inputs.right) direction[0] += 1;
-  if(inputs.a || inputs.left) direction[0] -= 1;
-  addSet(state.position, scaleToSet(direction, charSpeed));
-  state.position[1] = Math.max(state.position[1], 5);
-  avngSprite[0] = state.position[0];
-  avngSprite[1] = state.position[1];
-  const follow = calcFollow(avngSprite);
-  follow(chldSprite, 20 + Date.now() % 300 / 30);
-  follow(protSprite, 45 + Date.now() % 300 / 30);
-  follow(persSprite, 70 + Date.now() % 300 / 30);
-  follow(gemSprite, 90 + Date.now() % 300 / 30);
-  const xDiff = state.position[0] - camera[0];
-  if(Math.abs(xDiff) > viewWidth * 0.2) camera[0] += xDiff - sign(xDiff) * viewWidth * 0.2;
-  // console.log(camera[0]);
+var logic = {
+  init: ()=> {
+    // Character Controls
+    direction[0] = 0;
+    direction[1] = 0;
+    if(inputs.w || inputs.up) direction[1] += 1;
+    if(inputs.s || inputs.down) direction[1] -= 1;
+    if(inputs.d || inputs.right) direction[0] += 1;
+    if(inputs.a || inputs.left) direction[0] -= 1;
+    addSet(state.position, scaleToSet(direction, charSpeed));
+    state.position[1] = Math.max(state.position[1], 5);
+    avngSprite[0] = state.position[0];
+    avngSprite[1] = state.position[1];
+    const follow = calcFollow(avngSprite);
+    follow(chldSprite, 20 + Date.now() % 300 / 30);
+    follow(protSprite, 45 + Date.now() % 300 / 30);
+    follow(persSprite, 70 + Date.now() % 300 / 30);
+    follow(gemSprite, 90 + Date.now() % 300 / 30);
+    const xDiff = state.position[0] - camera[0];
+    if(Math.abs(xDiff) > viewWidth * 0.2) camera[0] += xDiff - sign(xDiff) * viewWidth * 0.2;
+    // console.log(camera[0]);
+  }
 };
 
-const context = new AudioContext();
+let stopLoop$1;
 
-const wait = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
+var overworld = {
+  init: ()=> {
+    stopLoop$1 = loop(dt => {
+      // Logic
+      logic.init(dt);
 
-async function playNote(note, length) {
-  if(note === ``) return await wait(length * 1000 * 0.75);
-  const oscillator = context.createOscillator();
-  const gain = context.createGain();
+      // Graphics
+      palette.clear();
 
-  oscillator.connect(gain);
-
-  oscillator.type = `sawtooth`;
-  oscillator.frequency.value = note;
-  gain.connect(context.destination);
-  oscillator.start(0);
-
-  gain.gain.exponentialRampToValueAtTime(
-    0.00001, context.currentTime + length
-  );
-
-  await wait(length * 1000 * 0.75);
-}
-
-async function playSong(music) {
-  let i = -1;
-  let h = -1;
-  while(++i < music.length) {
-    const [note, length] = music[i];
-    if(Array.isArray(note)) {
-      while(++h < note.length - 1) {
-        playNote(note[h], Array.isArray(length) ? length[h] : length);
-      }
-      playNote(note[h], Array.isArray(length) ? length[h] : length);
-      await wait((Array.isArray(length) ? Math.min(...length) : length) * 1000 * 0.75);
-      h = -1;
-    } else {
-      await playNote(note, length);
-    }
+      render$1();
+      render();
+    });
+  },
+  dismiss: ()=> {
+    stopLoop$1();
   }
-  return await true;
-}
-
-const C4 = 261.63;
-const E4 = 329.63;
-const F4 = 349.23;
-const G4 = 392.00;
-const A4 = 440.00;
-const B4 = 493.88;
-const C5 = 523.25;
-const D5 = 587.33;
-const E5 = 659.26;
-const F5 = 698.46;
-const G5 = 783.99;
-const A5 = 880.00;
-const Bb5 = 932.33;
-const B5 = 987.77;
-const C6 = 1046.50;
-const D6 = 1174.66;
-const E6 = 1318.51;
-const F6 = 1396.91;
-const G6 = 1567.98;
-const A6 = 1760.00;
-const playCanonD = async () => await playSong([
-
-  // line 1
-  [[E5, C5], 1],
-  [[D5, G4], 1],
-
-  [[C5, A4], 1],
-  [[B4, E4], 1],
-
-  [[A4, F4], 1],
-  [[G4, C4], 1],
-
-  [[A4, F4], 1],
-  [[B4, G4], 1],
-
-  // line 2
-  [[E6, G5, C5], 1],
-  [[D6, B5, G4], 1],
-
-  [[C6, A4], 1],
-  [[B5, G5, E4], 1],
-
-  [[A5, C5, F4], 1],
-  [[G5, E5, C4], 1],
-
-  [[A5, F5, F4], 1],
-  [[B5, D5, G4], 1],
-
-  // line 3
-  [[C6, C5, E5], [0.5, 1, 1]],
-  [C6, 0.5],
-  [[D6, D5, G4], [0.5, 1, 1]],
-  [B5, 0.5],
-
-  [[C6, E5, A5], [0.5, 1, 1]],
-  [E6, 0.5],
-  [[G6, E4], [0.5, 1, 1]],
-  [G5, 0.5],
-
-  [[A5, A4, F4], [0.5, 1, 1]],
-  [F5, 0.5],
-  [[E5, C4], [0.5, 1, 1]],
-  [G5, 0.5],
-
-  [[F5, A4, F4], [0.5, 1, 1]],
-  [C6, 0.5],
-  [[B5, B4, G4], [0.5, 1, 1]],
-  [G5, 0.5],
-
-  // line 4
-  [[C6, E5, C5], [0.5, 1, 1]],
-  [E6, 0.25],
-  [G6, 0.25],
-  [[G6, G4], [0.25, 1, 1]],
-  [A6, 0.25],
-  [G6, 0.25],
-  [F6, 0.25],
-
-  [[E6, A4, C5], [0.75, 1, 1]],
-  [E6, 0.25],
-  [[E6, G4, E4], [0.25, 1, 1]],
-  [F6, 0.25],
-  [E6, 0.25],
-  [D6, 0.25],
-
-  [[C6, A4, F4], [0.25, 1, 1]],
-  [Bb5, 0.25],
-  [A5, 0.25],
-  [B5, 0.25],
-  [[G5, E4, C4], [0.5, 1, 1]],
-  [E5, 0.5],
-
-  [[C5, A4, F4], [0.5, 1, 1]],
-  [F5, 0.25],
-  [E5, 0.25],
-  [[D5, B4, G4], [0.5, 1, 1]],
-  [G5, 0.25],
-  [F5, 0.25],
-
-
-  // line 5
-  [[``, E5, C5], [0.5, 1, 1]],
-  [C6, 0.5],
-  [[D6, G4], [0.5, 1, 1]],
-  [B5, 0.5],
-
-  [[C6, C5, A4], [0.5, 1, 1]],
-  [E5, 0.5],
-  [[G5, B4, E4], [0.75, 1, 1]],
-  [A5, 0.25],
-
-  [[F5, A4, F4], [0.5, 1, 1]],
-  [C5, 0.5],
-  [[E5, G4, C4], [0.5, 1, 1]],
-  [G5, 0.5],
-
-  [[F5, A4, F4], [0.5, 1, 1]],
-  [E5, 0.5],
-  [[D5, B4, G4], [0.5, 1, 1]],
-  [G5, 0.5],
-
-  [[E5, C5, C4], [2, 2, 2]],
-
-]);
-
-// colors
-
-
-
-// fonts
-const header = `Arial Black, Gadget, sans-serif`;
-const mono = `"Lucida Console", Monaco, monospace`;
-
-// text style
-const title_text = `24px ${  header}`;
-
-const base_text = `12px ${  mono}`;
+};
 
 let animationStart = null;
 let animState = 0;
+let animTime = 0;
 
-const fontStyle = { textBaseline: `middle`, style: 'white', font: title_text, };
+const fontStyle = { textBaseline: `middle`, style: `white`, font: title_text, };
 
 const title = {
   geometry: createRectangle([0, 0], 0, canvas.width, canvas.height),
   render: ({ ctx: ctx$$1, fillText, fillPolygon }, el) => {
 
-    if (!animationStart) {
+    if(!animationStart) {
       animationStart = Date.now();
       playCanonD();
     }
 
-    animState = Math.min((Date.now() - animationStart) / 24000, 1);
+    animTime = Date.now() - animationStart;
+    animState = Math.min(animTime / 24000, 1);
 
     fillText(
       fontStyle,
       [
         animTime / 24000 > 1 ? -11 : (Math.abs(((animTime - 1500) % 6000 / 600) - 5) - 2.5) * 10 - 11,
-        height - Math.min(animTime / 24000, 1) * height * 1.125,
+        canvas.height - Math.min(animTime / 24000, 1) * canvas.height * 1.125,
       ],
       gem
     );
@@ -966,45 +1117,47 @@ const title = {
       `A L T E R`
     );
 
-    if (animState > 1.1) {
+    if(animTime > 24500) {
       ctx$$1.font = base_text;
       const { width } = ctx$$1.measureText(`new game`);
-      fillText({ style: 'white', font: base_text }, [-width / 2 - 2, 48], `new game`);
+      fillText({ style: `white`, font: base_text }, [-width / 2 - 2, 48], `new game`);
       (Date.now() % 600 > 400) && fillPolygon(`white`, [-42, 44], [-5, 3, 5, 0, -5, -3]);
     }
 
-    if (inputs.space && animState < 1) animationStart /= 2;
-    else if (inputs.space) console.log('Start Game');
+    if((inputs.space || inputs.return) && animState < 1) animationStart /= 2;
+    else if(inputs.space || inputs.return) Scene(overworld);
 
   },
   interact: {
     onMouseDown() {
-      if (animState < 1) animationStart /= 2;
-      else console.log('Start Game');
+      if(animState < 1) animationStart /= 2;
+      else Scene(overworld);
     }
   }
 };
 
-var loadTitleScreen = () => {
-  animationStart = null;
-  clearUi();
-  uiElements.push(title);
+let stopLoop;
+
+var titleScreen = {
+  init: ()=> {
+    animationStart = null;
+    uiElements.push(title);
+
+    stopLoop = loop(dt => {
+      // Graphics
+      palette.clear();
+
+      render();
+    });
+  },
+  dismiss: ()=> {
+    stopCanonD();
+    const index = uiElements.indexOf(title);
+    uiElements.splice(index, 1);
+    stopLoop();
+  }
 };
 
-// import { render as renderGraphics } from 'overworld/graphics';
-// playCanonD();
-loadTitleScreen();
-loop(dt => {
-
-  // Logic
-  logic(dt);
-
-  // Graphics
-  palette.clear();
-
-  // renderGraphics();
-  render();
-
-});
+Scene(titleScreen);
 
 }());

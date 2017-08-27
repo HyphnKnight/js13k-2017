@@ -1,11 +1,14 @@
 import { createRectangle } from 'lib/geometry';
 import { uiElements, clearUi } from 'ui';
 import { canvas } from 'dom';
-import { playCanonD } from 'audio';
+import { playCanonD, stopCanonD } from 'audio';
 import { inputs } from 'controls';
 import { title_text, base_text, white, black } from 'style';
 import { gem } from 'emoji';
-
+import loop from 'loop';
+import { render as renderUI, palette } from 'ui';
+import Scene from 'scene';
+import overworld from 'overworld';
 
 let animationStart = null;
 let animState = 0;
@@ -54,20 +57,36 @@ const title = {
       (Date.now() % 600 > 400) && fillPolygon(`white`, [-42, 44], [-5, 3, 5, 0, -5, -3]);
     }
 
-    if(inputs.space && animState < 1) animationStart /= 2;
-    else if(inputs.space) console.log(`Start Game`);
+    if((inputs.space || inputs.return) && animState < 1) animationStart /= 2;
+    else if(inputs.space || inputs.return) Scene(overworld);
 
   },
   interact: {
     onMouseDown() {
       if(animState < 1) animationStart /= 2;
-      else console.log(`Start Game`);
+      else Scene(overworld);
     }
   }
 };
 
-export default () => {
-  animationStart = null;
-  clearUi();
-  uiElements.push(title);
+let stopLoop;
+
+export default {
+  init: ()=> {
+    animationStart = null;
+    uiElements.push(title);
+
+    stopLoop = loop(dt => {
+      // Graphics
+      palette.clear();
+
+      renderUI();
+    });
+  },
+  dismiss: ()=> {
+    stopCanonD();
+    const index = uiElements.indexOf(title);
+    uiElements.splice(index, 1);
+    stopLoop();
+  }
 };
