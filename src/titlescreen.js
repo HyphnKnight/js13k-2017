@@ -13,6 +13,7 @@ import overworld from 'overworld';
 let animationStart = null;
 let animState = 0;
 let animTime = 0;
+let pressed = false;
 
 const diamondAnimation = (animTime, height) => ([
   animTime / 24000 > 1
@@ -57,9 +58,9 @@ const title = {
       (Date.now() % 600 > 400) && fillPolygon(`white`, [-42, 44], [-5, 3, 5, 0, -5, -3]);
     }
 
-    if((inputs.space || inputs.return) && animState < 1) animationStart /= 2;
-    else if(inputs.space || inputs.return) Scene(overworld);
-
+    if(!pressed && (inputs.space || inputs.return) && animState < 1) animationStart /= 2;
+    else if(!pressed && (inputs.space || inputs.return)) Scene(overworld);
+    pressed = (inputs.space || inputs.return);
   },
   interact: {
     onMouseDown() {
