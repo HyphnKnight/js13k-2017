@@ -2,6 +2,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import includePaths from 'rollup-plugin-includepaths';
 
 export default {
+  name: `Alter`,
   input: `src/index.js`,
   output: {
     file: `docs/script.js`,
@@ -11,7 +12,7 @@ export default {
   plugins: [
     includePaths({
       include: {},
-      paths: [`src/lib`, `src`],
+      paths: [`src`],
       external: [],
       extensions: [`.js`]
     }),
