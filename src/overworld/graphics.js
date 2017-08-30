@@ -1,16 +1,17 @@
-import { createRectangle } from 'lib/geometry';
-import { addList, mapList } from 'lib/vector';
-import { palette } from 'ui';
+import { createRectangle, getRectanglePoints } from 'pura/geometry/tuple';
+import { mapListSet, addListSet } from 'pura/vector/tuple';
+import { firstValues } from 'pura/array';
+import { fillPolygon, fillRectangle, fillText, ctx } from 'pura/canvas/tuple';
 import { calcScreenPosition } from 'camera';
 import { perspective } from 'perspective';
 import { viewWidth, viewHeight } from 'dom';
 
 export const graphics = [];
 
-const { fillPolygon, fillText, ctx } = palette;
-
-const groundPlane = createRectangle([0, 1600 / 2], 0, 10000, 1600);
-const skyPlane = createRectangle([0, 0], 0, viewWidth * 2, viewHeight * 2);
+const groundPlanePoints = mapListSet(
+  addListSet(getRectanglePoints(10000, 1600), [0, 1600 / 2]),
+  pnt => firstValues(calcScreenPosition(pnt), 2),
+);
 
 const groundGradient = ctx.createLinearGradient(0, 0, 200, 200);
 groundGradient.addColorStop(0, `#5E8C6A`);
@@ -22,18 +23,18 @@ skyGradient.addColorStop(1, `#A7DBD8`);
 
 export const render = dt => {
   // Background
-  fillPolygon(
+  fillRectangle(
     skyGradient,
     [0, 0],
-    skyPlane.points,
+    viewWidth * 2,
+    viewHeight,
+    0,
   );
+
   fillPolygon(
     groundGradient,
     [0, 0],
-    mapList(
-      addList(groundPlane.points, groundPlane.position),
-      calcScreenPosition,
-    ),
+    groundPlanePoints,
   );
 
   // Dynamic

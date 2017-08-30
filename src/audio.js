@@ -10,7 +10,7 @@ async function playNote(note, length) {
   if(note === ``) return await wait(length * 1000 * 0.75);
   const oscillator = context.createOscillator();
   const gain = context.createGain();
-  gain.gain.value = 1.1 - Math.min(1,(Date.now()-startTime)/3000);
+  gain.gain.value = 1.1 - Math.min(1, (Date.now() - startTime) / 3000);
 
   oscillator.connect(gain);
 
@@ -292,6 +292,6 @@ export const playCanonD = async () => await playSong([
 
 ]);
 
-export const stopCanonD = ()=> {
+export const stopCanonD = () => {
   stopPlayingAudio = true;
 };

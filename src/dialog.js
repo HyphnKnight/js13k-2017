@@ -1,7 +1,8 @@
 // Display modal text.
 
-import { renderUI } from 'lib/cEl';
-import { createRectangle } from 'lib/geometry';
+import { renderUI } from 'pura/cEl';
+import { createRectangle } from 'pura/geometry/tuple';
+import { ctx, fillRectangle, strokeRectangle, fillText } from 'pura/canvas/tuple';
 import { inputs } from 'controls';
 import { canvas, viewHeight, viewWidth } from 'dom';
 import state from 'state';
@@ -16,8 +17,11 @@ const textSpeed = 50;
 const stroke = 2;
 const dialogWidth = viewWidth - stroke;
 const dialogHeight = viewHeight / 4;
-const strokeColor = `#fff`;
 const bgColor = `#00f`;
+const strokeOptions = {
+  style: `#fff`,
+  thickness: stroke,
+};
 
 // Text traits.
 const textSize = 12;
@@ -74,16 +78,15 @@ const formatText = (ctx, text, maxChar) => {
 
 export const Dialog = {
   geometry: createRectangle([viewWidth / 2, viewHeight - dialogHeight / 2], 0, dialogWidth, dialogHeight),
-  render: (palette, { geometry }) => {
+  render: ({ geometry }) => {
     const { dialog } = state;
     const [currentDialog] = dialog;
     if(!currentDialog) return;
     if(!textStart) textStart = Date.now();
 
-    const { ctx, fillRectangle, strokeRectangle, fillText } = palette;
     const maxChar = Math.floor((Date.now() - textStart) / textSpeed);
-    fillRectangle(bgColor, [0, -stroke/2], geometry.width, geometry.height);
-    strokeRectangle(strokeColor, stroke, [0, -stroke/2], geometry.width, geometry.height);
+    fillRectangle(bgColor, [0, -stroke / 2], geometry.width, geometry.height);
+    strokeRectangle(strokeOptions, [0, -stroke / 2], geometry.width, geometry.height);
 
     // Render text
     const [text, author] = currentDialog;
@@ -96,7 +99,7 @@ export const Dialog = {
       const leftOffset = -dialogWidth / 2 + nameWidth;
       const topOffset = -dialogHeight / 2 - stroke * 2;
       fillRectangle(bgColor, [leftOffset, topOffset], boxWidth, lineHeight + stroke * 4);
-      strokeRectangle(strokeColor, stroke, [leftOffset, topOffset], boxWidth, lineHeight + stroke * 4);
+      strokeRectangle(strokeOptions, [leftOffset, topOffset], boxWidth, lineHeight + stroke * 4);
       ctx.font = `${textSize}px monospace`;
       fillText({ style: textColor }, [leftOffset - 6 + stroke * 4 - boxWidth / 2, topOffset - lineHeight / 2], emoji);
       fillText({ style: textColor }, [leftOffset - 6 + stroke * 4 - boxWidth / 2 + 16, topOffset - lineHeight / 2], name);

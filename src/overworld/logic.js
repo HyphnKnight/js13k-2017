@@ -1,5 +1,5 @@
-import { scaleToSet, addSet, set, subtract, magnitude, mapList } from 'lib/vector';
-import { sign } from 'lib/math';
+import { scaleToSet, addSet, set, subtract, magnitude, mapList } from 'pura/vector/tuple';
+import { sign } from 'pura/math';
 import state from 'state';
 import { graphics } from 'overworld/graphics';
 import { camera } from 'camera';

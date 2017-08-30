@@ -1,12 +1,12 @@
-import { createRectangle } from 'lib/geometry';
-import { uiElements, clearUi } from 'ui';
+import { createRectangle } from 'pura/geometry/tuple';
+import { ctx, fillText, fillPolygon, clear } from 'pura/canvas/tuple';
 import { canvas } from 'dom';
 import { playCanonD, stopCanonD } from 'audio';
 import { inputs } from 'controls';
 import { title_text, base_text, white, black } from 'style';
 import { gem } from 'emoji';
 import loop from 'loop';
-import { render as renderUI, palette } from 'ui';
+import { render as renderUI, uiElements } from 'ui';
 import Scene from 'scene';
 import overworld from 'overworld';
 
@@ -25,7 +25,7 @@ const fontStyle = { textBaseline: `middle`, style: `white`, font: title_text, };
 
 const title = {
   geometry: createRectangle([0, 0], 0, canvas.width, canvas.height),
-  render: ({ ctx, fillText, fillPolygon }, el) => {
+  render: () => {
 
     if(!animationStart) {
       animationStart = Date.now();
@@ -72,18 +72,18 @@ const title = {
 let stopLoop;
 
 export default {
-  init: ()=> {
+  init: () => {
     animationStart = null;
     uiElements.push(title);
 
     stopLoop = loop(dt => {
       // Graphics
-      palette.clear();
+      clear();
 
       renderUI();
     });
   },
-  dismiss: ()=> {
+  dismiss: () => {
     stopCanonD();
     const index = uiElements.indexOf(title);
     uiElements.splice(index, 1);

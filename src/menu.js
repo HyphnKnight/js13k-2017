@@ -1,19 +1,23 @@
 // Display modal text.
 
-import { renderUI } from 'lib/cEl';
-import { createRectangle } from 'lib/geometry';
+import { renderUI } from 'pura/cEl';
+import { createRectangle } from 'pura/geometry/tuple';
+import { fillText, fillRectangle, strokeRectangle } from 'pura/canvas/tuple';
 import { inputs } from 'controls';
 import { canvas, ctx, viewHeight, viewWidth } from 'dom';
 
 // Menu box traits.
 // Flexible size.
 const stroke = 2;
-let menuWidth = viewWidth/3;
+let menuWidth = viewWidth / 3;
 let menuHeight = 0;
-let menuX = -viewWidth/2 + menuWidth/2 + stroke/2;
-let menuY = viewHeight/2 - menuHeight/2 - stroke/2 | 0;
-const strokeColor = `#fff`;
+let menuX = -viewWidth / 2 + menuWidth / 2 + stroke / 2;
+let menuY = viewHeight / 2 - menuHeight / 2 - stroke / 2 | 0;
 const bgColor = `#00f`;
+const strokeOptions = {
+  style: `#fff`,
+  thickness: stroke,
+};
 
 // Text traits.
 const textSize = 12;
@@ -22,22 +26,22 @@ const textWidth = menuWidth - stroke * 4;
 const textHeight = menuHeight - stroke * 4;
 const textColor = `#fff`;
 
-const Command = (label, handler, index)=> {
+const Command = (label, handler, index) => {
   label = label.toUpperCase();
   const txtMetrics = ctx.measureText(label);
-  menuWidth = Math.max(menuWidth, txtMetrics.width + stroke*4);
-  menuX = -viewWidth/2 + menuWidth/2 + stroke/2;
+  menuWidth = Math.max(menuWidth, txtMetrics.width + stroke * 4);
+  menuX = -viewWidth / 2 + menuWidth / 2 + stroke / 2;
 
   return {
     geometry: createRectangle([
-      -menuWidth/2 + stroke*2,
-      lineHeight/4 + menuHeight/2 - lineHeight/2 - index*lineHeight | 0
+      -menuWidth / 2 + stroke * 2,
+      lineHeight / 4 + menuHeight / 2 - lineHeight / 2 - index * lineHeight | 0
     ], 0, menuWidth, lineHeight),
 
-    render: ({ fillText }, { geometry })=> {
+    render: ({ geometry }) => {
       geometry.position = [
-        -menuWidth/2 + stroke*2,
-        lineHeight/4 + menuHeight/2 - lineHeight/2 - index*lineHeight | 0
+        -menuWidth / 2 + stroke * 2,
+        lineHeight / 4 + menuHeight / 2 - lineHeight / 2 - index * lineHeight | 0
       ];
 
       fillText({ style: textColor }, [0, 0], label);
@@ -57,15 +61,15 @@ export default class Menu {
   add(label, handler) {
     const cmd = Command(label, handler, this.commands.size);
     this.commands.add(cmd);
-    menuHeight = lineHeight*this.commands.size + stroke | 0;
-    menuY = viewHeight/2 - menuHeight/2 - stroke/2 | 0;
+    menuHeight = lineHeight * this.commands.size + stroke | 0;
+    menuY = viewHeight / 2 - menuHeight / 2 - stroke / 2 | 0;
     return cmd;
   }
 
   delete(cmd) {
     this.commands.delete(cmd);
-    menuHeight = lineHeight*this.commands.size + stroke | 0;
-    menuY = viewHeight/2 - menuHeight/2 - stroke/2 | 0;
+    menuHeight = lineHeight * this.commands.size + stroke | 0;
+    menuY = viewHeight / 2 - menuHeight / 2 - stroke / 2 | 0;
   }
 
   render() {
@@ -74,12 +78,10 @@ export default class Menu {
 
       children: this.commands,
 
-      render: (palette, { geometry }) => {
+      render: ({ geometry }) => {
         geometry.position = [menuX, menuY];
-
-        const { fillRectangle, strokeRectangle } = palette;
-        fillRectangle(bgColor, [0,0], menuWidth, menuHeight);
-        strokeRectangle(strokeColor, stroke, [0,0], menuWidth, menuHeight);
+        fillRectangle(bgColor, [0, 0], menuWidth, menuHeight);
+        strokeRectangle(strokeOptions, [0, 0], menuWidth, menuHeight);
       }
     };
   }

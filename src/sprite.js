@@ -1,4 +1,3 @@
-import { palette } from 'ui';
 import {
   tree,
   treeAlt,
@@ -12,8 +11,6 @@ import {
   pool,
   gem,
 } from 'emoji';
-
-const { fillText } = palette;
 
 export const createSprite = (emoji) => ([x, y], z = 0) => ([x, y, z, emoji]);
 export const mkTree = createSprite(tree);
