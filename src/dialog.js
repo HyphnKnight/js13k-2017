@@ -3,6 +3,7 @@
 import { renderUI } from 'pura/cEl';
 import { createRectangle } from 'pura/geometry/tuple';
 import { ctx, fillRectangle, strokeRectangle, fillText } from 'pura/canvas/tuple';
+import { drawBox, stroke, textSize, lineHeight, white } from 'styles';
 import { inputs } from 'controls';
 import { canvas, viewHeight, viewWidth } from 'dom';
 import state from 'state';
@@ -14,21 +15,12 @@ const textSpeed = 50;
 
 // Dialog box traits.
 // Renders over bottom half of screen.
-const stroke = 2;
 const dialogWidth = viewWidth - stroke;
 const dialogHeight = viewHeight / 4;
-const bgColor = `#00f`;
-const strokeOptions = {
-  style: `#fff`,
-  thickness: stroke,
-};
 
 // Text traits.
-const textSize = 12;
-const lineHeight = textSize * 1.2;
 const textWidth = dialogWidth - stroke * 4;
 const textHeight = dialogHeight - stroke * 4;
-const textColor = `#fff`;
 
 
 // Formatted text is an array of lineData
@@ -85,8 +77,7 @@ export const Dialog = {
     if(!textStart) textStart = Date.now();
 
     const maxChar = Math.floor((Date.now() - textStart) / textSpeed);
-    fillRectangle(bgColor, [0, -stroke / 2], geometry.width, geometry.height);
-    strokeRectangle(strokeOptions, [0, -stroke / 2], geometry.width, geometry.height);
+    drawBox([0, 0], geometry.width, 0, geometry.height);
 
     // Render text
     const [text, author] = currentDialog;
@@ -98,15 +89,14 @@ export const Dialog = {
       const boxWidth = nameWidth + 16 + stroke * 4;
       const leftOffset = -dialogWidth / 2 + nameWidth;
       const topOffset = -dialogHeight / 2 - stroke * 2;
-      fillRectangle(bgColor, [leftOffset, topOffset], boxWidth, lineHeight + stroke * 4);
-      strokeRectangle(strokeOptions, [leftOffset, topOffset], boxWidth, lineHeight + stroke * 4);
+      drawBox([leftOffset, topOffset], boxWidth, 1, stroke * 4);
       ctx.font = `${textSize}px monospace`;
-      fillText({ style: textColor }, [leftOffset - 6 + stroke * 4 - boxWidth / 2, topOffset - lineHeight / 2], emoji);
-      fillText({ style: textColor }, [leftOffset - 6 + stroke * 4 - boxWidth / 2 + 16, topOffset - lineHeight / 2], name);
+      fillText({ style: white }, [leftOffset - 6 + stroke * 4 - boxWidth / 2, topOffset - lineHeight / 2], emoji);
+      fillText({ style: white }, [leftOffset - 6 + stroke * 4 - boxWidth / 2 + 16, topOffset - lineHeight / 2], name);
       offset = lineHeight / 2;
     }
     formattedText.forEach(([x, y, line]) => {
-      fillText({ style: textColor }, [x, y + offset], line);
+      fillText({ style: white }, [x, y + offset], line);
     });
 
     if(/*maxChar >= text.length &&*/ inputs.space && !justDeleted) {
