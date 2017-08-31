@@ -8,7 +8,7 @@
     "compile": "rollup --config rollup.config.prod.js",
     "compress": "minify docs -d docs",
     "zip": "bestzip Alter.zip docs",
-    "test-size": "stat -f%z Alter.zip",
+    "test-size": "stat -c%z Alter.zip",
     "build": "npm run compile && npm run compress && npm run zip && npm run test-size",
     "lint": "eslint src --fix"
   },
