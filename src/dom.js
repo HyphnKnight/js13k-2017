@@ -5,6 +5,7 @@ setCanvas(canvas);
 ctx.imageSmoothingEnabled = false;
 export const viewWidth = 160;
 export const viewHeight = 192;
+export const viewCenter = [viewWidth / 2, viewHeight / 2];
 export let canvasOffsetLeft = canvas.offsetWidth;
 export let canvasOffsetTop = canvas.offsetHeight;
 export let scaleX = 1;
