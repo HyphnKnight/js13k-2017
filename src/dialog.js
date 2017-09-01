@@ -69,7 +69,7 @@ const formatText = (ctx, text, maxChar) => {
 };
 
 export const Dialog = {
-  geometry: createRectangle([viewWidth / 2, viewHeight - dialogHeight / 2], 0, dialogWidth, dialogHeight),
+  geometry: createRectangle([0, viewHeight / 2 - dialogHeight / 2], 0, dialogWidth, dialogHeight),
   render: ({ geometry }) => {
     const { dialog } = state;
     const [currentDialog] = dialog;
