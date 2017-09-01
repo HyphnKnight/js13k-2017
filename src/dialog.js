@@ -3,7 +3,7 @@
 import { renderUI } from 'pura/cEl';
 import { createRectangle } from 'pura/geometry/tuple';
 import { ctx, fillRectangle, strokeRectangle, fillText } from 'pura/canvas/tuple';
-import { drawBox, stroke, textSize, lineHeight, white } from 'styles';
+import { drawBox, stroke, textSize, lineHeight, white } from 'style';
 import { inputs } from 'controls';
 import { canvas, viewHeight, viewWidth } from 'dom';
 import state from 'state';
@@ -69,7 +69,7 @@ const formatText = (ctx, text, maxChar) => {
 };
 
 export const Dialog = {
-  geometry: createRectangle([viewWidth / 2, viewHeight - dialogHeight / 2], 0, dialogWidth, dialogHeight),
+  geometry: createRectangle([0, viewHeight / 2 - dialogHeight / 2], 0, dialogWidth, dialogHeight),
   render: ({ geometry }) => {
     const { dialog } = state;
     const [currentDialog] = dialog;

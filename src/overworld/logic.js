@@ -66,15 +66,15 @@ export default () => {
   // Character Controls
   direction[0] = 0;
   direction[1] = 0;
-  if (inputs.w || inputs.up || inputs.s || inputs.down || inputs.d || inputs.right || inputs.a || inputs.left) state.target = null;
-  if (inputs.w || inputs.up) direction[1] += 1;
-  if (inputs.s || inputs.down) direction[1] -= 1;
-  if (inputs.d || inputs.right) direction[0] += 1;
-  if (inputs.a || inputs.left) direction[0] -= 1;
+  if(inputs.w || inputs.up || inputs.s || inputs.down || inputs.d || inputs.right || inputs.a || inputs.left) state.target = null;
+  if(inputs.w || inputs.up) direction[1] += 1;
+  if(inputs.s || inputs.down) direction[1] -= 1;
+  if(inputs.d || inputs.right) direction[0] += 1;
+  if(inputs.a || inputs.left) direction[0] -= 1;
   addSet(state.position, scaleToSet(direction, charSpeed));
-  if (state.target !== null) {
+  if(state.target !== null) {
     const diff = subtract(state.target, state.position);
-    if (magnitudeSqr(diff) < 3) { state.target = null; }
+    if(magnitudeSqr(diff) < 3) { state.target = null }
     addSet(state.position, scaleToSet(diff, charSpeed));
   }
   state.position[1] = Math.max(state.position[1], 5);
@@ -86,5 +86,5 @@ export default () => {
   follow(persSprite, 70 + Date.now() % 300 / 30);
   follow(gemSprite, 90 + Date.now() % 300 / 30);
   const xDiff = state.position[0] - camera[0];
-  if (Math.abs(xDiff) > viewWidth * 0.2) camera[0] += xDiff - sign(xDiff) * viewWidth * 0.2;
+  if(Math.abs(xDiff) > viewWidth * 0.2) camera[0] += xDiff - sign(xDiff) * viewWidth * 0.2;
 };

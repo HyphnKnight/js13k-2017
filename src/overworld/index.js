@@ -1,8 +1,9 @@
 import loop from 'loop';
-import { render as renderUI } from 'ui';
+import { render as renderUI, uiElements, clearUi } from 'ui';
 import { clear } from 'pura/canvas/tuple';
 import { subtractSet } from 'pura/vector/tuple';
 import state from 'state';
+import { Dialog } from 'dialog';
 import { render as renderGraphics } from 'overworld/graphics';
 import logic, { avngSprite } from 'overworld/logic';
 import { calcWorldPosition } from 'camera';
@@ -23,6 +24,8 @@ const evtMouseUp = ()=> (moveTo = false);
 
 export default {
   init: () => {
+    uiElements.push(Dialog);
+
     stopLoop = loop(dt => {
       // Logic
       logic(dt);

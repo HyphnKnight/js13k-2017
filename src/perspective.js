@@ -22,4 +22,4 @@ export const reversePerspective =
       const pY = cY / (-cZ / (sY - viewHeight) - 1);
       const pX = -((-2 * cX * cY) + (viewWidth * pY) + (viewWidth * cY) + (-2 * sX * pY) + (-2 * sX * cY)) / (2 * cY);
       return [pX, pY];
-    }
+    };
