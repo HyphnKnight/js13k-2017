@@ -2,16 +2,17 @@
 
 import { renderUI } from 'pura/cEl';
 import { createRectangle } from 'pura/geometry/tuple';
-import { fillText, fillRectangle, strokeRectangle } from 'pura/canvas/tuple';
+import { ctx, fillText, fillRectangle, strokeRectangle } from 'pura/canvas/tuple';
 import { inputs } from 'controls';
-import { canvas, ctx, viewHeight, viewWidth } from 'dom';
+import { canvas, viewHeight, viewWidth } from 'dom';
+import { pointRight } from 'emoji';
 
 // Menu box traits.
 // Flexible size.
 const stroke = 2;
 let menuWidth = viewWidth / 3;
 let menuHeight = 0;
-let menuX = -viewWidth / 2 + menuWidth / 2 + stroke / 2;
+let menuX = viewWidth / 2 - menuWidth / 2 - stroke / 2;
 let menuY = viewHeight / 2 - menuHeight / 2 - stroke / 2 | 0;
 const bgColor = `#00f`;
 const strokeOptions = {
@@ -30,19 +31,18 @@ const Command = (label, handler, index) => {
   label = label.toUpperCase();
   const txtMetrics = ctx.measureText(label);
   menuWidth = Math.max(menuWidth, txtMetrics.width + stroke * 4);
-  menuX = -viewWidth / 2 + menuWidth / 2 + stroke / 2;
+  menuX = viewWidth / 2 - menuWidth / 2 - stroke / 2;
+
+  const poz = ()=> [
+    -menuWidth/2 + stroke*2,
+    lineHeight/4 + menuHeight/2 - lineHeight/2 - index*lineHeight | 0
+  ];
 
   return {
-    geometry: createRectangle([
-      -menuWidth / 2 + stroke * 2,
-      lineHeight / 4 + menuHeight / 2 - lineHeight / 2 - index * lineHeight | 0
-    ], 0, menuWidth, lineHeight),
+    geometry: createRectangle(poz(), 0, menuWidth, lineHeight),
 
     render: ({ geometry }) => {
-      geometry.position = [
-        -menuWidth / 2 + stroke * 2,
-        lineHeight / 4 + menuHeight / 2 - lineHeight / 2 - index * lineHeight | 0
-      ];
+      geometry.position = poz();
 
       fillText({ style: textColor }, [0, 0], label);
     },
@@ -55,20 +55,21 @@ const Command = (label, handler, index) => {
 
 export default class Menu {
   constructor() {
-    this.commands = new Set();
+    this.commands = [];
+    this.activeIndex = 0;
   }
 
   add(label, handler) {
-    const cmd = Command(label, handler, this.commands.size);
-    this.commands.add(cmd);
-    menuHeight = lineHeight * this.commands.size + stroke | 0;
+    const cmd = Command(label, handler, this.commands.length);
+    this.commands.unshift(cmd);
+    menuHeight = lineHeight * this.commands.length + stroke | 0;
     menuY = viewHeight / 2 - menuHeight / 2 - stroke / 2 | 0;
     return cmd;
   }
 
   delete(cmd) {
-    this.commands.delete(cmd);
-    menuHeight = lineHeight * this.commands.size + stroke | 0;
+    this.commands.splice(this.commands.indexOf(cmd), 1);
+    menuHeight = lineHeight * this.commands.length + stroke | 0;
     menuY = viewHeight / 2 - menuHeight / 2 - stroke / 2 | 0;
   }
 
@@ -78,10 +79,18 @@ export default class Menu {
 
       children: this.commands,
 
-      render: ({ geometry }) => {
+      render: ({ geometry, children }) => {
+        if(!this.commands.length) {
+          return;
+        }
+
         geometry.position = [menuX, menuY];
         fillRectangle(bgColor, [0, 0], menuWidth, menuHeight);
         strokeRectangle(strokeOptions, [0, 0], menuWidth, menuHeight);
+
+        // Render pointer hand.
+        const [x, y] = children[this.activeIndex].geometry.position;
+        fillText({}, [x - 13, y], pointRight);
       }
     };
   }
