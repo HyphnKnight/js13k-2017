@@ -3,7 +3,7 @@
 import { renderUI } from 'pura/cEl';
 import { createRectangle } from 'pura/geometry/tuple';
 import { ctx, fillRectangle, strokeRectangle, fillText } from 'pura/canvas/tuple';
-import { drawBox, stroke, textSize, lineHeight, white } from 'styles';
+import { drawBox, stroke, textSize, lineHeight, white } from 'style';
 import { inputs } from 'controls';
 import { canvas, viewHeight, viewWidth } from 'dom';
 import state from 'state';
