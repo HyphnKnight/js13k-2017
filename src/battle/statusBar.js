@@ -1,6 +1,6 @@
 import { createRectangle } from 'pura/geometry/tuple';
 import { fillText } from 'pura/canvas/tuple';
-import { canvas, ctx, viewHeight, viewWidth } from 'dom';
+import { canvas, viewHeight, viewWidth } from 'dom';
 import { heart, blackHeart } from 'emoji';
 
 const textSize = 12;
@@ -10,7 +10,7 @@ const name = `Avenger`;
 const maxHealth = Math.random() * 80 + 20;
 const health = Math.random() * (maxHealth - 10) + 10;
 
-export const statusBar = {
+export default {
   geometry: createRectangle([0, -viewHeight / 2 + lineHeight / 2], 0, viewWidth, lineHeight),
   render({ geometry }) {
     let heartContainers = Math.ceil(maxHealth / 10) + 1;
