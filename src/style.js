@@ -12,7 +12,7 @@ const mono = `"Lucida Console", Monaco, monospace`;
 
 // font styles
 export const textSize = 12;
-export const lineHeight = textSize * 1.2;
+export const lineHeight = textSize * 1.1;
 
 export const title_text = `24px ${header}`;
 export const button_text = `16px ${mono}`;

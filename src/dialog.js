@@ -16,7 +16,7 @@ const textSpeed = 50;
 // Dialog box traits.
 // Renders over bottom half of screen.
 const dialogWidth = viewWidth - stroke;
-const dialogHeight = viewHeight / 4;
+const dialogHeight = lineHeight*5;
 
 // Text traits.
 const textWidth = dialogWidth - stroke * 4;
@@ -93,7 +93,7 @@ export const Dialog = {
       ctx.font = `${textSize}px monospace`;
       fillText({ style: white }, [leftOffset - 6 + stroke * 4 - boxWidth / 2, topOffset - lineHeight / 2], emoji);
       fillText({ style: white }, [leftOffset - 6 + stroke * 4 - boxWidth / 2 + 16, topOffset - lineHeight / 2], name);
-      offset = lineHeight / 2;
+      offset = lineHeight*0.33;
     }
     formattedText.forEach(([x, y, line]) => {
       fillText({ style: white }, [x, y + offset], line);
