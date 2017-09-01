@@ -38,10 +38,10 @@ export default {
       renderGraphics();
       renderUI();
     });
-    window.addEventListener('click', onClick);
+    window.addEventListener(`click`, onClick);
   },
   dismiss: () => {
     stopLoop();
-    window.addEventListener('click', onClick);
+    window.addEventListener(`click`, onClick);
   }
 };

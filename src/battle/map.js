@@ -67,7 +67,7 @@ export const map = {
   children: [groundPlane, ...[].concat(...grid).map(createHex)],
   render({ fillRectangle }, { geometry }) {
     fillRectangle(skyGradient, [0, 0], viewWidth, viewHeight);
-    if (inputs.up) addSet(mapOffset, [0, -1]);
-    if (inputs.down) addSet(mapOffset, [0, 1]);
+    if(inputs.up) addSet(mapOffset, [0, -1]);
+    if(inputs.down) addSet(mapOffset, [0, 1]);
   }
 };
