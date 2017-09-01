@@ -86,8 +86,6 @@ export default {
   },
   dismiss: () => {
     stopCanonD();
-    const index = uiElements.indexOf(title);
-    uiElements.splice(index, 1);
     stopLoop();
   }
 };
