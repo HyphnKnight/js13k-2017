@@ -1,5 +1,5 @@
 export const child = `\uD83D\uDC69\uD83C\uDFFC\u200D\uD83C\uDF3E`;
-export const protector = `\uD83D\uDC6E\uD83C\uDFFF\u200D\u2640\uFE0F`;
+export const protector = `\uD83D\uDC6E\uD83C\uDFFF\u200D`;
 export const persecutor = `\uD83D\uDD75\uD83C\uDFFD`;
 export const avenger = `\uD83D\uDC69\uD83C\uDFFB\u200D\uD83C\uDFA4`;
 export const demon = `\uD83D\uDC79`;
