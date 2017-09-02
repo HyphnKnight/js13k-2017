@@ -25,34 +25,26 @@ const evtMouseUp = ()=> (moveTo = false);
 export default {
   init: () => {
     uiElements.push(Dialog);
-
-    stopLoop = loop(dt => {
+    state.logic = (dt) => {
       // Logic
       logic(dt);
-
+      renderGraphics(dt);
       // Input
-      if(moveTo) {
+      if (moveTo) {
         const position = subtractSet(calcMousePosition(moveTo), [canvasOffsetLeft, canvasOffsetTop]);
         position[0] *= scaleX;
         position[1] *= scaleY;
         state.target = calcWorldPosition(position);
       }
-
-      // Graphics
-      clear();
-
-      renderGraphics();
-      renderUI();
-    });
+    };
 
     window.addEventListener(`mousedown`, evtMouseDown);
     window.addEventListener(`mousemove`, evtMouseMove);
     window.addEventListener(`mouseup`, evtMouseUp);
   },
   dismiss: () => {
-    stopLoop();
     window.removeEventListener(`mousedown`, evtMouseDown);
     window.removeEventListener(`mousemove`, evtMouseMove);
     window.removeEventListener(`mouseup`, evtMouseUp);
-  }
+  },
 };
