@@ -37,49 +37,58 @@ const keyCodes = {
 
 export const inputs = {
 
-  up: false,
-  down: false,
-  left: false,
-  right: false,
+  up: 0,
+  down: 0,
+  left: 0,
+  right: 0,
 
-  q: false,
-  w: false,
-  e: false,
-  a: false,
-  s: false,
-  d: false,
+  q: 0,
+  w: 0,
+  e: 0,
+  a: 0,
+  s: 0,
+  d: 0,
 
-  '0': false,
-  '1': false,
-  '2': false,
-  '3': false,
-  '4': false,
-  '5': false,
-  '6': false,
-  '7': false,
-  '8': false,
-  '9': false,
+  '0': 0,
+  '1': 0,
+  '2': 0,
+  '3': 0,
+  '4': 0,
+  '5': 0,
+  '6': 0,
+  '7': 0,
+  '8': 0,
+  '9': 0,
 
-  '-': false,
-  '=': false,
+  '-': 0,
+  '=': 0,
 
-  space: false,
-  return: false,
-  shift: false,
-  ctrl: false,
-  tab: false,
-  alt: false,
+  space: 0,
+  return: 0,
+  shift: 0,
+  ctrl: 0,
+  tab: 0,
+  alt: 0,
 
-  click: false
 
 };
 
 const parseKeyInfo =
-  (keyCode, active = true) => {
+  (keyCode, active = 1) => {
     const key = keyCodes[keyCode];
-    if(key) inputs[key] = active;
+    if (key) inputs[key] = active;
     return inputs[key];
   };
 
-document.body.onkeyup = ({ keyCode }) => parseKeyInfo(keyCode, false);
-document.body.onkeydown = ({ keyCode }) => parseKeyInfo(keyCode, true);
+document.body.onkeyup = ({ keyCode }) => parseKeyInfo(keyCode, 0);
+document.body.onkeydown = ({ keyCode }) => parseKeyInfo(keyCode, 1);
+
+export const updateInputs = () => {
+  for (const [key, value] of inputs.entries()) {
+    inputs[key] =
+      value === 1
+        ? 2
+        : value;
+  }
+}
+
