@@ -90,11 +90,11 @@ document.body.onkeyup = ({ keyCode }) => parseKeyInfo(keyCode, 0);
 document.body.onkeydown = ({ keyCode }) => parseKeyInfo(keyCode, 1);
 
 export const updateInputs = () => {
-  for (const [key, value] of inputs.entries()) {
-    inputs[key] =
-      value === 1
-        ? 2
-        : value;
+  const keys = Object.keys(inputs);
+  let i = -1;
+  while (++i < keys.length) {
+    if (inputs[keys[i]] === 1) inputs[keys[i]] = 2;
+    else inputs[keys[i]] = inputs[keys[i]];
   }
 }
 
