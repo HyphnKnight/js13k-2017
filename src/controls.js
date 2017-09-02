@@ -1,3 +1,6 @@
+import { subtractSet } from 'pura/vector/tuple';
+import { canvasOffsetLeft, canvasOffsetTop, scaleX, scaleY } from 'dom';
+
 const keyCodes = {
 
   '38': `up`,
@@ -70,6 +73,9 @@ export const inputs = {
   tab: 0,
   alt: 0,
 
+  mousePosition: null,
+
+  click: null,
 
 };
 
@@ -92,3 +98,18 @@ export const updateInputs = () => {
   }
 }
 
+document.body.onmousedown = () => inputs.click = 1;
+document.body.onmouseup = () => inputs.click = 0;
+
+const calcMousePosition =
+  ({ clientX, clientY, touches }) =>
+    touches
+      ? ([touches[0].clientX, touches[0].clientY])
+      : ([clientX, clientY]);
+
+document.body.onmousemove = (evt) => {
+  const position = subtractSet(calcMousePosition(evt), [canvasOffsetLeft, canvasOffsetTop]);
+  position[0] *= scaleX;
+  position[1] *= scaleY;
+  inputs.mousePosition = position;
+};
