@@ -3,144 +3,80 @@
 import { renderUI } from 'pura/cEl';
 import { createRectangle } from 'pura/geometry/tuple';
 import { ctx, fillText, fillRectangle, strokeRectangle } from 'pura/canvas/tuple';
+import { drawBox, stroke, textSize, lineHeight, white } from 'style';
 import { inputs } from 'controls';
 import { canvas, viewHeight, viewWidth } from 'dom';
 import { pointRight } from 'emoji';
 
-// Menu box traits.
-// Flexible size.
-const stroke = 2;
-let menuWidth = viewWidth / 3;
-let menuHeight = 0;
-let menuX = viewWidth / 2 - menuWidth / 2 - stroke / 2;
-let menuY = viewHeight / 2 - menuHeight / 2 - stroke / 2 | 0;
-const bgColor = `#00f`;
-const strokeOptions = {
-  style: `#fff`,
-  thickness: stroke,
-};
+/*
+  Menu([
+    [`CommandLabel1`, ()=> {//Handler1}],
+    [`CommandLabel2`, ()=> {//Handler2}]
+  ]);
+*/
+const Menu = (commands)=> {
+  // Menu dimensions.
+  let menuWidth = viewWidth/3;
+  const menuHeight = lineHeight*commands.length + stroke;
+  const menuX = viewWidth/2 - menuWidth/2 - stroke/2;
+  const menuY = viewHeight/2 - menuHeight/2 - stroke;
 
-// Text traits.
-const textSize = 12;
-const lineHeight = textSize * 1.2;
-const textWidth = menuWidth - stroke * 4;
-const textHeight = menuHeight - stroke * 4;
-const textColor = `#fff`;
+  let activeCommandIndex = 0;
 
-class Command {
-  constructor(label, handler, index) {
-    this.label = label.toUpperCase();
-    this.handler = handler;
-    this.index = index;
-    this.active = false;
+  const children = [];
+
+  // Create command render objects.
+  for(const [index, [text, handler]] of commands.entries()) {
+    const label = text.toUpperCase();
 
     const txtMetrics = ctx.measureText(label);
     menuWidth = Math.max(menuWidth, txtMetrics.width + stroke * 4);
-    menuX = viewWidth / 2 - menuWidth / 2 - stroke / 2;
-  }
 
-  poz() {
-    return [
-      -menuWidth/2 + stroke*2,
-      lineHeight/4 + menuHeight/2 - lineHeight/2 - this.index*lineHeight | 0
-    ];
-  }
+    children.push(
+      {
+        geometry: createRectangle(
+          [
+            -menuWidth/2 + stroke*2,
+            index*lineHeight - stroke
+          ], 0, menuWidth, lineHeight
+        ),
 
-  trigger() {
-    this.handler.call(this);
-  }
+        render() {
+          fillText({ style: white }, [0, 0], label);
 
-  render() {
-    return {
-      geometry: createRectangle(this.poz(), 0, menuWidth, lineHeight),
-
-      render: ({ geometry }) => {
-        geometry.position = this.poz();
-
-        fillText({ style: textColor }, [0, 0], this.label);
-
-        // Render pointer hand.
-        if(this.active) {
-          fillText({}, [-13, 0], pointRight);
-        }
-      },
-
-      interact: {
-        onMouseDown: ()=> console.log(`foo`),
-        onMouseMove: ()=> { this.active = true }
-      }
-    };
-  }
-}
-
-export default class Menu {
-  constructor() {
-    this.commands = [];
-    this.activeIndex = 0;
-  }
-
-  add(label, handler) {
-    const cmd = new Command(label, handler, this.commands.length);
-    this.commands.unshift(cmd);
-
-    this.commands.map((cmd, idx)=> {
-      if(idx > 0) {
-        cmd.active = false;
-      } else {
-        cmd.active = true;
-      }
-    });
-
-    menuHeight = lineHeight * this.commands.length + stroke | 0;
-    menuY = viewHeight / 2 - menuHeight / 2 - stroke / 2 | 0;
-    return cmd;
-  }
-
-  delete(cmd) {
-    this.commands.splice(this.commands.indexOf(cmd), 1);
-
-    this.commands.map((cmd, idx)=> {
-      if(idx > 0) {
-        cmd.active = false;
-      } else {
-        cmd.active = true;
-      }
-    });
-
-    menuHeight = lineHeight * this.commands.length + stroke | 0;
-    menuY = viewHeight / 2 - menuHeight / 2 - stroke / 2 | 0;
-  }
-
-  render() {
-    return {
-      geometry: createRectangle([menuX, menuY], 0, menuWidth, menuHeight),
-
-      children: this.commands.map((cmd)=> cmd.render()),
-
-      render: ({ geometry, children }) => {
-        if(!this.commands.length) {
-          return;
-        }
-
-        geometry.position = [menuX, menuY];
-        fillRectangle(bgColor, [0, 0], menuWidth, menuHeight);
-        strokeRectangle(strokeOptions, [0, 0], menuWidth, menuHeight);
-
-        // Keyboard controls.
-        if(inputs.down) {
-          if(this.activeIndex < this.commands.length - 1) {
-            this.commands[this.activeIndex].active = false;
-            this.activeIndex++;
-            this.commands[this.activeIndex].active = true;
-          }
-        } else if(inputs.up) {
-          if(this.activeIndex > 0) {
-            this.commands[this.activeIndex].active = false;
-            this.activeIndex--;
-            this.commands[this.activeIndex].active = true;
+          // Render pointer hand.
+          if(activeCommandIndex === index) {
+            fillText({}, [-13, 0], pointRight);
           }
         }
       }
-    };
+    );
   }
-}
+
+  // Render menu.
+  return {
+    geometry: createRectangle([menuX, menuY], 0, menuWidth, menuHeight),
+
+    children,
+
+    render() {
+      drawBox([0, 0], menuWidth, 0, menuHeight);
+
+      // Keyboard controls.
+      if(inputs.down) {
+        if(activeCommandIndex < commands.length - 1) {
+          activeCommandIndex++;
+        }
+      } else if(inputs.up) {
+        if(activeCommandIndex > 0) {
+          activeCommandIndex--;
+        }
+      }
+      if(inputs.space || inputs.return) {
+        commands[activeCommandIndex][1]();
+      }
+    }
+  };
+};
+
+export default Menu;
