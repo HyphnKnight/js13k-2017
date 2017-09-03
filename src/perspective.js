@@ -9,9 +9,9 @@ export const perspective =
       const relPos = (pY + cY);
       const sX = pX + pY * (cX - pX) / (pY + cY) - cX + viewWidth / 2;
       let sY;
-      if (relPos < 0) {
-        sY = viewHeight + cZ * pY / relPos
-      } else if (relPos > 0) {
+      if(relPos < 0) {
+        sY = viewHeight + cZ * pY / relPos;
+      } else if(relPos > 0) {
         sY = viewHeight - cZ * pY / relPos;
       } else {
         sY = viewHeight;

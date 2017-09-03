@@ -18,7 +18,7 @@ export default {
       logic(dt);
       renderGraphics(dt);
       // Input
-      if (inputs.click) {
+      if(inputs.click) {
         state.target = calcWorldPosition(inputs.mousePosition);
       }
     };

@@ -18,7 +18,7 @@ const baseHex = createEqualLateralPolygon([0, 0], 0, 6, 20);
 const getScreenPositionVector = pnt => {
   const [x, y] = calcScreenPosition(pnt);
   return [x, y];
-}
+};
 
 const drawHex = (hex) => {
   const position = addSet(scaleSet(hexPixelPosition(hex), 20), mapOffset);
@@ -27,13 +27,13 @@ const drawHex = (hex) => {
     const [x, y] = calcScreenPosition(pnt);
     return [x, y];
   });
-  if (state.target && isPointInPolygon(state.target, addList(baseHex.points, position))) {
-    fillPolygon('green', [0, 0], points, 0);
+  if(state.target && isPointInPolygon(state.target, addList(baseHex.points, position))) {
+    fillPolygon(`green`, [0, 0], points, 0);
   } else {
-    strokePolygon({ style: 'green', thickness: 1 }, [0, 0], points, 0);
+    strokePolygon({ style: `green`, thickness: 1 }, [0, 0], points, 0);
   }
-  forEachList(points, pnt => fillArc('blue', pnt, 1, 0));
-  fillArc('red', viewPosition, 1, 0);
+  forEachList(points, pnt => fillArc(`blue`, pnt, 1, 0));
+  fillArc(`red`, viewPosition, 1, 0);
 };
 
 const groundGradient = ctx.createLinearGradient(-100, -100, 200, 200);
@@ -64,10 +64,10 @@ export default {
 
     [].concat(...grid).forEach(drawHex);
 
-    if (inputs.up || inputs.w) addSet(mapOffset, [0, -1]);
-    if (inputs.down || inputs.s) addSet(mapOffset, [0, 1]);
+    if(inputs.up || inputs.w) addSet(mapOffset, [0, -1]);
+    if(inputs.down || inputs.s) addSet(mapOffset, [0, 1]);
 
-    if (inputs.left || inputs.a) addSet(mapOffset, [1, 0]);
-    if (inputs.right || inputs.d) addSet(mapOffset, [-1, 0]);
+    if(inputs.left || inputs.a) addSet(mapOffset, [1, 0]);
+    if(inputs.right || inputs.d) addSet(mapOffset, [-1, 0]);
   }
 };

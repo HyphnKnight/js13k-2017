@@ -82,7 +82,7 @@ export const inputs = {
 const parseKeyInfo =
   (keyCode, active = 1) => {
     const key = keyCodes[keyCode];
-    if (key) inputs[key] = active;
+    if(key) inputs[key] = active;
     return inputs[key];
   };
 
@@ -92,11 +92,11 @@ document.body.onkeydown = ({ keyCode }) => parseKeyInfo(keyCode, 1);
 export const updateInputs = () => {
   const keys = Object.keys(inputs);
   let i = -1;
-  while (++i < keys.length) {
-    if (inputs[keys[i]] === 1) inputs[keys[i]] = 2;
+  while(++i < keys.length) {
+    if(inputs[keys[i]] === 1) inputs[keys[i]] = 2;
     else inputs[keys[i]] = inputs[keys[i]];
   }
-}
+};
 
 document.body.onmousedown = () => inputs.click = 1;
 document.body.onmouseup = () => inputs.click = 0;
