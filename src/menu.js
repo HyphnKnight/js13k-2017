@@ -1,19 +1,20 @@
 // Display modal text.
+// Menu([
+//   [`CommandLabel1`, ()=> {
+//     //Handler1
+//   }],
+//   [`CommandLabel2`, ()=> {
+//     //Handler2
+//   }]
+// ]);
 
-import { renderUI } from 'pura/cEl';
 import { createRectangle } from 'pura/geometry/tuple';
-import { ctx, fillText, fillRectangle, strokeRectangle } from 'pura/canvas/tuple';
+import { ctx, fillText } from 'pura/canvas/tuple';
 import { drawBox, stroke, textSize, lineHeight, white } from 'style';
 import { inputs } from 'controls';
 import { canvas, viewHeight, viewWidth } from 'dom';
 import { pointRight } from 'emoji';
 
-/*
-  Menu([
-    [`CommandLabel1`, ()=> {//Handler1}],
-    [`CommandLabel2`, ()=> {//Handler2}]
-  ]);
-*/
 const Menu = (commands)=> {
   // Menu dimensions.
   let menuWidth = viewWidth/3;
