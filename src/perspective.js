@@ -6,11 +6,17 @@ export const perspective =
     // 2d point in world space
     ([pX, pY]) => {
       const [cX, cY, cZ] = camera;
-      return [
-        pX + pY * (cX - pX) / (pY + cY) - cX + viewWidth / 2,
-        viewHeight - ((cY + pY) === 0 ? 0 : cZ * pY / (cY + pY)),
-        Math.sqrt(Math.pow(cY + pY, 2) + Math.pow((cX - pX), 2)),
-      ];
+      const relPos = (pY + cY);
+      const sX = pX + pY * (cX - pX) / (pY + cY) - cX + viewWidth / 2;
+      let sY;
+      if(relPos < 0) {
+        sY = viewHeight + cZ * pY / relPos;
+      } else if(relPos > 0) {
+        sY = viewHeight - cZ * pY / relPos;
+      } else {
+        sY = viewHeight;
+      }
+      return [sX, sY, Math.pow(cY + pY, 2) + Math.pow((cX - pX), 2)];
     };
 
 export const reversePerspective =

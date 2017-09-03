@@ -1,43 +1,39 @@
 import { createRectangle, createEqualLateralPolygon } from 'pura/geometry/tuple';
-import { add, addSet, addList, subtractSet, subtractListSet, mapList, scaleSet } from 'pura/vector/tuple';
-import { fillArc, fillPolygon, strokePolygon } from 'pura/canvas/tuple';
+import { add, addSet, addList, subtractSet, subtractListSet, mapList, scaleSet, forEachList } from 'pura/vector/tuple';
+import { ctx, fillArc, fillPolygon, strokePolygon } from 'pura/canvas/tuple';
+import { isPointInPolygon } from 'pura/intersection/tuple';
 import { generateGrid, hexPixelPosition } from 'pura/hex';
-import { canvas, ctx, viewHeight, viewWidth, viewCenter } from 'dom';
+import { canvas, viewHeight, viewWidth, viewCenter } from 'dom';
 import { heart, blackHeart } from 'emoji';
 import { calcScreenPosition } from 'camera';
 import { inputs } from 'controls';
+import state from 'state';
 
 
-const mapOffset = [0, 0];
+const mapOffset = [0, 45];
 
-const grid = generateGrid(5);
+const grid = generateGrid(10);
 const baseHex = createEqualLateralPolygon([0, 0], 0, 6, 20);
 
-const createHex = (hex) => {
-  const position = scaleSet(hexPixelPosition(hex), 20);
-  return {
-    geometry: createEqualLateralPolygon(position, 0, 6, 20),
-    render({ geometry }) {
+const getScreenPositionVector = pnt => {
+  const [x, y] = calcScreenPosition(pnt);
+  return [x, y];
+};
 
-      const viewPosition = calcScreenPosition(add(position, mapOffset));
-
-      geometry.position = subtractSet(viewPosition, viewCenter);
-
-      geometry.points = subtractListSet(
-        mapList(
-          addList(baseHex.points, add(position, mapOffset)),
-          pnt => subtractSet(calcScreenPosition(pnt), viewCenter)
-        ),
-        geometry.position
-      );
-      strokePolygon(`white`, 1, [0, 0], geometry.points, 0);
-    },
-    interact: {
-      onMouseDown() {
-        console.log(hex.toString());
-      }
-    }
-  };
+const drawHex = (hex) => {
+  const position = addSet(scaleSet(hexPixelPosition(hex), 20), mapOffset);
+  const viewPosition = calcScreenPosition(position);
+  const points = mapList(addList(baseHex.points, position), pnt => {
+    const [x, y] = calcScreenPosition(pnt);
+    return [x, y];
+  });
+  if(state.target && isPointInPolygon(state.target, addList(baseHex.points, position))) {
+    fillPolygon(`green`, [0, 0], points, 0);
+  } else {
+    strokePolygon({ style: `green`, thickness: 1 }, [0, 0], points, 0);
+  }
+  forEachList(points, pnt => fillArc(`blue`, pnt, 1, 0));
+  fillArc(`red`, viewPosition, 1, 0);
 };
 
 const groundGradient = ctx.createLinearGradient(-100, -100, 200, 200);
@@ -62,12 +58,16 @@ const groundPlane = {
   }
 };
 
-export const map = {
-  geometry: createRectangle([0, 0], 0, viewWidth, viewHeight),
-  children: [groundPlane, ...[].concat(...grid).map(createHex)],
-  render({ fillRectangle }, { geometry }) {
-    fillRectangle(skyGradient, [0, 0], viewWidth, viewHeight);
-    if(inputs.up) addSet(mapOffset, [0, -1]);
-    if(inputs.down) addSet(mapOffset, [0, 1]);
+export default {
+  geometry: createRectangle([-viewWidth / 2, -viewHeight / 2], 0, viewWidth, viewHeight),
+  render({ geometry }) {
+
+    [].concat(...grid).forEach(drawHex);
+
+    if(inputs.up || inputs.w) addSet(mapOffset, [0, -1]);
+    if(inputs.down || inputs.s) addSet(mapOffset, [0, 1]);
+
+    if(inputs.left || inputs.a) addSet(mapOffset, [1, 0]);
+    if(inputs.right || inputs.d) addSet(mapOffset, [-1, 0]);
   }
 };
