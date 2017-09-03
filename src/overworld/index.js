@@ -6,7 +6,7 @@ import state from 'state';
 import { Dialog } from 'dialog';
 import { inputs } from 'controls';
 import { render as renderGraphics } from 'overworld/graphics';
-import logic, { avngSprite } from 'overworld/logic';
+import logic from 'overworld/logic';
 import { calcWorldPosition } from 'camera';
 import { canvasOffsetLeft, canvasOffsetTop, scaleX, scaleY } from 'dom';
 
@@ -18,7 +18,7 @@ export default {
       logic(dt);
       renderGraphics(dt);
       // Input
-      if (inputs.click) {
+      if(inputs.click) {
         state.target = calcWorldPosition(inputs.mousePosition);
       }
     };
