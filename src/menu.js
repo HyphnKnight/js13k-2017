@@ -17,9 +17,9 @@ import { pointRight } from 'emoji';
 const Menu = (commands)=> {
   // Menu dimensions.
   let menuWidth = viewWidth/3;
-  const menuHeight = lineHeight*commands.length + stroke;
-  const menuX = viewWidth/2 - menuWidth/2 - stroke/2;
-  const menuY = viewHeight/2 - menuHeight/2 - stroke;
+  const menuHeight = lineHeight*commands.length + stroke*2;
+  let menuX = viewWidth/2 - menuWidth/2 - stroke/2;
+  const menuY = viewHeight/2 - menuHeight/2;
 
   let activeCommandIndex = 0;
 
@@ -30,14 +30,14 @@ const Menu = (commands)=> {
     const label = text.toUpperCase();
 
     const txtMetrics = ctx.measureText(label);
-    menuWidth = Math.max(menuWidth, txtMetrics.width + stroke * 4);
+    menuWidth = Math.max(menuWidth, txtMetrics.width + stroke*4);
 
     children.push(
       {
         geometry: createRectangle(
           [
             -menuWidth/2 + stroke*2,
-            index*lineHeight - stroke
+            index*lineHeight - stroke*2
           ], 0, menuWidth, lineHeight
         ),
 
@@ -52,6 +52,9 @@ const Menu = (commands)=> {
       }
     );
   }
+
+  // Reposition menu.
+  menuX = viewWidth/2 - menuWidth/2 - stroke/2;
 
   // Render menu.
   return {
