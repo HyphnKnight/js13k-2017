@@ -8,7 +8,6 @@ import { inputs } from 'controls';
 import { canvas, viewHeight, viewWidth } from 'dom';
 import state from 'state';
 
-let justDeleted = false;
 let textStart = null;
 const textSpeed = 50;
 
@@ -99,20 +98,15 @@ export const Dialog = {
       fillText({ style: white }, [x, y + offset], line);
     });
 
-    if(/*maxChar >= text.length &&*/ inputs.space && !justDeleted) {
+    if(inputs.space === 1) {
       state.dialog.shift();
       textStart = null;
-      justDeleted = true;
-    } else if(!inputs.space && justDeleted) {
-      justDeleted = false;
     }
   },
   interact: {
     onMouseDown: () => {
-      //if(maxChar >= text.length) {
       state.dialog.shift();
       textStart = null;
-      //}
     },
   }
 };

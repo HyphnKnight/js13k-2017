@@ -5,6 +5,7 @@ import { playCanonD, stopCanonD } from 'audio';
 import { inputs } from 'controls';
 import { title_text, base_text, white, black } from 'style';
 import { gem } from 'emoji';
+import state from 'state';
 import loop from 'loop';
 import { render as renderUI, uiElements } from 'ui';
 import Scene from 'scene';
@@ -57,7 +58,6 @@ const title = {
       fillText({ style: `white`, font: base_text }, [-width / 2 - 2, 48], `new game`);
       (Date.now() % 600 > 400) && fillPolygon(`white`, [-42, 44], [-5, 3, 5, 0, -5, -3]);
     }
-
     if(!pressed && (inputs.space || inputs.return) && animState < 1) animationStart /= 2;
     else if(!pressed && (inputs.space || inputs.return)) Scene(overworld);
     pressed = (inputs.space || inputs.return);
@@ -70,22 +70,11 @@ const title = {
   }
 };
 
-let stopLoop;
-
 export default {
   init: () => {
     animationStart = null;
     uiElements.push(title);
-
-    stopLoop = loop(dt => {
-      // Graphics
-      clear();
-
-      renderUI();
-    });
+    state.logic = null;
   },
-  dismiss: () => {
-    stopCanonD();
-    stopLoop();
-  }
+  dismiss: () => stopCanonD(),
 };

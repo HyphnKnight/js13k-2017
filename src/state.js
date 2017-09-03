@@ -16,6 +16,7 @@ const state = {
   ],
   position: [0, 0],
   target: null,
+  logic: null,
 };
 
 
