@@ -1,5 +1,6 @@
-import resolve from 'rollup-plugin-node-resolve';
 import includePaths from 'rollup-plugin-includepaths';
+import resolve from 'rollup-plugin-node-resolve';
+import analyze from 'rollup-analyzer-plugin';
 
 export default {
   name: `Alter`,
@@ -17,5 +18,6 @@ export default {
       extensions: [`.js`]
     }),
     resolve(),
+    analyze()
   ],
 };
