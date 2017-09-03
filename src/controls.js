@@ -82,7 +82,7 @@ export const inputs = {
 const parseKeyInfo =
   (keyCode, active = 1) => {
     const key = keyCodes[keyCode];
-    if(key) inputs[key] = active;
+    if(key && (active === 0 || inputs[key] !== 2)) inputs[key] = active;
     return inputs[key];
   };
 
