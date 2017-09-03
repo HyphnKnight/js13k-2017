@@ -13,11 +13,9 @@ export default {
   init() {
     uiElements.push(BattleMap, StatusBar);
     state.logic = () => {
-      if (inputs.click) {
-        state.target = calcWorldPosition(inputs.mousePosition);
-      } else {
-        state.target = null
-      }
+      state.target = inputs.click
+        ? calcWorldPosition(inputs.mousePosition)
+        : null;
     };
   },
   dismiss() { }
