@@ -10,6 +10,7 @@ import loop from 'loop';
 import { render as renderUI, uiElements } from 'ui';
 import Scene from 'scene';
 import overworld from 'overworld';
+import Movie from 'movie';
 
 let animationStart = null;
 let animState = 0;
@@ -75,6 +76,7 @@ export default {
     animationStart = null;
     uiElements.push(title);
     state.logic = null;
+    uiElements.push(Movie(0,0,0,0));
   },
   dismiss: () => stopCanonD(),
 };
