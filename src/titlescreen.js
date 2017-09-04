@@ -1,6 +1,6 @@
 import { createRectangle } from 'pura/geometry/tuple';
 import { ctx, fillText, fillPolygon, clear } from 'pura/canvas/tuple';
-import { canvas } from 'dom';
+import { viewWidth, viewHeight } from 'dom';
 import { playCanonD, stopCanonD } from 'audio';
 import { inputs } from 'controls';
 import { title_text, base_text, white, black } from 'style';
@@ -11,25 +11,19 @@ import { render as renderUI, uiElements } from 'ui';
 import Scene from 'scene';
 import overworld from 'overworld';
 import Movie from 'movie';
+import titleMovie from 'movies/title';
 
 let animationStart = null;
 let animState = 0;
 let animTime = 0;
 let pressed = false;
 
-const diamondAnimation = (animTime, height) => ([
-  animTime / 24000 > 1
-    ? -11
-    : (Math.abs(((animTime - 1500) % 6000 / 600) - 5) - 2.5) * 10 - 11,
-  height - Math.min(animTime / 24000, 1) * height * 1.125,
-]);
-
-const headerStyle = { textBaseline: `middle`, style: `white`, font: title_text, horizontalAlign: true };
+// const headerStyle = { textBaseline: `middle`, style: `white`, font: title_text, horizontalAlign: true };
 const gemStyle = { textBaseline: `middle`, style: `white`, font: title_text };
 const textStyle = { style: `white`, font: base_text, horizontalAlign: true };
 
 const title = {
-  geometry: createRectangle([0, 0], 0, canvas.width, canvas.height),
+  geometry: createRectangle([0, 0], 0, viewWidth, viewHeight),
   render: () => {
 
     if(!animationStart) {
@@ -44,16 +38,16 @@ const title = {
       gemStyle,
       [
         animTime / 24000 > 1 ? -11 : (Math.abs(((animTime - 1500) % 6000 / 600) - 5) - 2.5) * 10 - 11,
-        canvas.height - Math.min(animTime / 24000, 1) * canvas.height * 1.125,
+        viewHeight - Math.min(animTime / 24000, 1) * viewHeight * 1.125,
       ],
       gem
     );
 
-    fillText(
-      headerStyle,
-      [0, -canvas.height / 2 + Math.min(animState * 2, 1) * canvas.height / 2],
-      `A L T E R`
-    );
+    // fillText(
+    //   headerStyle,
+    //   [0, -viewHeight / 2 + Math.min(animState * 2, 1) * viewHeight / 2],
+    //   `A L T E R`
+    // );
 
     if(animTime > 24500) {
       ctx.font = base_text;
@@ -76,8 +70,10 @@ export default {
   init: () => {
     animationStart = null;
     uiElements.push(title);
+    uiElements.push(Movie(
+      0,0,viewWidth,viewHeight,titleMovie
+    ));
     state.logic = null;
-    uiElements.push(Movie(0,0,0,0));
   },
   dismiss: () => stopCanonD(),
 };
