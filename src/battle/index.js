@@ -1,3 +1,12 @@
+/*
+THOUGHTS:
+What about if after you win a battle you can now roam around the small area
+and there's a pool in the center which ports you back up to the overworld
+TODO:
+[ ] Design Map need ground cover and clouds equivalent (preferably animated in some way)
+[ ] Need to detect a 'win state'
+*/
+
 import loop from 'loop';
 import StatusBar from 'statusBar';
 import BattleMap from 'map';

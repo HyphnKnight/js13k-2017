@@ -1,3 +1,16 @@
+/*
+TODO:
+[ ] Can select a target hex my clicking
+[ ] Have a map of hex coordinates to position data
+[ ] Have a storage of 'optional' hexes (hexes you can act upon)
+[ ] Have a concept of flashing optional hexes
+[ ] Have the ability to cycle through hexes that are highlighted
+[ ] Render hexes differently based on their status
+[ ] have battle order in state
+[ ] Render status bar when hihglighting hex with someone on it
+*/
+
+
 import { createRectangle, createEqualLateralPolygon } from 'pura/geometry/tuple';
 import { add, addSet, addList, subtractSet, subtractListSet, mapList, scaleSet, forEachList } from 'pura/vector/tuple';
 import { ctx, fillArc, fillPolygon, strokePolygon } from 'pura/canvas/tuple';
