@@ -1,6 +1,6 @@
 /*
 TODO:
-[ ] Can select a target hex my clicking
+[x] Can select a target hex my clicking
 [x] Have a map of hex coordinates to position data
 [ ] Have a storage of 'optional' hexes (hexes you can act upon)
 [ ] Have a concept of flashing optional hexes
@@ -24,21 +24,28 @@ import state from 'state';
 
 export const mapOffset = [0, 0];
 
+export const gridScale = 40;
+
 export const grid = generateGrid(5);
 
-const lookUpTable = new Map(flatten(grid).map(hex => [hex.join('/'), {
+const lookUpTable = new Map(flatten(grid).map(hex => [hex, {
   entity: null,
   status: [],
 }]));
 
-const baseHex = createEqualLateralPolygon([0, 0], 0, 6, 40);
+const options = grid[Math.floor(Math.random() * grid.length)];
+
+const baseHex = createEqualLateralPolygon([0, 0], 0, 6, gridScale);
 
 const drawHex = (hex) => {
-  const position = addSet(scaleSet(hexToVector2d(hex), 40), mapOffset);
+  const position = addSet(scaleSet(hexToVector2d(hex), gridScale), mapOffset);
   const viewPosition = calcScreenPosition2d(position);
   const points = mapList(addList(baseHex.points, position), calcScreenPosition2d);
-  if (state.target === hex) {
+  if(state.target === hex) {
     fillPolygon(`white`, [0, 0], points, 0);
+  }
+  if(contains(options, hex)) {
+    Date.now() % 600 > 400 && fillPolygon(`blue`, [0, 0], points, 0);
   }
   strokePolygon({ style: `white`, thickness: 1 }, [0, 0], points, 0);
 };
@@ -51,16 +58,14 @@ const skyGradient = ctx.createLinearGradient(0, 0, 200, 200);
 skyGradient.addColorStop(0, `#5E8C6A`);
 skyGradient.addColorStop(1, `#BFB35A`);
 
+const keyControls = keyboardVector(3);
+
 export default {
   geometry: createRectangle([-viewWidth / 2, -viewHeight / 2], 0, viewWidth, viewHeight),
   render({ geometry }) {
 
     [].concat(...grid).forEach(drawHex);
 
-    if (inputs.up || inputs.w) addSet(mapOffset, [0, -1]);
-    if (inputs.down || inputs.s) addSet(mapOffset, [0, 1]);
-
-    if (inputs.left || inputs.a) addSet(mapOffset, [1, 0]);
-    if (inputs.right || inputs.d) addSet(mapOffset, [-1, 0]);
+    addSet(mapOffset, keyControls());
   }
 };
