@@ -9,10 +9,11 @@ TODO:
 
 import loop from 'loop';
 import StatusBar from 'statusBar';
-import BattleMap from 'map';
+import BattleMap, { grid, mapOffset } from 'map';
 import state from 'state';
 import { inputs } from 'controls';
-import { subtractSet } from 'pura/vector/tuple';
+import { getFromVector2d, vector2dToHex, hexToVector2d, get } from 'pura/hex';
+import { add, subtractSet, scaleSet } from 'pura/vector/tuple';
 import { canvasOffsetLeft, canvasOffsetTop, scaleX, scaleY } from 'dom';
 import { render as renderUI, uiElements, clearUi } from 'ui';
 import { calcWorldPosition } from 'camera';
