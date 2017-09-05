@@ -21,9 +21,9 @@ export default {
     uiElements.push(BattleMap, StatusBar);
     state.logic = () => {
       const { click, mousePosition } = inputs;
-      if (click === 1) {
-        state.target = getFromVector2d(grid)(scale(calcWorldPosition(mousePosition), 1 / 40));
-      } else if (click === 0) {
+      if(click === 1) {
+        state.target = getFromVector2d(grid)(scaleSet(subtractSet(calcWorldPosition(mousePosition), mapOffset), 1 / gridScale));
+      } else if(click === 0) {
         state.target = null;
       }
     };
