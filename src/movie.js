@@ -1,99 +1,64 @@
 //Play a "movie" using text and/or cEl render objects.
 // Movie(
 //   x, y, w, h,
-
-//   [
-//     [
-//       `ALTER`,
-//       [
-//         [
-//           0,
-//           {
-//             fontOptions: { // Can't be animated.
-//               style: `#fff`
-//             },
-//             x: 0,
-//             y: -100,
-//             rotation: 0
-//           }
-//         ],
-//         [
-//           1200,
-//           {
-//             x: 0,
-//             y: 0,
-//             rotation: 0
-//           }
-//         ]
-//       ]
-//     ],
-//     [
-//       obj,
-//       [
-//         [
-//           600,
-//           {
-//             x: 0,
-//             y: 100
-//           }
-//         ],
-//         [
-//           800,
-//           {
-//             symbol: obj,
-//             x: 20,
-//             y: 80
-//           }
-//         ],
-//         [
-//           1200,
-//           {
-//             x: Math.sin,
-//             y: -20,
-//             rotation: 0
-//           }
-//         ]
-//       ]
-//     ]
-//   ],
+//   movieObject,
 //   ()=> {
 //     // Movie Completed
 //   }
 // );
+
+// Frame properties:
+// `fontOptions` - fillText style options
+//   use it in the first keyframe of text layers
+//   and in keyframes where the `symbol` property is given text
+// `x` - mandatory in first keyframe
+//   optional in subsequent keyframes only if it never changes
+// `y` - see `x`
+// `remove` - layer will no longer render once keyframe time is exceeded
+//   use this only in a particular layer's final keyframe
+// `symbol` - swap the given symbol for a different one
+//   only active until the keyframe is exceeded
 
 import { createRectangle } from 'pura/geometry/tuple';
 import { ctx, fillText } from 'pura/canvas/tuple';
 
 const Movie = (x, y, width, height, timeline, callback)=> {
   // Determine movie duration.
+  // Find max time among all layers in timeline.
   const duration =
     timeline.length === 1
       ? timeline[0][1][timeline[0][1].length - 1][0]
       : timeline.reduce((layerP, layerN)=> {
         return Math.max(
+          // Is prev element a number or array?
           layerP.length && layerP[1][layerP[1].length - 1][0] || layerP,
           layerN[1][layerN[1].length - 1][0]
         );
       });
 
+  // Convert plaintext into a cEl render object.
+  const bootstrapText = (text, fontOptions)=> {
+    const { width, height } = ctx.measureText(text);
+
+    return {
+      geometry: createRectangle([0 ,0], 0, width, height),
+
+      render() {
+        fillText(fontOptions, [0, 0], text);
+      }
+    };
+  };
+
   // Collect symbols in movie.
   const symbols = timeline.map((layer)=> {
     let symbol = layer[0];
 
+    // Only fontOptions is optionsal in movieObject.
     const { fontOptions={}, x, y, rotation } = layer[1][0][1];
 
-    // Convert plaintext into cEl render object.
+    // Convert plaintext.
     if(typeof symbol === `string`) {
-      const text = symbol;
-      const { width, height } = ctx.measureText(text);
-
-      symbol = {
-        geometry: createRectangle([0 ,0], 0, width, height),
-
-        render() {
-          fillText(fontOptions, [0, 0], text);
-        }
-      };
+      symbol = bootstrapText(symbol, fontOptions);
     }
 
     // Setup symbol for its first render.
@@ -165,12 +130,9 @@ const Movie = (x, y, width, height, timeline, callback)=> {
           }
 
           // Setup frame.
-          // Use keyframe symbol or main one.
-          const symbol =
-            keyframe.symbol
-              ? Object.assign({}, symbols[index], keyframe.symbol)
-              : symbols[index];
-
+          // Extract values from previous keyframe.
+          // If previous keyframe used function-driven values,
+          // set them to their end states.
           for(const prop in prevframe.keyframe) {
             const val = prevframe.keyframe[prop];
 
@@ -180,6 +142,12 @@ const Movie = (x, y, width, height, timeline, callback)=> {
           }
 
           const { x:prevX, y:prevY, rotation:prevRot } = prevframe.keyframe;
+
+          // Use keyframe symbol or main one.
+          const symbol =
+            keyframe.symbol
+              ? Object.assign({}, symbols[index], keyframe.symbol)
+              : symbols[index];
 
           // Tween properties.
           if(typeof keyframe.x === `function`) {
@@ -197,7 +165,7 @@ const Movie = (x, y, width, height, timeline, callback)=> {
               prevY + (keyframe.y - prevY)*progress;
           }
           if(typeof keyframe.rotation === `function`) {
-            symbol.geometry.position[1] =
+            symbol.geometry.rotation =
               keyframe.rotation.call(this, progress);
           } else if(keyframe.rotation !== undefined) {
             symbol.geometry.rotation =
