@@ -16,6 +16,8 @@ import {
   mkGem,
 } from 'sprite';
 import { viewWidth } from 'dom';
+import Scene from 'scene';
+import battle from 'battle';
 
 
 const direction = [0, 0];
@@ -87,4 +89,9 @@ export default () => {
   follow(gemSprite, 90 + Date.now() % 300 / 30);
   const xDiff = state.position[0] - camera[0];
   if(Math.abs(xDiff) > viewWidth * 0.2) camera[0] += xDiff - sign(xDiff) * viewWidth * 0.2;
+
+  // Go to battle scene.
+  if(inputs.space === 1) {
+    Scene(battle);
+  }
 };

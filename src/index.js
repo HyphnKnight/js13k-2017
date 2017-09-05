@@ -6,7 +6,6 @@ import { updateInputs } from 'controls';
 import { render } from 'ui';
 import { clear } from 'pura/canvas/tuple';
 
-
 Scene(titleScreen);
 
 loop((dt) => {
