@@ -71,8 +71,8 @@ const Movie = (x, y, width, height, timeline, callback)=> {
       ? timeline[0][1][timeline[0][1].length - 1][0]
       : timeline.reduce((layerP, layerN)=> {
         return Math.max(
-          layerP[1][layerP.length - 1][0],
-          layerN[1][layerP.length - 1][0]
+          layerP.length && layerP[1][layerP[1].length - 1][0] || layerP,
+          layerN[1][layerN[1].length - 1][0]
         );
       });
 
@@ -110,7 +110,13 @@ const Movie = (x, y, width, height, timeline, callback)=> {
   return {
     geometry: createRectangle([x, y], 0, width, height),
 
-    children: [],
+    children: symbols.map((symbol, index)=> {
+      if(timeline[index][1][0][0] !== 0) {
+        return {};
+      }
+
+      return symbol;
+    }).reverse(),
 
     render({ children }) {
       const now = Date.now();
@@ -124,9 +130,6 @@ const Movie = (x, y, width, height, timeline, callback)=> {
         return;
       }
 
-      // Clear out previous frame.
-      children.length = 0;
-
       for(const [index, layer] of timeline.entries()) {
         const keyframes = layer[1];
 
@@ -135,15 +138,31 @@ const Movie = (x, y, width, height, timeline, callback)=> {
         for(const [keyframeIndex, [time, keyframe]] of keyframes.entries()) {
           // Save old keyframe and move on.
           if(diff > time) {
-            prevframe = { time, keyframe };
-            continue;
+            if(keyframeIndex === 0) {
+              children[children.length - 1 - index] = symbols[index];
+            }
+
+            if(keyframe.remove) {
+              children[children.length - 1 - index] = {};
+              break;
+            } else {
+              prevframe = { time, keyframe };
+              continue;
+            }
+          } else if(keyframeIndex === 0) {
+            break;
           }
+
           if(keyframeIndex === 0) {
             prevframe = { time, keyframe };
           }
 
           // Percentage of way through keyframe; 0-1.
-          const progress = (diff-prevframe.time)/time;
+          let progress = (diff-prevframe.time)/(time - prevframe.time);
+
+          if(progress > 0.995) {
+            progress = 1;
+          }
 
           // Setup frame.
           // Use keyframe symbol or main one.
@@ -152,18 +171,38 @@ const Movie = (x, y, width, height, timeline, callback)=> {
               ? Object.assign({}, symbols[index], keyframe.symbol)
               : symbols[index];
 
+          for(const prop in prevframe.keyframe) {
+            const val = prevframe.keyframe[prop];
+
+            if(typeof val === `function`) {
+              prevframe.keyframe[prop] = val(1);
+            }
+          }
+
           const { x:prevX, y:prevY, rotation:prevRot } = prevframe.keyframe;
 
           // Tween properties.
-          symbol.geometry.position[0] =
-            prevX + (keyframe.x - prevX)*progress;
-          symbol.geometry.position[1] =
-            prevY + (keyframe.y - prevY)*progress;
-          symbol.geometry.rotation =
-            prevRot + (keyframe.rotation - prevRot)*progress;
-
-          // Add symbol to the render stack.
-          children.unshift(symbol);
+          if(typeof keyframe.x === `function`) {
+            symbol.geometry.position[0] =
+              keyframe.x.call(this, progress);
+          } else if(keyframe.x !== undefined) {
+            symbol.geometry.position[0] =
+              prevX + (keyframe.x - prevX)*progress;
+          }
+          if(typeof keyframe.y === `function`) {
+            symbol.geometry.position[1] =
+              keyframe.y.call(this, progress);
+          } else if(keyframe.y !== undefined) {
+            symbol.geometry.position[1] =
+              prevY + (keyframe.y - prevY)*progress;
+          }
+          if(typeof keyframe.rotation === `function`) {
+            symbol.geometry.position[1] =
+              keyframe.rotation.call(this, progress);
+          } else if(keyframe.rotation !== undefined) {
+            symbol.geometry.rotation =
+              prevRot + (keyframe.rotation - prevRot)*progress;
+          }
 
           // Do not look at future keyframes.
           break;
