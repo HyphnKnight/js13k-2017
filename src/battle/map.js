@@ -5,9 +5,9 @@ TODO:
 [x] Have a storage of 'optional' hexes (hexes you can act upon)
 [x] Have a concept of flashing optional hexes
 [x] Have the ability to cycle through hexes that are highlighted
-[ ] Render hexes differently based on their status
+[x] Render hexes differently based on their status
 [ ] have battle order in state
-[ ] Render status bar when hihglighting hex with someone on it
+[x] Render status bar when hihglighting hex with someone on it
 */
 
 
