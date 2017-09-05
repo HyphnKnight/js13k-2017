@@ -14,13 +14,11 @@ TODO:
 import { createRectangle, createEqualLateralPolygon } from 'pura/geometry/tuple';
 import { add, addSet, addList, subtractSet, subtractListSet, mapList, scaleSet, forEachList } from 'pura/vector/tuple';
 import { ctx, fillArc, fillPolygon, strokePolygon } from 'pura/canvas/tuple';
-import { isPointInPolygon } from 'pura/intersection/tuple';
-import { flatten } from 'pura/array';
+import { flatten, contains } from 'pura/array';
 import { generateGrid, hexToVector2d } from 'pura/hex';
 import { canvas, viewHeight, viewWidth, viewCenter } from 'dom';
-import { heart, blackHeart } from 'emoji';
 import { calcScreenPosition2d } from 'camera';
-import { inputs } from 'controls';
+import { inputs, keyboardVector } from 'controls';
 import state from 'state';
 
 
