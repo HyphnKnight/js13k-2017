@@ -34,7 +34,7 @@ const title = {
   )],
 
   render() {
-    if((inputs.space || inputs.return)) {
+    if((inputs.space === 1 || inputs.return === 1)) {
       skipTitle();
     }
   },
