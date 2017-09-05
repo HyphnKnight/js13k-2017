@@ -23,8 +23,6 @@ export default {
       const { click, mousePosition } = inputs;
       if(click === 1) {
         state.target = getFromVector2d(grid)(scaleSet(subtractSet(calcWorldPosition(mousePosition), mapOffset), 1 / gridScale));
-      } else if(click === 0) {
-        state.target = null;
       }
     };
   },
