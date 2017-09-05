@@ -51,7 +51,6 @@
         }
       }
     }],
-    "no-unused-vars": "off",
     "quotes": ["error", "backtick"],
     "no-console": ["warn", {
       "allow": ["warn", "error", "info"]
