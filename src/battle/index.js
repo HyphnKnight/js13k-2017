@@ -13,7 +13,7 @@ import BattleMap, { grid, mapOffset } from 'map';
 import state from 'state';
 import { inputs } from 'controls';
 import { getFromVector2d, vector2dToHex, hexToVector2d, get } from 'pura/hex';
-import { add, subtractSet, scaleSet } from 'pura/vector/tuple';
+import { add, subtractSet, scale } from 'pura/vector/tuple';
 import { canvasOffsetLeft, canvasOffsetTop, scaleX, scaleY } from 'dom';
 import { render as renderUI, uiElements, clearUi } from 'ui';
 import { calcWorldPosition } from 'camera';
@@ -23,9 +23,12 @@ export default {
   init() {
     uiElements.push(BattleMap, StatusBar);
     state.logic = () => {
-      state.target = inputs.click
-        ? calcWorldPosition(inputs.mousePosition)
-        : null;
+      const { click, mousePosition } = inputs;
+      if (click === 1) {
+        state.target = getFromVector2d(grid)(scale(calcWorldPosition(mousePosition), 1 / 40));
+      } else if (click === 0) {
+        state.target = null;
+      }
     };
   },
   dismiss() { }

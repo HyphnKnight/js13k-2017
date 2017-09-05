@@ -24,10 +24,10 @@ import { inputs } from 'controls';
 import state from 'state';
 
 
-export const mapOffset = [0, 10];
+export const mapOffset = [0, 0];
 
 export const grid = generateGrid(5);
-let selectedHex = null;
+
 const lookUpTable = new Map(flatten(grid).map(hex => [hex.join('/'), {
   entity: null,
   status: [],
@@ -35,21 +35,11 @@ const lookUpTable = new Map(flatten(grid).map(hex => [hex.join('/'), {
 
 const baseHex = createEqualLateralPolygon([0, 0], 0, 6, 40);
 
-const drawHexOutline = (hex) => {
-  const position = addSet(scaleSet(hexToVector2d(hex), 40), mapOffset);
-  const viewPosition = calcScreenPosition2d(position);
-  const points = mapList(addList(baseHex.points, position), calcScreenPosition2d);
-  if (state.target && isPointInPolygon(state.target, addList(baseHex.points, position))) {
-    selectedHex = hex;
-  }
-  strokePolygon({ style: `white`, thickness: 1 }, [0, 0], points, 0);
-};
-
 const drawHex = (hex) => {
   const position = addSet(scaleSet(hexToVector2d(hex), 40), mapOffset);
   const viewPosition = calcScreenPosition2d(position);
   const points = mapList(addList(baseHex.points, position), calcScreenPosition2d);
-  if (state.target && isPointInPolygon(state.target, addList(baseHex.points, position))) {
+  if (state.target === hex) {
     fillPolygon(`white`, [0, 0], points, 0);
   }
   strokePolygon({ style: `white`, thickness: 1 }, [0, 0], points, 0);
@@ -66,8 +56,7 @@ skyGradient.addColorStop(1, `#BFB35A`);
 export default {
   geometry: createRectangle([-viewWidth / 2, -viewHeight / 2], 0, viewWidth, viewHeight),
   render({ geometry }) {
-    selectedHex = null;
-    [].concat(...grid).forEach(drawHexOutline);
+
     [].concat(...grid).forEach(drawHex);
 
     if (inputs.up || inputs.w) addSet(mapOffset, [0, -1]);
