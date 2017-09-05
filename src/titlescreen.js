@@ -30,7 +30,9 @@ const title = {
   geometry: createRectangle([0, 0], 0, viewWidth, viewHeight),
 
   children: [Movie(
-    0, 0, viewWidth, viewHeight, titleMovie
+    0, 0, viewWidth, viewHeight, titleMovie, ()=> {
+      skipped = true;
+    }
   )],
 
   render() {
