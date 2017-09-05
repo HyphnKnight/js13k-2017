@@ -3,7 +3,7 @@ import { viewWidth, viewHeight } from 'dom';
 import { playCanonD, stopCanonD } from 'audio';
 import { inputs } from 'controls';
 import state from 'state';
-import { render as renderUI, uiElements } from 'ui';
+import { uiElements } from 'ui';
 import Scene from 'scene';
 import overworld from 'overworld';
 import Movie from 'movie';
