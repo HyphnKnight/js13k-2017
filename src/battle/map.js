@@ -30,7 +30,7 @@ export const battleData = new Map(flatten(grid).map(hex => [hex, {
 
 const randomRow = grid[Math.floor(Math.random() * grid.length)];
 const randomHex = randomRow[Math.floor(Math.random() * randomRow.length)];
-battleData.get(randomHex).entity = { name: 'protector', health: 70 };
+battleData.get(randomHex).entity = { name: `protector`, health: 70 };
 
 const options = grid[Math.floor(Math.random() * grid.length)];
 let selectedOption = null;
@@ -100,22 +100,22 @@ export default {
     battleData.forEach(drawEntity);
 
     addSet(mapOffset, keyControls());
-    if (state.target !== null) {
+    if(state.target !== null) {
       const targetIndex = options.indexOf(state.target);
-      if (targetIndex > -1) selectedOption = targetIndex;
+      if(targetIndex > -1) selectedOption = targetIndex;
       else selectedOption = null;
     }
-    if (selectedOption === null && (inputs.q === 1 || inputs.e === 1)) {
+    if(selectedOption === null && (inputs.q === 1 || inputs.e === 1)) {
       selectedOption = 0;
-    } else if (inputs.e === 1) {
+    } else if(inputs.e === 1) {
       selectedOption = ++selectedOption === options.length
         ? 0
         : selectedOption;
-    } else if (inputs.q === 1) {
+    } else if(inputs.q === 1) {
       selectedOption = --selectedOption < 0
         ? options.length - 1
         : selectedOption;
     }
-    if (selectedOption !== null) state.target = options[selectedOption];
+    if(selectedOption !== null) state.target = options[selectedOption];
   }
 };

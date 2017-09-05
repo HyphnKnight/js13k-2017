@@ -20,7 +20,7 @@ export default {
   geometry: createRectangle([0, -viewHeight / 2 + lineHeight / 2], 0, viewWidth, lineHeight),
   render({ geometry }) {
     const hexData = battleData.get(state.target);
-    if (!hexData || !hexData.entity) return;
+    if(!hexData || !hexData.entity) return;
     const { entity } = hexData;
     const { maxHealth, name } = characters[entity.name];
     let heartContainers = Math.ceil(maxHealth / 10) + 1;
