@@ -7,17 +7,14 @@ TODO:
 [ ] Need to detect a 'win state'
 */
 
-import loop from 'loop';
 import StatusBar from 'statusBar';
-import BattleMap, { grid, mapOffset } from 'map';
+import BattleMap, { grid, mapOffset, gridScale } from 'map';
 import state from 'state';
 import { inputs } from 'controls';
 import { getFromVector2d, vector2dToHex, hexToVector2d, get } from 'pura/hex';
-import { add, subtractSet, scale } from 'pura/vector/tuple';
-import { canvasOffsetLeft, canvasOffsetTop, scaleX, scaleY } from 'dom';
-import { render as renderUI, uiElements, clearUi } from 'ui';
+import { add, subtractSet, scaleSet } from 'pura/vector/tuple';
+import { uiElements } from 'ui';
 import { calcWorldPosition } from 'camera';
-import { clear } from 'pura/canvas/tuple';
 
 export default {
   init() {
