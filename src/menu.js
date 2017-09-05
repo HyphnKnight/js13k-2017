@@ -10,9 +10,9 @@
 
 import { createRectangle } from 'pura/geometry/tuple';
 import { ctx, fillText } from 'pura/canvas/tuple';
-import { drawBox, stroke, textSize, lineHeight, white } from 'style';
+import { drawBox, stroke, lineHeight, white } from 'style';
 import { inputs } from 'controls';
-import { canvas, viewHeight, viewWidth } from 'dom';
+import { viewHeight, viewWidth } from 'dom';
 import { pointRight } from 'emoji';
 
 const Menu = (commands)=> {
@@ -49,6 +49,13 @@ const Menu = (commands)=> {
           if(activeCommandIndex === index) {
             fillText({}, [-13, 0], pointRight);
           }
+        },
+
+        interact: {
+          onMouseDown: handler,
+          onMouseMove() {
+            activeCommandIndex = index;
+          }
         }
       }
     );
@@ -67,16 +74,16 @@ const Menu = (commands)=> {
       drawBox([0, 0], menuWidth, 0, menuHeight);
 
       // Keyboard controls.
-      if(inputs.down) {
+      if(inputs.down === 1) {
         if(activeCommandIndex < commands.length - 1) {
           activeCommandIndex++;
         }
-      } else if(inputs.up) {
+      } else if(inputs.up === 1) {
         if(activeCommandIndex > 0) {
           activeCommandIndex--;
         }
       }
-      if(inputs.space || inputs.return) {
+      if(inputs.space === 1 || inputs.return === 1) {
         commands[activeCommandIndex][1]();
       }
     }
