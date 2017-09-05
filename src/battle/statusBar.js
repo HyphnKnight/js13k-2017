@@ -1,6 +1,5 @@
 /*
 TODO:
-[ ] Render status bar when highlighting a hex with someone on it
 [ ] Render enemies names differently (font? color?)
 */
 
