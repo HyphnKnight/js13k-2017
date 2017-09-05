@@ -1,4 +1,4 @@
-//Play a "movie" using text and/or cEl render objects.
+// Play a "movie" using text and/or cEl render objects.
 // Movie(
 //   x, y, w, h,
 //   movieObject,
@@ -9,15 +9,19 @@
 
 // Frame properties:
 // `fontOptions` - fillText style options
-//   use it in the first keyframe of text layers
-//   and in keyframes where the `symbol` property is given text
+//   - use it in the first keyframe of text layers
+//   - and in keyframes where the `symbol` property is given text
 // `x` - mandatory in first keyframe
-//   optional in subsequent keyframes only if it never changes
+//   - optional in subsequent keyframes only if it never changes
 // `y` - see `x`
+// `rotation` - see `x`
 // `remove` - layer will no longer render once keyframe time is exceeded
-//   use this only in a particular layer's final keyframe
+//   - use this only in a particular layer's final keyframe
 // `symbol` - swap the given symbol for a different one
-//   only active until the keyframe is exceeded
+//   - only active until the keyframe is exceeded
+//   - will be merged with the existing symbol,
+//   - so only provide the parts of the symbol you want to overwrite
+//   - can be text as well as cEl obj
 
 import { createRectangle } from 'pura/geometry/tuple';
 import { ctx, fillText } from 'pura/canvas/tuple';
@@ -141,35 +145,43 @@ const Movie = (x, y, width, height, timeline, callback)=> {
             }
           }
 
-          const { x:prevX, y:prevY, rotation:prevRot } = prevframe.keyframe;
-
           // Use keyframe symbol or main one.
+          if(keyframe.symbol) {
+            if(typeof keyframe.symbol === `string`) {
+              keyframe.symbol = bootstrapText(keyframe.symbol, keyframe.fontOptions);
+            }
+
+            children[children.length - 1 - index] = keyframe.symbol;
+          } else {
+            children[children.length - 1 - index] = symbols[index];
+          }
+
           const symbol =
             keyframe.symbol
               ? Object.assign({}, symbols[index], keyframe.symbol)
               : symbols[index];
 
+          // Abbreviations.
+          const { x:prevX, y:prevY, rotation:prevRot } = prevframe.keyframe;
+          const { x:keyX, y:keyY, rotation:keyRot } = keyframe;
+          const { geometry:geo } = symbol;
+          const { position:geoPos } = geo;
+
           // Tween properties.
-          if(typeof keyframe.x === `function`) {
-            symbol.geometry.position[0] =
-              keyframe.x.call(this, progress);
-          } else if(keyframe.x !== undefined) {
-            symbol.geometry.position[0] =
-              prevX + (keyframe.x - prevX)*progress;
+          if(typeof keyX === `function`) {
+            geoPos[0] = keyX.call(this, progress);
+          } else if(keyX !== undefined) {
+            geoPos[0] = prevX + (keyX - prevX)*progress;
           }
-          if(typeof keyframe.y === `function`) {
-            symbol.geometry.position[1] =
-              keyframe.y.call(this, progress);
-          } else if(keyframe.y !== undefined) {
-            symbol.geometry.position[1] =
-              prevY + (keyframe.y - prevY)*progress;
+          if(typeof keyY === `function`) {
+            geoPos[1] = keyY.call(this, progress);
+          } else if(keyY !== undefined) {
+            geoPos[1] = prevY + (keyY - prevY)*progress;
           }
-          if(typeof keyframe.rotation === `function`) {
-            symbol.geometry.rotation =
-              keyframe.rotation.call(this, progress);
-          } else if(keyframe.rotation !== undefined) {
-            symbol.geometry.rotation =
-              prevRot + (keyframe.rotation - prevRot)*progress;
+          if(typeof keyRot === `function`) {
+            geo.rotation = keyRot.call(this, progress);
+          } else if(keyRot !== undefined) {
+            geo.rotation = prevRot + (keyRot - prevRot)*progress;
           }
 
           // Do not look at future keyframes.
