@@ -2,8 +2,8 @@
 TODO:
 [x] Can select a target hex my clicking
 [x] Have a map of hex coordinates to position data
-[ ] Have a storage of 'optional' hexes (hexes you can act upon)
-[ ] Have a concept of flashing optional hexes
+[x] Have a storage of 'optional' hexes (hexes you can act upon)
+[x] Have a concept of flashing optional hexes
 [ ] Have the ability to cycle through hexes that are highlighted
 [ ] Render hexes differently based on their status
 [ ] have battle order in state
@@ -34,6 +34,7 @@ const lookUpTable = new Map(flatten(grid).map(hex => [hex, {
 }]));
 
 const options = grid[Math.floor(Math.random() * grid.length)];
+let selectedOption = 0;
 
 const baseHex = createEqualLateralPolygon([0, 0], 0, 6, gridScale);
 
@@ -41,11 +42,15 @@ const drawHex = (hex) => {
   const position = addSet(scaleSet(hexToVector2d(hex), gridScale), mapOffset);
   const viewPosition = calcScreenPosition2d(position);
   const points = mapList(addList(baseHex.points, position), calcScreenPosition2d);
-  if(state.target === hex) {
+  if (state.target === hex) {
     fillPolygon(`white`, [0, 0], points, 0);
   }
-  if(contains(options, hex)) {
-    Date.now() % 600 > 400 && fillPolygon(`blue`, [0, 0], points, 0);
+  if (contains(options, hex)) {
+    if (options[selectedOption] === hex) {
+      Date.now() % 600 > 400 && fillPolygon(`yellow`, [0, 0], points, 0);
+    } else {
+      Date.now() % 600 > 400 && fillPolygon(`blue`, [0, 0], points, 0);
+    }
   }
   strokePolygon({ style: `white`, thickness: 1 }, [0, 0], points, 0);
 };
@@ -67,5 +72,7 @@ export default {
     [].concat(...grid).forEach(drawHex);
 
     addSet(mapOffset, keyControls());
+    if (inputs.e === 1) selectedOption = Math.min(++selectedOption, options.length - 1);
+    if (inputs.q === 1) selectedOption = Math.max(--selectedOption, 0);
   }
 };
