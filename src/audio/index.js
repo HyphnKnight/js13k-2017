@@ -119,7 +119,7 @@ export const playCanonD = async () => await playSong([
   [note.A3, 0.25],
   [note.B3, 0.25],
   [[note.G3, note.E2, note.C2], [0.5, 1, 1]],
-  [note.note.E3, 0.5],
+  [note.E3, 0.5],
 
   [[note.C3, note.A2, note.F2], [0.5, 1, 1]],
   [note.F3, 0.25],
