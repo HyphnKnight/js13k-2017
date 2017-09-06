@@ -26,11 +26,7 @@ const createPool =
             adjustedPoints,
           );
 
-          strokeOval(
-            { style: shoreColor, thickness: 2 },
-            [0, 0],
-            adjustedPoints,
-          );
+          const rippleScale = (Date.now() + offset) % interval / speed;
 
           strokeOval(
             { style: waveColor, thickness: 1 },
@@ -39,12 +35,20 @@ const createPool =
               addListSet(
                 scaleList(
                   basePoints,
-                  Math.min((Date.now() + offset) % interval / speed, 1)
+                  rippleScale > 1
+                    ? 0
+                    : rippleScale
                 ),
                 position
               ),
               calcScreenPosition2d,
             ),
+          );
+
+          strokeOval(
+            { style: shoreColor, thickness: 2 },
+            [0, 0],
+            adjustedPoints,
           );
 
         }
