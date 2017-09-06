@@ -1,4 +1,4 @@
-import { subtractSet, addSet, scaleToSet } from 'pura/vector/tuple';
+import { subtractSet, scaleToSet } from 'pura/vector/tuple';
 import { canvasOffsetLeft, canvasOffsetTop, scaleX, scaleY } from 'dom';
 
 const keyCodes = {
