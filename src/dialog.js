@@ -10,7 +10,6 @@ import state from 'state';
 let textStart = null;
 const textSpeed = 50;
 
-
 // Dialog box traits.
 // Renders over bottom half of screen.
 const dialogWidth = viewWidth - stroke;
@@ -19,7 +18,6 @@ const dialogHeight = lineHeight*5;
 // Text traits.
 const textWidth = dialogWidth - stroke * 4;
 const textHeight = dialogHeight - stroke * 4;
-
 
 // Formatted text is an array of lineData
 // lineData is an array of the following values
@@ -58,7 +56,6 @@ const formatText = (ctx, text, maxChar) => {
     } else {
       line = currLine;
     }
-
   }
 
   formattedText.push([-textWidth / 2, -textHeight / 2 + lineY, line]);
@@ -66,9 +63,20 @@ const formatText = (ctx, text, maxChar) => {
   return formattedText;
 };
 
-export const Dialog = {
+const nextDialogEntry = ()=> {
+  state.dialog.shift();
+  textStart = null;
+
+  if(!state.dialog.length && state.dialog.callback) {
+    state.dialog.callback();
+    state.dialog.callback = null;
+  }
+};
+
+const Dialog = {
   geometry: createRectangle([0, viewHeight / 2 - dialogHeight / 2], 0, dialogWidth, dialogHeight),
-  render: ({ geometry }) => {
+
+  render: ({ geometry })=> {
     const { dialog } = state;
     const [currentDialog] = dialog;
     if(!currentDialog) return;
@@ -81,7 +89,7 @@ export const Dialog = {
     const [text, author] = currentDialog;
     const formattedText = formatText(ctx, text, maxChar);
     let offset = 0;
-    if(author) {//author) {
+    if(author) {
       const [emoji, name] = author;
       const { width: nameWidth } = ctx.measureText(name);
       const boxWidth = nameWidth + 16 + stroke * 4;
@@ -98,14 +106,14 @@ export const Dialog = {
     });
 
     if(inputs.space === 1) {
-      state.dialog.shift();
-      textStart = null;
+      nextDialogEntry();
     }
   },
   interact: {
     onMouseDown: () => {
-      state.dialog.shift();
-      textStart = null;
+      nextDialogEntry();
     },
   }
 };
+
+export default Dialog;
