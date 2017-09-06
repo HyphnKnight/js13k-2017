@@ -8,7 +8,8 @@ export default {
   input: `src/index.js`,
   output: {
     file: `docs/script.js`,
-    format: `iife`
+    format: `iife`,
+    sourcemap: false
   },
 
   plugins: [
