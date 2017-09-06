@@ -1,4 +1,4 @@
-import { uiElements, clearUi } from 'ui';
+import { clearUi } from 'ui';
 
 let activeScene;
 
