@@ -1,6 +1,6 @@
 import { uiElements } from 'ui';
 import state from 'state';
-import { Dialog } from 'dialog';
+import Dialog from 'dialog';
 import { inputs } from 'controls';
 import { render as renderGraphics } from 'overworld/graphics';
 import logic from 'overworld/logic';

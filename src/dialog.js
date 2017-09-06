@@ -63,11 +63,11 @@ const formatText = (ctx, text, maxChar) => {
   return formattedText;
 };
 
-const nextDialogEntry = ()=> {
-  state.dialog.shift();
+const nextScriptEntry = ()=> {
+  state.dialog.script.shift();
   textStart = null;
 
-  if(!state.dialog.length && state.dialog.callback) {
+  if(!state.dialog.script.length && state.dialog.callback) {
     state.dialog.callback();
     state.dialog.callback = null;
   }
@@ -77,16 +77,16 @@ const Dialog = {
   geometry: createRectangle([0, viewHeight / 2 - dialogHeight / 2], 0, dialogWidth, dialogHeight),
 
   render: ({ geometry })=> {
-    const { dialog } = state;
-    const [currentDialog] = dialog;
-    if(!currentDialog) return;
+    const { script } = state.dialog;
+    const [currentScript] = script;
+    if(!currentScript) return;
     if(!textStart) textStart = Date.now();
 
     const maxChar = Math.floor((Date.now() - textStart) / textSpeed);
     drawBox([0, 0], geometry.width, 0, geometry.height);
 
     // Render text
-    const [text, author] = currentDialog;
+    const [text, author] = currentScript;
     const formattedText = formatText(ctx, text, maxChar);
     let offset = 0;
     if(author) {
@@ -106,12 +106,12 @@ const Dialog = {
     });
 
     if(inputs.space === 1) {
-      nextDialogEntry();
+      nextScriptEntry();
     }
   },
   interact: {
     onMouseDown: () => {
-      nextDialogEntry();
+      nextScriptEntry();
     },
   }
 };
