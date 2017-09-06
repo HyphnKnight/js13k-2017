@@ -646,6 +646,8 @@ const atariPalette = [
 
 const paLen = atariPalette.length;
 
+const computedStorage = {};
+
 const Atarify = ()=> {
   const img = ctx.getImageData(0, 0, viewWidth, viewHeight);
   const data = img.data;
@@ -655,23 +657,25 @@ const Atarify = ()=> {
     const r = data[i];
     const g = data[i + 1];
     const b = data[i + 2];
-    let minDistance = Infinity;
-    let closestColor;
+    let closestColor = computedStorage[`${r},${g},${b}`];
+    if(!closestColor) {
+      let minDistance = Infinity;
 
-    for(let i = 0; i < paLen; ++i) {
-      const color = atariPalette[i];
-      const [ cR, cG, cB ] = color;
+      for(let i = 0; i < paLen; ++i) {
+        const color = atariPalette[i];
+        const [cR, cG, cB] = color;
 
-      const distance = Math.sqrt(
-        ((r - cR) * (r - cR)) +
-        ((g - cG) * (g - cG)) +
-        ((b - cB) * (b - cB))
-      );
+        const distance =
+          ((r - cR) * (r - cR)) +
+          ((g - cG) * (g - cG)) +
+          ((b - cB) * (b - cB));
 
-      if(distance < minDistance) {
-        minDistance = distance;
-        closestColor = color;
+        if(distance < minDistance) {
+          minDistance = distance;
+          closestColor = color;
+        }
       }
+      computedStorage[`${r},${g},${b}`] = closestColor;
     }
 
     const [ aR, aG, aB ] = closestColor;

@@ -1,10 +1,10 @@
 import { createRectangle, createEqualLateralPolygon, getRectanglePoints } from 'pura/geometry/tuple';
-import { mapListSet, add, addSet, addList, addListSet, subtractSet, subtractListSet, mapList, scaleSet, forEachList } from 'pura/vector/tuple';
-import { ctx, fillArc, fillRectangle, fillPolygon, strokePolygon, fillText } from 'pura/canvas/tuple';
-import { flatten, contains, firstValues } from 'pura/array';
+import { mapListSet, addSet, addList, addListSet, mapList, scaleSet } from 'pura/vector/tuple';
+import { ctx, fillRectangle, fillPolygon, strokePolygon, fillText } from 'pura/canvas/tuple';
+import { flatten, contains } from 'pura/array';
 import { generateGrid, hexToVector2d } from 'pura/hex';
-import { canvas, viewHeight, viewWidth, viewCenter } from 'dom';
-import { calcScreenPosition2d } from 'camera';
+import { viewHeight, viewWidth } from 'dom';
+import { perspective2d } from 'camera';
 import { inputs, keyboardVector } from 'controls';
 import characters from 'characters';
 import state from 'state';
@@ -40,8 +40,8 @@ const baseHex = createEqualLateralPolygon([0, 0], 0, 6, gridScale);
 const calculateHexGeometry = hex => {
   const data = battleData.get(hex);
   const position = addSet(scaleSet(hexToVector2d(hex), gridScale), mapOffset);
-  const viewPosition = calcScreenPosition2d(position);
-  const points = mapList(addList(baseHex.points, position), calcScreenPosition2d);
+  const viewPosition = perspective2d(position);
+  const points = mapList(addList(baseHex.points, position), perspective2d);
   data.position = viewPosition;
   data.points = points;
   return data;
@@ -75,7 +75,7 @@ const keyControls = keyboardVector(3);
 
 export default {
   geometry: createRectangle([-viewWidth / 2, -viewHeight / 2], 0, viewWidth, viewHeight),
-  render({ geometry }) {
+  render() {
     // Background
     fillRectangle(
       skyGradient,
@@ -90,7 +90,7 @@ export default {
       [0, 0],
       mapListSet(
         addListSet(getRectanglePoints(10000, 1600), [0, 1600 / 2]),
-        pnt => calcScreenPosition2d(pnt),
+        pnt => perspective2d(pnt),
       ),
     );
 
