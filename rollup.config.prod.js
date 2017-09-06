@@ -1,5 +1,4 @@
 import includePaths from 'rollup-plugin-includepaths';
-import cjs from 'rollup-plugin-commonjs';
 import resolve from 'rollup-plugin-node-resolve';
 import analyze from 'rollup-analyzer-plugin';
 
@@ -18,9 +17,6 @@ export default {
       paths: [`src`],
       external: [],
       extensions: [`.js`]
-    }),
-    cjs({
-      sourceMap: false
     }),
     resolve(),
     analyze()
