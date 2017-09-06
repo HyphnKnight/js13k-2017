@@ -15,7 +15,7 @@ export default {
       renderGraphics(dt);
       // Input
       if(inputs.click) {
-        state.target = calcWorldPosition(inputs.mousePosition);
+        state.target = perspective(inputs.mousePosition);
       }
     };
   },
