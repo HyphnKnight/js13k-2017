@@ -1,7 +1,7 @@
 import { getRectanglePoints } from 'pura/geometry/tuple';
 import { mapList, addList, addListSet, subtract, scaleList, magnitudeSqr } from 'pura/vector/tuple';
 import { fillOval, strokeOval } from 'pura/canvas/tuple';
-import { calcScreenPosition2d } from 'camera';
+import { perspective2d } from 'camera';
 
 const createPool =
   (baseColor, shoreColor, waveColor) =>
@@ -18,7 +18,7 @@ const createPool =
             ? callBack()
             : null,
         render() {
-          adjustedPoints = mapList(placedPoints, calcScreenPosition2d);
+          adjustedPoints = mapList(placedPoints, perspective2d);
 
           fillOval(
             baseColor,
@@ -41,7 +41,7 @@ const createPool =
                 ),
                 position
               ),
-              calcScreenPosition2d,
+              perspective2d,
             ),
           );
 
