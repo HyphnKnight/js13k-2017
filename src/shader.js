@@ -3,7 +3,7 @@ import hex2rgb from 'hex-rgb';
 import { ctx } from 'pura/canvas/tuple';
 import { viewWidth, viewHeight } from 'dom';
 
-const atariPalette = [
+const atariPaletteArr = [
   `#000`,
   `#440`,
   `#702800`,
@@ -134,7 +134,17 @@ const atariPalette = [
   `#fce08c`
 ];
 
+const atariPalette = {};
+
+for(const color of atariPaletteArr) {
+  const [r, g, b] = hex2rgb(color);
+
+  atariPalette[color] = { r, g, b };
+}
+
 const nearestToAtari = paletteInit.from(atariPalette);
+
+export {nearestToAtari};
 
 const Atarify = ()=> {
   const img = ctx.getImageData(0, 0, viewWidth, viewHeight);
@@ -142,12 +152,12 @@ const Atarify = ()=> {
   const dataLen = data.length;
 
   for(let i = 0; i < dataLen; i += 4) {
-    const [ r,g,b ] =
-      hex2rgb(nearestToAtari({
+    const { r, g, b } =
+      nearestToAtari({
         r: data[i],
         g: data[i + 1],
         b: data[i + 2]
-      }));
+      }).rgb;
 
     data[i] = r;
     data[i + 1] = g;
