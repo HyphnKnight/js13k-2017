@@ -1,5 +1,5 @@
 import { viewWidth, viewHeight } from 'dom';
-import { subtract } from 'pura/vector/tuple';
+import { addSet, subtract } from 'pura/vector/tuple';
 
 export let focalLength = 500;
 export const camera = [0, 0, 240];
@@ -12,10 +12,10 @@ export const perspective =
     const relPos = (pY + focalLength);
     let sX = pX + pY * -pX / (pY + focalLength) + viewWidth / 2;
     let sY;
-    if (relPos < 0) {
+    if(relPos < 0) {
       sY = viewHeight + cZ * pY / relPos;
       sX = pX;
-    } else if (relPos > 0) {
+    } else if(relPos > 0) {
       sY = viewHeight - cZ * pY / relPos;
     } else {
       sY = viewHeight;

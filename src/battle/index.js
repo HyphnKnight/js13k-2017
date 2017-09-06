@@ -12,8 +12,8 @@ import BattleMap, { grid, mapOffset, gridScale } from 'map';
 import state from 'state';
 import { camera } from 'camera';
 import { inputs } from 'controls';
-import { getFromVector2d, vector2dToHex, hexToVector2d, get } from 'pura/hex';
-import { add, subtractSet, scaleSet } from 'pura/vector/tuple';
+import { getFromVector2d } from 'pura/hex';
+import { subtractSet, scaleSet } from 'pura/vector/tuple';
 import { uiElements } from 'ui';
 import { calcWorldPosition } from 'camera';
 

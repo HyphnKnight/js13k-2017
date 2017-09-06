@@ -662,11 +662,10 @@ const Atarify = ()=> {
       const color = atariPalette[i];
       const [ cR, cG, cB ] = color;
 
-      const distance = Math.sqrt(
+      const distance =
         ((r - cR) * (r - cR)) +
         ((g - cG) * (g - cG)) +
-        ((b - cB) * (b - cB))
-      );
+        ((b - cB) * (b - cB));
 
       if(distance < minDistance) {
         minDistance = distance;

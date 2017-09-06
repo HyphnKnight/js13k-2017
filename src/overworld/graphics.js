@@ -1,4 +1,4 @@
-import { createRectangle, getRectanglePoints } from 'pura/geometry/tuple';
+import { getRectanglePoints } from 'pura/geometry/tuple';
 import { mapListSet, addListSet, scaleList } from 'pura/vector/tuple';
 import { fillPolygon, fillRectangle, fillText, fillOval, strokeOval, ctx } from 'pura/canvas/tuple';
 import { perspective, perspective2d } from 'camera';
@@ -24,13 +24,13 @@ const groundPlanePoints = mapListSet(
 // ocean
 const baseOcean = `#69D2E7`;
 const lightOcean = `#A7DBD8`;
-const beachOcean = `#E0E4CC`;
+// const beachOcean = `#E0E4CC`;
 // ground
 const sand = `#CFB590`;
 const lightGrass = `#9E9A41`;
 const darkGrass = `#758918`;
-const lightBrown = `#49281F`;
-const darkBrown = `#564334`;
+// const lightBrown = `#49281F`;
+// const darkBrown = `#564334`;
 
 // sky
 const skyBlue = `#CCF3FF`;
@@ -54,14 +54,14 @@ const calcIslandPoints =
       perspective2d,
     );
 
-const avengerPool = makeAvengerPool(50, [0, 100], () => console.log(`test`));
-const childPool = makeChildPool(50, [75, 100], () => console.log(`test`));
-const protectionPool = makeProtectionPool(50, [150, 100], () => console.log(`test`));
-const persecutorPool = makePersecutorPool(50, [225, 100], () => console.log(`test`));
-const originalPool = makeOriginalPool(50, [300, 100], () => console.log(`test`));
-const evilPool = makeEvilPool(50, [375, 100], () => console.log(`test`));
+const avengerPool = makeAvengerPool(50, [0, 100], () => { });
+const childPool = makeChildPool(50, [75, 100], () => { });
+const protectionPool = makeProtectionPool(50, [150, 100], () => { });
+const persecutorPool = makePersecutorPool(50, [225, 100], () => { });
+const originalPool = makeOriginalPool(50, [300, 100], () => { });
+const evilPool = makeEvilPool(50, [375, 100], () => { });
 
-export const render = dt => {
+export const render = () => {
   // Background
   fillRectangle(
     skyBlue,
