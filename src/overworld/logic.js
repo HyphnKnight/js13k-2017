@@ -23,30 +23,6 @@ import battle from 'battle';
 const direction = [0, 0];
 const charSpeed = 3;
 
-let i = 1000;
-while(--i > 0) {
-  graphics.push((Math.random() > 0.5 ? mkTree : mkTreeAlt)([
-    Math.random() * 5120 - 2560,
-    Math.random() * 1280,
-  ], 0));
-}
-
-i = 25;
-while(--i > 0) {
-  graphics.push(mkCloud([
-    Math.random() * 10000 - 5000,
-    Math.random() * 1000 + 3500,
-  ], Math.random() * 30 + 10));
-}
-
-i = 5;
-while(--i > 0) {
-  graphics.push(mkPool([
-    Math.random() * 5120 - 2560,
-    Math.random() * 1280,
-  ], 0));
-}
-
 export const avngSprite = mkAvenger([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
 export const chldSprite = mkChild([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
 export const protSprite = mkProtector([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
