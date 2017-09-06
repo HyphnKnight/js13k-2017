@@ -12,15 +12,16 @@ import {
   gem,
 } from 'emoji';
 
-export const createSprite = (emoji) => ([x, y], z = 0) => ([x, y, z, emoji]);
-export const mkTree = createSprite(tree);
-export const mkTreeAlt = createSprite(treeAlt);
+// size is a scale relative to 16px.
+export const createSprite = (emoji, size = 1) => ([x, y], z = 0) => ([x, y, z, emoji, size]);
+export const mkTree = createSprite(tree, 2);
+export const mkTreeAlt = createSprite(treeAlt, 2);
 export const mkChild = createSprite(child);
 export const mkProtector = createSprite(protector);
 export const mkPersecutor = createSprite(persecutor);
 export const mkAvenger = createSprite(avenger);
 export const mkCloud = createSprite(cloud);
-export const mkMountain = createSprite(mountain);
+export const mkMountain = createSprite(mountain, 4);
 export const mkGhost = createSprite(ghost);
 export const mkPool = createSprite(pool);
 export const mkGem = createSprite(gem);
