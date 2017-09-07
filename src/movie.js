@@ -169,17 +169,17 @@ const Movie = (x, y, width, height, timeline, callback)=> {
 
           // Tween properties.
           if(typeof keyX === `function`) {
-            geoPos[0] = keyX.call(this, progress);
+            geoPos[0] = keyX(progress, prevX, prevY, prevRot, width, height);
           } else if(keyX !== undefined) {
             geoPos[0] = prevX + (keyX - prevX)*progress;
           }
           if(typeof keyY === `function`) {
-            geoPos[1] = keyY.call(this, progress);
+            geoPos[1] = keyY(progress, prevX, prevY, prevRot, width, height);
           } else if(keyY !== undefined) {
             geoPos[1] = prevY + (keyY - prevY)*progress;
           }
           if(typeof keyRot === `function`) {
-            geo.rotation = keyRot.call(this, progress);
+            geo.rotation = keyRot(progress, prevX, prevY, prevRot, width, height);
           } else if(keyRot !== undefined) {
             geo.rotation = prevRot + (keyRot - prevRot)*progress;
           }

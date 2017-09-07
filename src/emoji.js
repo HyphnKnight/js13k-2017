@@ -14,3 +14,4 @@ export const gem = `\uD83D\uDC8E`;
 export const blackHeart = `\uD83D\uDDA4`;
 export const heart = `\u2764\uFE0F`;
 export const flame = `\uD83D\uDD25`;
+export const punch = `\uD83E\uDD1B\uD83C\uDFFF`;
