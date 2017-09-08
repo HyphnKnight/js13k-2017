@@ -1,7 +1,7 @@
-import { flame } from 'emoji';
+import { flame, flake } from 'emoji';
 
-const genFlame = Array.from(Array(9).keys()).map((index, i, arr)=> [
-  flame,
+const genFlame = (enemy)=> Array.from(Array(9).keys()).map((index, i, arr)=> [
+  !enemy ? flame : flake,
   [
     [
       0,
@@ -40,8 +40,8 @@ const genFlame = Array.from(Array(9).keys()).map((index, i, arr)=> [
   ]
 ]);
 
-const attack = [
-  ...genFlame
+const attack = (enemy)=> [
+  ...genFlame(enemy)
 ];
 
 export default attack;
