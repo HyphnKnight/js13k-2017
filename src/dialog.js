@@ -97,8 +97,8 @@ const Dialog = {
       const topOffset = -dialogHeight / 2 - stroke * 2;
       drawBox([leftOffset, topOffset], boxWidth, 1, stroke * 4);
       ctx.font = `${textSize}px monospace`;
-      fillText({ style: white }, [leftOffset - 6 + stroke * 4 - boxWidth / 2, topOffset - lineHeight / 2], emoji);
-      fillText({ style: white }, [leftOffset - 6 + stroke * 4 - boxWidth / 2 + 16, topOffset - lineHeight / 2], name);
+      fillText({ style: white }, [leftOffset - 6 + stroke * 4 - boxWidth / 2, topOffset - lineHeight/2 - stroke], emoji);
+      fillText({ style: white }, [leftOffset - 6 + stroke * 4 - boxWidth / 2 + 16, topOffset - lineHeight/2 - stroke], name);
       offset = lineHeight*0.33;
     }
     formattedText.forEach(([x, y, line]) => {
