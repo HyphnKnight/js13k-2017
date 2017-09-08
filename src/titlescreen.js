@@ -1,6 +1,7 @@
 import { createRectangle } from 'pura/geometry/tuple';
 import { viewWidth, viewHeight } from 'dom';
-import { playCanonD, stopCanonD } from 'audio';
+import { playSong, stopSong } from 'audio';
+import canond from 'songs/canond';
 import { inputs } from 'controls';
 import state from 'state';
 import { uiElements } from 'ui';
@@ -48,8 +49,8 @@ const title = {
 export default {
   init: () => {
     uiElements.push(title);
-    playCanonD();
+    playSong(canond);
     state.logic = null;
   },
-  dismiss: () => stopCanonD(),
+  dismiss: () => stopSong(),
 };
