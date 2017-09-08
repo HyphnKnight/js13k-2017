@@ -1,7 +1,7 @@
-import { punch } from '../../emoji.js';
+import { punch, eye } from 'emoji';
 
-const genPunch = Array.from(Array(6).keys()).map((index, i, arr)=> [
-  punch,
+const genPunch = (enemy)=> Array.from(Array(6).keys()).map((index, i, arr)=> [
+  !enemy ? punch : eye,
   [
     [
       index*200,
@@ -35,8 +35,8 @@ const genPunch = Array.from(Array(6).keys()).map((index, i, arr)=> [
   ]
 ]);
 
-const defend = [
-  ...genPunch
+const defend = (enemy)=> [
+  ...genPunch(enemy)
 ];
 
 export default defend;

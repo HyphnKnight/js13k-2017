@@ -16,4 +16,5 @@ export const heart = `\u2764\uFE0F`;
 export const flame = `\uD83D\uDD25`;
 export const flake = `\u2744\uFE0F`;
 export const punch = `\uD83E\uDD1B\uD83C\uDFFF`;
+export const eye = `\uD83D\uDC41\uFE0F`;
 export const sparkle = `\u2728`;
