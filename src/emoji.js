@@ -1,7 +1,8 @@
 export const child = `\uD83D\uDC69\uD83C\uDFFC\u200D\uD83C\uDF3E`;
 export const protector = `\uD83D\uDC6E\uD83C\uDFFF\u200D`;
 export const persecutor = `\uD83D\uDD75\uD83C\uDFFD`;
-export const avenger = `\uD83D\uDC69\uD83C\uDFFB\u200D\uD83C\uDFA4`;
+export const avenger = `\uD83D\uDC68\uD83C\uDFFB\u200D\uD83C\uDFA4`;
+export const avengerF = `\uD83D\uDC69\uD83C\uDFFB\u200D\uD83C\uDFA4`;
 export const demon = `\uD83D\uDC79`;
 export const tree = `\uD83C\uDF32`;
 export const treeAlt = `\uD83C\uDF33`;
