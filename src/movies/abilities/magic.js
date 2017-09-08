@@ -1,8 +1,10 @@
-import { sparkle } from 'emoji';
+import { sparkle, heartPurple, shout, needle } from 'emoji';
 import { easeOutQuad } from 'easing';
 
 const hotOrDot = (hot, enemy)=> Array(100).fill(0).map((el, index)=> [
-  !enemy ? sparkle : 0,
+  !enemy
+    ? (hot ? sparkle : heartPurple)
+    : (hot ? needle : shout),
   [
     [
       index*16,
