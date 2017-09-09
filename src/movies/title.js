@@ -1,5 +1,5 @@
 import { createRectangle } from 'pura/geometry/tuple';
-import { fillPolygon } from 'pura/canvas/tuple';
+import { fillRectangle, fillPolygon } from 'pura/canvas/tuple';
 import { title_text, base_text, white } from 'style';
 import { viewWidth, viewHeight } from 'dom';
 import { gem } from 'emoji';
@@ -84,6 +84,31 @@ const title = [
     [
       [
         24500,
+        {
+          x: 0,
+          y: 0,
+          rotation: 0
+        }
+      ]
+    ]
+  ],
+  [
+    {
+      geometry: createRectangle([0, 0], 0, viewWidth, viewHeight),
+
+      render() {
+        fillRectangle(
+          `#00f`,
+          [0, 0],
+          viewWidth,
+          viewHeight,
+          0,
+        );
+      }
+    },
+    [
+      [
+        0,
         {
           x: 0,
           y: 0,
