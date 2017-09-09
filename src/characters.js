@@ -1,4 +1,7 @@
-import { child, avenger, protector, persecutor } from 'emoji';
+import {
+  child, avenger, protector, persecutor,
+  scorpion,
+} from 'emoji';
 
 export default {
 
@@ -51,4 +54,19 @@ export default {
       },
     },
   },
+
+  /* The Bad Guys */
+
+  swarmer: {
+    name: `Swarmer`,
+    emoji: scorpion,
+    type: false,
+    maxHealth: 30,
+    abilities: {
+      swarm: {
+        range: 5,
+      }
+    }
+  }
+
 };
