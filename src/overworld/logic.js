@@ -38,8 +38,8 @@ export default () => {
   state.position[1] = Math.max(state.position[1], 5);
   avngSprite[0] = state.position[0];
   avngSprite[1] = state.position[1];
-  follow(chldSprite, 20 + Date.now() % 300 / 30);
-  follow(protSprite, 45 + Date.now() % 300 / 30);
+  follow(protSprite, 20 + Date.now() % 300 / 30);
+  follow(chldSprite, 45 + Date.now() % 300 / 30);
   follow(persSprite, 70 + Date.now() % 300 / 30);
   follow(gemSprite, 90 + Date.now() % 300 / 30);
   const xDiff = state.position[0] - camera[0];

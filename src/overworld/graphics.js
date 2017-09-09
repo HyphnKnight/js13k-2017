@@ -44,18 +44,18 @@ const calcIslandPoints =
 
 // Characters.
 export const avngSprite = mkAvenger([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
-export const chldSprite = mkChild([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
 export const protSprite = mkProtector([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
+export const chldSprite = mkChild([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
 export const persSprite = mkPersecutor([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
 export const gemSprite = mkGem([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
 
-graphics.push(avngSprite, chldSprite, protSprite, persSprite, gemSprite);
+graphics.push(avngSprite, protSprite, chldSprite, persSprite, gemSprite);
 
 // Pools.
 const pools = [
   makeAvengerPool(50, [0, 600], () => { }),
-  makeChildPool(50, [75, 600], () => { }),
   makeProtectionPool(50, [150, 600], () => { }),
+  makeChildPool(50, [75, 600], () => { }),
   makePersecutorPool(50, [225, 600], () => { }),
   makeOriginalPool(50, [300, 600], () => { }),
   makeEvilPool(50, [375, 600], () => { })
