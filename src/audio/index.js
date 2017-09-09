@@ -1,25 +1,33 @@
-const context = new AudioContext();
-
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const startTime = Date.now();
 
+const context = new AudioContext();
+
 async function playNote(note, length) {
   if(note === ``) return await wait(length * 1000 * 0.75);
+
+  const gainNode = context.createGain();
+  gainNode.gain.value = 1.1 - Math.min(1, (Date.now() - startTime) / 3000);
+
   const oscillator = context.createOscillator();
-  const gain = context.createGain();
-  gain.gain.value = 1.1 - Math.min(1, (Date.now() - startTime) / 3000);
-
-  oscillator.connect(gain);
-
   oscillator.type = `square`;
   oscillator.frequency.value = note;
-  gain.connect(context.destination);
+  oscillator.onended = ()=> {
+    oscillator.disconnect();
+    gainNode.disconnect();
+  };
+
+  oscillator.connect(gainNode);
+  gainNode.connect(context.destination);
+
   oscillator.start(0);
 
-  gain.gain.exponentialRampToValueAtTime(
+  gainNode.gain.exponentialRampToValueAtTime(
     0.00001, context.currentTime + length
   );
+
+  oscillator.stop(context.currentTime + length);
 
   await wait(length * 1000 * 0.75);
 }
@@ -49,7 +57,7 @@ export default class Song {
     }
 
     if(!this.stopped && repeat) {
-      this.play(this.music, repeat);
+      this.play(repeat);
     }
 
     return await true;
