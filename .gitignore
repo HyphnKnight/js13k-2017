@@ -63,3 +63,6 @@ typings/
 # And the rest!
 Alter.zip
 dev/script.js
+tools/mxml2alter/*
+!tools/mxml2alter/mxml2alter.js
+src/songs/song.js

@@ -2,7 +2,7 @@ import * as note from 'audio/notes';
 
 const canond = [
 
-  // Measure 1.
+  // Staff 1.
   [[note.E4, note.C4], 1],
   [[note.D4, note.G3], 1],
 
@@ -15,7 +15,7 @@ const canond = [
   [[note.A3, note.F3], 1],
   [[note.B3, note.G3], 1],
 
-  // Measure 2.
+  // Staff 2.
   [[note.E6, note.G5, note.C5], 1],
   [[note.D6, note.B5, note.G4], 1],
 
@@ -28,7 +28,7 @@ const canond = [
   [[note.A5, note.F5, note.F4], 1],
   [[note.B5, note.D5, note.G4], 1],
 
-  // Measure 3.
+  // Staff 3.
   [[note.C5, note.C4, note.E4], [0.5, 1, 1]],
   [note.C5, 0.5],
   [[note.D5, note.D4, note.G3], [0.5, 1, 1]],
@@ -49,7 +49,7 @@ const canond = [
   [[note.B4, note.B3, note.G3], [0.5, 1, 1]],
   [note.G4, 0.5],
 
-  // Measure 4.
+  // Staff 4.
   [[note.C4, note.E3, note.C3], [0.5, 1, 1]],
   [note.E4, 0.25],
   [note.G4, 0.25],
@@ -80,7 +80,7 @@ const canond = [
   [note.F3, 0.25],
 
 
-  // Measure 5.
+  // Staff 5.
   [[``, note.E4, note.C4], [0.5, 1, 1]],
   [note.C5, 0.5],
   [[note.D5, note.G3], [0.5, 1, 1]],
