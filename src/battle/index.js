@@ -1,3 +1,13 @@
+/*
+How to create a battle scene.
+Scene(createBattleScene([
+  [`avenger`, [0, 0, 0]],
+  [`child`, [1, 0, -1]],
+  [`protector`, [-1, 1, 0]],
+  [`persecutor`, [-1, 0, 1]],
+],5));
+*/
+
 import { add } from 'pura/vector/tuple';
 import { camera, } from 'camera';
 import { uiElements } from 'ui';
@@ -7,17 +17,6 @@ import BattleMap from 'battle/map';
 import { initializeMap, turnOrder, moveCharacter } from 'battle/grid';
 import Move from 'battle/actions/Move';
 import state from 'state';
-
-/*
-type CharacterData = [
-  string, // Name to be used to look up data
-  [number, number, number] // Hex position of said character
-];
-
-interface createBattle {
-  (characters: CharacterData) => battle scene
-}
-*/
 
 const cameraOffset = [0, -150];
 
