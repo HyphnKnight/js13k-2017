@@ -1,6 +1,6 @@
 import { uiElements } from 'ui';
-import { playSong, stopSong } from 'audio';
-import bgMusic from 'songs/overworld';
+import Song from 'audio';
+import overworldTheme from 'songs/overworld';
 import state from 'state';
 import Dialog from 'dialog';
 import { inputs } from 'controls';
@@ -8,9 +8,11 @@ import { render as renderGraphics } from 'overworld/graphics';
 import logic from 'overworld/logic';
 import { calcWorldPosition } from 'camera';
 
+const bgMusic = new Song(overworldTheme);
+
 export default {
   init: () => {
-    playSong(bgMusic, `repeat`);
+    bgMusic.play(`repeat`);
     uiElements.push(Dialog);
     state.logic = (dt) => {
       // Logic
@@ -23,6 +25,6 @@ export default {
     };
   },
   dismiss: () => {
-    stopSong();
+    bgMusic.stop();
   },
 };

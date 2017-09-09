@@ -1,6 +1,6 @@
 import { createRectangle } from 'pura/geometry/tuple';
 import { viewWidth, viewHeight } from 'dom';
-import { playSong, stopSong } from 'audio';
+import Song from 'audio';
 import canond from 'songs/canond';
 import { inputs } from 'controls';
 import state from 'state';
@@ -46,11 +46,13 @@ const title = {
   }
 };
 
+const bgMusic = new Song(canond);
+
 export default {
   init: () => {
     uiElements.push(title);
-    playSong(canond);
+    bgMusic.play();
     state.logic = null;
   },
-  dismiss: () => stopSong(),
+  dismiss: () => bgMusic.stop(),
 };

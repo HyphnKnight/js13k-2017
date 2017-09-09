@@ -4,8 +4,6 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const startTime = Date.now();
 
-export let stopPlayingAudio = false;
-
 async function playNote(note, length) {
   if(note === ``) return await wait(length * 1000 * 0.75);
   const oscillator = context.createOscillator();
@@ -26,32 +24,38 @@ async function playNote(note, length) {
   await wait(length * 1000 * 0.75);
 }
 
-export const playSong = async (music, repeat)=> {
-  stopPlayingAudio = false;
+export default class Song {
+  constructor(music) {
+    this.music = music;
+    this.stopped = false;
+  }
+  async play(repeat) {
+    this.stopped = false;
 
-  let i = -1;
-  let h = -1;
-  while(!stopPlayingAudio && ++i < music.length) {
-    const [note, length] = music[i];
-    if(Array.isArray(note)) {
-      while(++h < note.length - 1) {
+    let i = -1;
+    let h = -1;
+    while(!this.stopped && ++i < this.music.length) {
+      const [note, length] = this.music[i];
+      if(Array.isArray(note)) {
+        while(++h < note.length - 1) {
+          playNote(note[h], Array.isArray(length) ? length[h] : length);
+        }
         playNote(note[h], Array.isArray(length) ? length[h] : length);
+        await wait((Array.isArray(length) ? Math.min(...length) : length) * 1000 * 0.75);
+        h = -1;
+      } else {
+        await playNote(note, length);
       }
-      playNote(note[h], Array.isArray(length) ? length[h] : length);
-      await wait((Array.isArray(length) ? Math.min(...length) : length) * 1000 * 0.75);
-      h = -1;
-    } else {
-      await playNote(note, length);
     }
+
+    if(!this.stopped && repeat) {
+      this.play(this.music, repeat);
+    }
+
+    return await true;
   }
 
-  if(!stopPlayingAudio && repeat) {
-    playSong(music, repeat);
+  stop() {
+    this.stopped = true;
   }
-
-  return await true;
-};
-
-export const stopSong = () => {
-  stopPlayingAudio = true;
-};
+}
