@@ -5,31 +5,43 @@ export default {
     name: `Child`,
     emoji: child,
     maxHealth: 40,
-    movement: 3,
-    ability: `forget`,
+    abilities: {
+      move: {
+        range: 3,
+      },
+    },
   },
 
   avenger: {
     name: `Avenger`,
     emoji: avenger,
     maxHealth: 80,
-    movement: 3,
-    ability: `avenge`,
+    abilities: {
+      move: {
+        range: 3,
+      },
+    },
   },
 
   protector: {
     name: `Protector`,
     emoji: protector,
     maxHealth: 100,
-    movement: 2,
-    ability: `protect`,
+    abilities: {
+      move: {
+        range: 2,
+      },
+    },
   },
 
   persecutor: {
     name: `Persecutor`,
     emoji: persecutor,
     maxHealth: 60,
-    movement: 5,
-    ability: `persecute`,
+    abilities: {
+      move: {
+        range: 5,
+      },
+    },
   },
 };
