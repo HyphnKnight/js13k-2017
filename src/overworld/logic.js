@@ -59,11 +59,13 @@ export default () => {
   // Character Controls
   direction[0] = 0;
   direction[1] = 0;
-  if(inputs.w || inputs.up || inputs.s || inputs.down || inputs.d || inputs.right || inputs.a || inputs.left) state.target = null;
-  if(inputs.w || inputs.up) direction[1] += 1;
-  if(inputs.s || inputs.down) direction[1] -= 1;
-  if(inputs.d || inputs.right) direction[0] += 1;
-  if(inputs.a || inputs.left) direction[0] -= 1;
+  if(!state.dialog.script.length){
+    if(inputs.w || inputs.up || inputs.s || inputs.down || inputs.d || inputs.right || inputs.a || inputs.left) state.target = null;
+    if(inputs.w || inputs.up) direction[1] += 1;
+    if(inputs.s || inputs.down) direction[1] -= 1;
+    if(inputs.d || inputs.right) direction[0] += 1;
+    if(inputs.a || inputs.left) direction[0] -= 1;
+  }
   const movement = scaleToSet(direction, charSpeed);
   addSet(state.position, movement);
   if(state.target !== null) {
