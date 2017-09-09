@@ -53,7 +53,7 @@ const convert = async ()=> {
 
   for(const note of notes) {
     try {
-      if(note === false) {
+      if(noteCol[0] === false) {
         break;
       }
 
@@ -92,7 +92,11 @@ const convert = async ()=> {
         alter.push(`]`);
       }
 
-      alter.push(`, ${noteTypes[note.type[0]]}],`);
+      alter.push(`, ${
+        noteCol[0].type
+          ? noteTypes[noteCol[0].type[0]]
+          : 4
+      }],`);
 
       noteCol = [note];
     } catch(e) {
