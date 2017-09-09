@@ -18,8 +18,6 @@ const readFileAsync = promisify(fs.readFile),
 const parse = async ()=> {
   const data = await readFileAsync(path.join(__dirname, argMxml));
   return await parseAsync(data);
-  // console.log(inspect(result, false, null));
-  // console.log(`Done`);
 };
 
 const alter = [`import * as note from 'audio/notes';
@@ -44,7 +42,29 @@ const convert = async ()=> {
   const notes = [];
 
   for(let i = 0; i < argMesr && i < mesrLen; ++i) {
-    notes.push(...measures[i].note);
+    const posCol = new Set();
+
+    for(const note of measures[i].note) {
+      if(note.$ && posCol.has(note.$[`default-x`])) {
+        continue;
+      }
+
+      const currNotes = [];
+
+      if(note.$ && note.$[`default-x`]) {
+        const x = note.$[`default-x`];
+
+        posCol.add(x);
+
+        currNotes.push(...measures[i].note.filter((note)=> {
+          return note.$ && note.$[`default-x`] === x;
+        }));
+      } else {
+        currNotes.push(note);
+      }
+
+      notes.push(...currNotes);
+    }
   }
   notes.push(false);
 
