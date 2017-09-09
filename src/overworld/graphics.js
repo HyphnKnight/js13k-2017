@@ -38,10 +38,6 @@ const groundGradient = ctx.createLinearGradient(0, 0, 200, 200);
   groundGradient.addColorStop(index/colors.length, stop);
 });
 
-// const skyGradient = ctx.createLinearGradient(0, 0, 50, 50);
-// skyGradient.addColorStop(0, `#F8B195`);
-// skyGradient.addColorStop(1, `#C06C84`);
-
 // Island Geometry
 const islandRadius = 1000;
 const islandPoints = getRectanglePoints(islandRadius, islandRadius);
