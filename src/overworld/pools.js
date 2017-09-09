@@ -59,7 +59,7 @@ const createPool =
       };
     };
 
-export const makeAvengerPool = createPool(`#F96541`, `#AE5750`, `#FF7939`);
+export const makeAvengerPool = createPool(`#F96541`, `#AE5750`, `#fcb4b4`);
 export const makeChildPool = createPool(`#EDE574`, `#F9D423`, `#E1F5C4`);
 export const makeProtectionPool = createPool(`#00B4CC`, `#005F6B`, `#00DFFC`);
 export const makePersecutorPool = createPool(`#8F9A9C`, `#65727A`, `#BEC3BC`);
