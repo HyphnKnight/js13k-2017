@@ -26,7 +26,7 @@ async function playNote(note, length) {
   await wait(length * 1000 * 0.75);
 }
 
-export const playSong = async (music)=> {
+export const playSong = async (music, repeat)=> {
   stopPlayingAudio = false;
 
   let i = -1;
@@ -44,6 +44,11 @@ export const playSong = async (music)=> {
       await playNote(note, length);
     }
   }
+
+  if(!stopPlayingAudio && repeat) {
+    playSong(music, repeat);
+  }
+
   return await true;
 };
 
