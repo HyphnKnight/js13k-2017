@@ -11,6 +11,9 @@ Scene(createBattleScene([
 import { add } from 'pura/vector/tuple';
 import { camera, } from 'camera';
 import { uiElements } from 'ui';
+import Song from 'audio';
+import battleMusic from 'songs/summer';
+import finalBossMusic from 'songs/winter';
 import Menu from 'menu';
 import StatusBar from 'battle/statusBar';
 import BattleMap from 'battle/map';
@@ -168,8 +171,11 @@ export default function createBattleScene(characters, mapSize) {
         0;
   }
 
+  const bgMusic = new Song(battleMusic || finalBossMusic);
+
   return {
     init: () => {
+      bgMusic.play(bgMusic);
       camera[2] = 340;
       uiElements.push(StatusBar, BattleMap);
       turn = Turn();
@@ -188,6 +194,8 @@ export default function createBattleScene(characters, mapSize) {
         }
       };
     },
-    dismiss: () => { },
+    dismiss: () => {
+      bgMusic.stop();
+    },
   };
 }
