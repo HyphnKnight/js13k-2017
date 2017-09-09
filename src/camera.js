@@ -1,5 +1,6 @@
 import { viewWidth, viewHeight } from 'dom';
 import { addSet, subtract } from 'pura/vector/tuple';
+import { keyboardVector } from 'controls';
 
 export let focalLength = 500;
 export const camera = [0, 0, 240];
@@ -35,3 +36,7 @@ export const calcWorldPosition =
     const pX = -((viewWidth * pY) + (viewWidth * focalLength) + (-2 * sX * pY) + (-2 * sX * focalLength)) / (2 * focalLength);
     return addSet([pX, pY], camera);
   };
+
+const getKeyboardVector = keyboardVector(3);
+
+export const controlCamera = () => addSet(camera, getKeyboardVector());
