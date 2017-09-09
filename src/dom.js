@@ -1,7 +1,7 @@
 // Reused DOM elements and objects.
 import { setCanvas, ctx } from 'pura/canvas/tuple';
 export const canvas = document.querySelector(`canvas`);
-setCanvas(canvas);
+setCanvas(canvas, { alpha: false });
 ctx.imageSmoothingEnabled = false;
 export const viewWidth = 160;
 export const viewHeight = 192;
