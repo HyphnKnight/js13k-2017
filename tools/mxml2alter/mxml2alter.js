@@ -95,7 +95,7 @@ const convert = async ()=> {
       alter.push(`, ${
         noteCol[0].type
           ? noteTypes[noteCol[0].type[0]]
-          : 4
+          : 2
       }],`);
 
       noteCol = [note];
