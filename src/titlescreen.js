@@ -20,7 +20,7 @@ const skipTitle = ()=> {
 
   skipped = true;
 
-  title.children.length = 0;
+  title.children.splice(0, title.children.length);
   endTitle();
   title.children.push(Movie(
     0, 0, viewWidth, viewHeight, titleMovie
