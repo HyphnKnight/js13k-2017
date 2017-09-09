@@ -23,21 +23,20 @@ const groundPlanePoints = mapListSet(
 // Colors
 // ocean
 const baseOcean = `#69D2E7`;
-const lightOcean = `#A7DBD8`;
-// const beachOcean = `#E0E4CC`;
+const seaFoam = `#fff`;
 // ground
 const sand = `#CFB590`;
-const lightGrass = `#9E9A41`;
-const darkGrass = `#758918`;
-// const lightBrown = `#49281F`;
-// const darkBrown = `#564334`;
 
 // sky
 const skyBlue = `#CCF3FF`;
 
 const groundGradient = ctx.createLinearGradient(0, 0, 200, 200);
-groundGradient.addColorStop(0, lightGrass);
-groundGradient.addColorStop(1, darkGrass);
+[
+  `#e8e85c`,
+  `#646410`
+].map((stop, index, colors)=> {
+  groundGradient.addColorStop(index/colors.length, stop);
+});
 
 // const skyGradient = ctx.createLinearGradient(0, 0, 50, 50);
 // skyGradient.addColorStop(0, `#F8B195`);
@@ -54,12 +53,12 @@ const calcIslandPoints =
       perspective2d,
     );
 
-const avengerPool = makeAvengerPool(50, [0, 100], () => { });
-const childPool = makeChildPool(50, [75, 100], () => { });
-const protectionPool = makeProtectionPool(50, [150, 100], () => { });
-const persecutorPool = makePersecutorPool(50, [225, 100], () => { });
-const originalPool = makeOriginalPool(50, [300, 100], () => { });
-const evilPool = makeEvilPool(50, [375, 100], () => { });
+const avengerPool = makeAvengerPool(50, [0, 600], () => { });
+const childPool = makeChildPool(50, [75, 600], () => { });
+const protectionPool = makeProtectionPool(50, [150, 600], () => { });
+const persecutorPool = makePersecutorPool(50, [225, 600], () => { });
+const originalPool = makeOriginalPool(50, [300, 600], () => { });
+const evilPool = makeEvilPool(50, [375, 600], () => { });
 
 export const render = () => {
   // Background
@@ -86,7 +85,7 @@ export const render = () => {
   );
 
   strokeOval(
-    { style: lightOcean, thickness: 5 },
+    { style: seaFoam, thickness: 5 },
     [0, 0],
     adjustedWavePoints,
   );
