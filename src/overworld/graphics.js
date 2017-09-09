@@ -103,10 +103,10 @@ const skyBlue = `#CCF3FF`;
 
 const groundGradient = ctx.createLinearGradient(0, 0, 200, 200);
 [
-  `#e8e85c`,
-  `#646410`
-].map((stop, index, colors)=> {
-  groundGradient.addColorStop(index/colors.length, stop);
+  [`#e8e85c`, 0.1],
+  [`#646410`, 0.9]
+].map(([stop, pos])=> {
+  groundGradient.addColorStop(pos, stop);
 });
 
 export const render = () => {
