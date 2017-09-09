@@ -1,5 +1,5 @@
 // Usage:
-// mxml2alter.js xml_filename number_of_measures
+// mxml2alter.js xml_filename [song_filename || `song.js`] [number_of_measures || all measures]
 
 const fs = require(`fs`),
       path = require(`path`),
