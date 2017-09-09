@@ -118,9 +118,9 @@ export const keyboardVector =
   (magnitude) =>
     () => {
       const directional = [0, 0];
-      if(inputs.up || inputs.w)--directional[1];
-      if(inputs.down || inputs.s)++directional[1];
-      if(inputs.left || inputs.a)++directional[0];
-      if(inputs.right || inputs.d)--directional[0];
+      if(inputs.up || inputs.w)++directional[1];
+      if(inputs.down || inputs.s)--directional[1];
+      if(inputs.left || inputs.a)--directional[0];
+      if(inputs.right || inputs.d)++directional[0];
       return scaleToSet(directional, magnitude);
     };
