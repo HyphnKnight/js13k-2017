@@ -1,9 +1,20 @@
+import { addSet, rotateSet, scaleSet } from 'pura/vector/tuple';
 import { getRectanglePoints } from 'pura/geometry/tuple';
 import { mapListSet, addListSet, scaleList } from 'pura/vector/tuple';
 import { fillPolygon, fillRectangle, fillText, fillOval, strokeOval, ctx } from 'pura/canvas/tuple';
 import { perspective, perspective2d } from 'camera';
 import { viewWidth, viewHeight } from 'dom';
 import state from 'state';
+import {
+  mkTree,
+  mkTreeAlt,
+  mkAvenger,
+  mkChild,
+  mkProtector,
+  mkPersecutor,
+  mkGem,
+  mkMountain,
+} from 'sprite';
 import {
   makeAvengerPool,
   makeChildPool,
@@ -19,6 +30,66 @@ const groundPlanePoints = mapListSet(
   addListSet(getRectanglePoints(10000, 1600), [0, 1600 / 2]),
   perspective2d,
 );
+
+// Island Geometry
+const islandRadius = 1000;
+const islandPoints = getRectanglePoints(islandRadius, islandRadius);
+export const islandOffset = islandRadius;
+const calcIslandPoints =
+  (scale = 1) =>
+    mapListSet(
+      addListSet(scaleList(islandPoints, scale), [0, islandOffset]),
+      perspective2d,
+    );
+
+// Characters.
+export const avngSprite = mkAvenger([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
+export const chldSprite = mkChild([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
+export const protSprite = mkProtector([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
+export const persSprite = mkPersecutor([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
+export const gemSprite = mkGem([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
+
+graphics.push(avngSprite, chldSprite, protSprite, persSprite, gemSprite);
+
+// Pools.
+const pools = [
+  makeAvengerPool(50, [0, 600], () => { }),
+  makeChildPool(50, [75, 600], () => { }),
+  makeProtectionPool(50, [150, 600], () => { }),
+  makePersecutorPool(50, [225, 600], () => { }),
+  makeOriginalPool(50, [300, 600], () => { }),
+  makeEvilPool(50, [375, 600], () => { })
+];
+
+// Island props.
+const maxProps = 100;
+
+const props = new Map([
+  [mkTree, 1],
+  [mkTreeAlt, 1],
+  [mkMountain, 0.1],
+]);
+
+let i = 0;
+while(++i < maxProps) {
+  for(const [prop, amount] of props) {
+    if(i < maxProps*amount) {
+      const pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
+
+      for(const pool of pools) {
+        while(pool.collision(pos)) {
+          pos[1]++;
+        }
+      }
+
+      graphics.push(
+        prop(
+          pos, 0
+        )
+      );
+    }
+  }
+}
 
 // Colors
 // ocean
@@ -37,24 +108,6 @@ const groundGradient = ctx.createLinearGradient(0, 0, 200, 200);
 ].map((stop, index, colors)=> {
   groundGradient.addColorStop(index/colors.length, stop);
 });
-
-// Island Geometry
-const islandRadius = 1000;
-const islandPoints = getRectanglePoints(islandRadius, islandRadius);
-export const islandOffset = islandRadius;
-const calcIslandPoints =
-  (scale = 1) =>
-    mapListSet(
-      addListSet(scaleList(islandPoints, scale), [0, islandOffset]),
-      perspective2d,
-    );
-
-const avengerPool = makeAvengerPool(50, [0, 600], () => { });
-const childPool = makeChildPool(50, [75, 600], () => { });
-const protectionPool = makeProtectionPool(50, [150, 600], () => { });
-const persecutorPool = makePersecutorPool(50, [225, 600], () => { });
-const originalPool = makeOriginalPool(50, [300, 600], () => { });
-const evilPool = makeEvilPool(50, [375, 600], () => { });
 
 export const render = () => {
   // Background
@@ -92,18 +145,10 @@ export const render = () => {
     calcIslandPoints(1),
   );
 
-  avengerPool.render();
-  avengerPool.collision(state.position);
-  childPool.render();
-  childPool.collision(state.position);
-  protectionPool.render();
-  protectionPool.collision(state.position);
-  persecutorPool.render();
-  persecutorPool.collision(state.position);
-  originalPool.render();
-  originalPool.collision(state.position);
-  evilPool.render();
-  evilPool.collision(state.position);
+  for(const pool of pools) {
+    pool.render();
+    pool.testCallback(state.position);
+  }
 
   // Dynamic
   graphics

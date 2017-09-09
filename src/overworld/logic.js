@@ -1,59 +1,21 @@
-import { scaleToSet, add, addSet, rotateSet, scaleSet, set, subtract, magnitude, magnitudeSqr } from 'pura/vector/tuple';
+import { scaleToSet, add, addSet, set, subtract, magnitude, magnitudeSqr } from 'pura/vector/tuple';
 import { sign } from 'pura/math';
 import state from 'state';
-import { graphics, islandOffset } from 'overworld/graphics';
+import { avngSprite, chldSprite, protSprite, persSprite, gemSprite } from 'overworld/graphics';
 import { camera } from 'camera';
 import { inputs } from 'controls';
-import {
-  mkTree,
-  mkTreeAlt,
-  mkAvenger,
-  mkChild,
-  mkProtector,
-  mkPersecutor,
-  mkGem,
-  mkMountain,
-} from 'sprite';
 import { viewWidth } from 'dom';
-
 
 const direction = [0, 0];
 const charSpeed = 3;
 
-export const avngSprite = mkAvenger([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
-export const chldSprite = mkChild([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
-export const protSprite = mkProtector([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
-export const persSprite = mkPersecutor([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
-export const gemSprite = mkGem([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
-
 const follow =
-    (sprite, distance) => {
-      const relativePos = subtract(state.position, sprite);
-      if(magnitude(relativePos) > distance) {
-        addSet(sprite, scaleToSet(relativePos, charSpeed));
-      }
-    };
-
-graphics.push(avngSprite, chldSprite, protSprite, persSprite, gemSprite);
-
-let i = 0;
-while(++i < 100) {
-  graphics.push(
-    mkTree(addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]), 0)
-  );
-}
-i = 0;
-while(++i < 100) {
-  graphics.push(
-    mkTreeAlt(addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]), 0)
-  );
-}
-i = 0;
-while(++i < 10) {
-  graphics.push(
-    mkMountain(addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]), 0)
-  );
-}
+  (sprite, distance) => {
+    const relativePos = subtract(state.position, sprite);
+    if(magnitude(relativePos) > distance) {
+      addSet(sprite, scaleToSet(relativePos, charSpeed));
+    }
+  };
 
 export default () => {
   // Character Controls

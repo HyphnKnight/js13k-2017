@@ -13,10 +13,14 @@ const createPool =
       const placedPoints = addList(basePoints, position);
       let adjustedPoints;
       return {
-        collision: (targetPosition) =>
-          magnitudeSqr(subtract(targetPosition, position)) <= baseSize * baseSize
+        collision: (targetPosition)=>
+          magnitudeSqr(subtract(targetPosition, position)) <= baseSize * baseSize,
+
+        testCallback(targetPosition) {
+          this.collision(targetPosition)
             ? callBack()
-            : null,
+            : null;
+        },
         render() {
           adjustedPoints = mapList(placedPoints, perspective2d);
 
