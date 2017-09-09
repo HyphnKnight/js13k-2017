@@ -53,12 +53,14 @@ graphics.push(avngSprite, protSprite, chldSprite, persSprite, gemSprite);
 
 // Pools.
 const pools = [
-  makeAvengerPool(50, [0, 600], () => { }),
+  makeAvengerPool(50, [0, 600], () => {}),
   makeProtectionPool(50, [150, 600], () => { }),
   makeChildPool(50, [75, 600], () => { }),
   makePersecutorPool(50, [225, 600], () => { }),
   makeOriginalPool(50, [300, 600], () => { }),
-  makeEvilPool(50, [375, 600], () => { })
+  makeEvilPool(50, [375, 600], () => {
+    state.dialog.script.push([`The person watching wasn't someone you knew.`]);
+  })
 ];
 
 // Island props.
