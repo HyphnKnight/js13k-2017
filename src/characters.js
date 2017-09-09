@@ -1,9 +1,13 @@
 import { child, avenger, protector, persecutor } from 'emoji';
 
 export default {
+
+  /* The Good Guys */
+
   child: {
     name: `Child`,
     emoji: child,
+    type: true,
     maxHealth: 40,
     abilities: {
       move: {
@@ -15,6 +19,7 @@ export default {
   avenger: {
     name: `Avenger`,
     emoji: avenger,
+    type: true,
     maxHealth: 80,
     abilities: {
       move: {
@@ -26,6 +31,7 @@ export default {
   protector: {
     name: `Protector`,
     emoji: protector,
+    type: true,
     maxHealth: 100,
     abilities: {
       move: {
@@ -37,6 +43,7 @@ export default {
   persecutor: {
     name: `Persecutor`,
     emoji: persecutor,
+    type: true,
     maxHealth: 60,
     abilities: {
       move: {
