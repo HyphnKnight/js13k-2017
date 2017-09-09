@@ -89,7 +89,7 @@ const song = [
   [[note.G2, note.B3, note.D4, ], 0.5],
   [[note.G2, note.B3, note.D4, ], 0.5],
   [[note.G2, note.B3, note.D4, ], 0.5],
-  [[note.G2, note.B3, note.D4, ], 0.125],
+  [[note.G2, note.B3, note.D4, ], 0.5],
   [note.C4, 0.125],
   [note.C5, 0.125],
   [note.C5, 0.125],
@@ -137,7 +137,7 @@ const song = [
   [note.C4, 0.125],
   [note.G3, 0.125],
   [note.C4, 0.125],
-  [note.E4, 0.5],
+  [note.E4, 0.125],
   [[note.C3, note.E3, note.G3, ], 0.5],
   [[note.E3, note.G3, ], 0.5],
   [[note.E3, note.G3, ], 0.5],
@@ -145,7 +145,7 @@ const song = [
   [[note.E3, note.G3, ], 0.5],
   [[note.E3, note.G3, ], 0.5],
   [[note.E3, note.G3, ], 0.5],
-  [[note.E3, note.G3, ], 0.125],
+  [[note.E3, note.G3, ], 0.5],
   [note.E4, 0.125],
   [note.E5, 0.125],
   [note.E5, 0.125],
@@ -193,6 +193,7 @@ const song = [
   [note.E4, 0.125],
   [note.C4, 0.125],
   [note.E4, 0.125],
+  [note.G4, 0.125],
 ];
 
 export default song;
