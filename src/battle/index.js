@@ -19,6 +19,7 @@ import StatusBar from 'battle/statusBar';
 import BattleMap from 'battle/map';
 import { initializeMap, turnOrder, moveCharacter } from 'battle/grid';
 import Move from 'battle/actions/Move';
+import Swarm from 'battle/actions/Swarm';
 import state from 'state';
 
 const cameraOffset = [0, -150];
@@ -43,6 +44,7 @@ export default function createBattleScene(characters, mapSize) {
   const action = {
     // Player Controlled Character Movement
     move: (character) => [`Move`, () => selectedAction = Move(character)],
+    swarm: (character) => [`Swarm`, () => selectedAction = Swarm(character)],
     // Player Controlled Attack
     // attack: (character, { name, range, damage }) => ([name, () => selectedAction = function* () {
     //   const [, , position] = character;
