@@ -213,41 +213,38 @@ while(++i < maxProps) {
 }
 
 // Miasma.
-let miasmaOnce = false;
-const genMiasma = (remove)=> {
-  if(!miasmaOnce) {
-    miasmaOnce = true;
-  } else {
-    graphics.splice(-500, 500);
-  }
+// let miasmaOnce = false;
+// const genMiasma = (remove) => {
+//   if(!miasmaOnce) {
+//     miasmaOnce = true;
+//   } else {
+//     graphics.splice(-500, 500);
+//   }
 
-  if(remove) {
-    return;
-  }
+//   if(remove) {
+//     return;
+//   }
 
-  let i = 0;
+//   let i = 0;
 
-  while(++i < 500) {
-    const pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
+//   while(++i < 500) {
+//     // const pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
 
-    if(pos[0] < state.miasma) {
-      pos[0] = state.miasma + Math.random()*100;
-    }
+//     // if(pos[0] < state.miasma) {
+//     //   pos[0] = state.miasma + Math.random() * 100;
+//     // }
 
-    let dir = isOffshore(pos);
-    while(dir) {
-      pos[0] += dir[0];
-      pos[1] += dir[1];
+//     // let dir = isOffshore(pos);
+//     // while(dir) {
+//     //   pos[0] += dir[0];
+//     //   pos[1] += dir[1];
 
-      dir = isOffshore(pos);
-    }
-
-    graphics.push(
-      mkTulip(pos, 0)
-    );
-  }
-};
-genMiasma();
+//     //   dir = isOffshore(pos);
+//     // }
+//     graphics.push(mkTulip(generateValidPropPoint(), 0));
+//   }
+// };
+// genMiasma();
 
 // Colors
 // ocean
