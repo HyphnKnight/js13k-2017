@@ -1,10 +1,11 @@
-import { addSet, rotateSet, scaleSet } from 'pura/vector/tuple';
+import { addSet, subtract, magnitude, rotateSet, scaleSet, mapListSet, addListSet, scaleList, average } from 'pura/vector/tuple';
 import { getRectanglePoints } from 'pura/geometry/tuple';
-import { mapListSet, addListSet, scaleList } from 'pura/vector/tuple';
-import { fillPolygon, fillRectangle, fillText, fillOval, strokeOval } from 'pura/canvas/tuple';
+import { isPointInCircle } from 'pura/intersection/tuple';
+import { fillPolygon, fillRectangle, fillText, fillOval, strokeOval, ctx } from 'pura/canvas/tuple';
 import { perspective, perspective2d } from 'camera';
 import { viewWidth, viewHeight } from 'dom';
 import state from 'state';
+import { islands } from 'overworld/island';
 import {
   mkTree,
   mkTreeAlt,
@@ -33,17 +34,19 @@ const groundPlanePoints = mapListSet(
 );
 
 // Island Geometry
-const islandRadius = 1000;
-const islandPoints = getRectanglePoints(islandRadius, islandRadius);
-export const islandOffset = islandRadius;
-const islandX = 0,
-      islandY = islandOffset;
-const calcIslandPoints =
-  (scale = 1) =>
-    mapListSet(
-      addListSet(scaleList(islandPoints, scale), [0, islandOffset]),
-      perspective2d,
-    );
+const islandPosition = average(islands.map(({ position }) => position));
+const islandRadius = Math.max(...islands.map(({ position }) => magnitude(subtract(position, islandPosition)))) + 200;
+// const islandRadius = islands;
+// const islandPoints = getRectanglePoints(islandRadius, islandRadius);
+// export const islandOffset = islandRadius;
+// const islandX = 0,
+//       islandY = islandOffset;
+// const calcIslandPoints =
+//   (scale = 1) =>
+//     mapListSet(
+//       addListSet(scaleList(islandPoints, scale), [0, islandOffset]),
+//       perspective2d,
+//     );
 
 // Characters.
 export const avngSprite = mkAvenger([...state.position], 0);
@@ -56,11 +59,11 @@ graphics.push(avngSprite, protSprite, chldSprite, persSprite, gemSprite);
 
 // Pools.
 let currLevel = 0;
-const showEvilPool = (evilPool)=> {
+const showEvilPool = (evilPool) => {
   ++currLevel;
 
   if(currLevel === 3) {
-    state.dialog.callback = ()=> {
+    state.dialog.callback = () => {
       evilPool.shouldDisplay = true;
     };
 
@@ -70,11 +73,11 @@ const showEvilPool = (evilPool)=> {
 
 const pools = [
   // LEVEL 1: Persector.
-  makePersecutorPool(50, [-400, 800], () => {
+  makePersecutorPool(25, [-400, 800], () => {
     showEvilPool(pools[3]);
     state.dialog.script.push([`You walked to school and back home.`]);
   }),
-  makePersecutorPool(50, [-400, 600], () => {
+  makePersecutorPool(25, [-400, 600], () => {
     showEvilPool(pools[3]);
     state.dialog.script.push(
       [`You stayed close behind the older kids.`],
@@ -82,100 +85,83 @@ const pools = [
       [`You picked them up silently.`]
     );
   }),
-  makePersecutorPool(50, [-300, 700], () => {
+  makePersecutorPool(25, [-300, 700], () => {
     showEvilPool(pools[3]);
     state.dialog.script.push([`You listened to the stories he invented.`]);
   }),
-  makeEvilPool(50, [-300, 600], () => {
-    state.dialog.callback = ()=> {
+  makeEvilPool(25, [-300, 600], () => {
+    state.dialog.callback = () => {
       state.miasma = -5;
-      genMiasma();
+      // genMiasma();
     };
     state.dialog.script.push([`The one watching wasn't someone you knew.`]);
   }, false),
 
   // LEVEL 2: Child.
-  makeChildPool(50, [-200, 800], () => {
+  makeChildPool(25, [-200, 800], () => {
     showEvilPool(pools[7]);
     state.dialog.script.push([`DIALOG`]);
   }),
-  makeChildPool(50, [-100, 600], () => {
+  makeChildPool(25, [-100, 600], () => {
     showEvilPool(pools[7]);
     state.dialog.script.push([`DIALOG`]);
   }),
-  makeChildPool(50, [-50, 700], () => {
+  makeChildPool(25, [-50, 700], () => {
     showEvilPool(pools[7]);
     state.dialog.script.push([`DIALOG`]);
   }),
-  makeEvilPool(50, [-75, 900], () => {
-    state.dialog.callback = ()=> {
+  makeEvilPool(25, [-75, 900], () => {
+    state.dialog.callback = () => {
       state.miasma = 150;
-      genMiasma();
+      // genMiasma();
     };
     state.dialog.script.push([`DIALOG`]);
   }, false),
 
   // LEVEL 3: Protector.
-  makeProtectorPool(50, [50, 700], () => {
+  makeProtectorPool(25, [50, 700], () => {
     showEvilPool(pools[11]);
     state.dialog.script.push([`DIALOG`]);
   }),
-  makeProtectorPool(50, [100, 600], () => {
+  makeProtectorPool(25, [100, 600], () => {
     showEvilPool(pools[11]);
     state.dialog.script.push([`DIALOG`]);
   }),
-  makeProtectorPool(50, [125, 1000], () => {
+  makeProtectorPool(25, [125, 1000], () => {
     showEvilPool(pools[11]);
     state.dialog.script.push([`Somewhere, deep inside, was a really good person.`]);
   }),
-  makeEvilPool(50, [125, 800], () => {
-    state.dialog.callback = ()=> {
+  makeEvilPool(25, [125, 800], () => {
+    state.dialog.callback = () => {
       state.miasma = 400;
-      genMiasma();
+      // genMiasma();
     };
     state.dialog.script.push([`DIALOG`]);
   }, false),
 
   // LEVEL 4: Avenger.
-  makeAvengerPool(50, [200, 900], () => {
+  makeAvengerPool(25, [200, 900], () => {
     showEvilPool(pools[15]);
     state.dialog.script.push([`DIALOG`]);
   }),
-  makeAvengerPool(50, [250, 610], () => {
+  makeAvengerPool(25, [250, 610], () => {
     showEvilPool(pools[15]);
     state.dialog.script.push([`DIALOG`]);
   }),
-  makeAvengerPool(50, [320, 700], () => {
+  makeAvengerPool(25, [320, 700], () => {
     showEvilPool(pools[15]);
     state.dialog.script.push([`DIALOG`]);
   }),
-  makeEvilPool(50, [300, 800], () => {
-    state.dialog.callback = ()=> {
+  makeEvilPool(25, [300, 800], () => {
+    state.dialog.callback = () => {
       state.miasma = Infinity;
-      genMiasma(`remove`);
+      // genMiasma(`remove`);
     };
     state.dialog.script.push([`DIALOG`]);
   }, false),
 
-  makeOriginalPool(50, [450, 800], () => { }),
+  makeOriginalPool(25, [450, 800], () => { }),
 ];
-
-// Island props.
-const isOffshore = (propPos)=> {
-  const [x, y] = propPos;
-
-  // Prop outside circle.
-  if(
-    (islandRadius)*(islandRadius) <
-    (x - islandX)*(x - islandX) +
-    (y - islandY)*(y - islandY)
-  ) {
-    // Direction of center of island.
-    return [x < islandX ? 1 : -1, y < islandY ? 1 : -1];
-  }
-
-  return false;
-};
 
 const props = [
   [mkTree, 50],
@@ -183,31 +169,38 @@ const props = [
   [mkMountain, 10],
 ];
 
-const maxProps = props.reduce((prev, next)=> Math.max(prev.length ? prev[1] : prev, next[1]));
 
-let i = 0;
-while(++i < maxProps) {
+const generatePropPosition =
+  () =>
+    addSet(
+      scaleSet(
+        rotateSet([0, 1], Math.random() * 2 * Math.PI),
+        islandRadius * Math.random()
+      ),
+      islandPosition
+    );
+
+const isValidPropPosition =
+  (point) => {
+    const isOnIsland = isPointInCircle(point, islandPosition, islandRadius);
+    const isOnASubIsland = !!islands.find(({ collision }) => collision(point));
+    const isNotInAPool = true;//!pools.find(({ collision }) => collision(point));
+    return isOnIsland && isOnASubIsland && isNotInAPool;
+  };
+
+const generateValidPropPoint =
+  () => {
+    let point = generatePropPosition();
+    while(!isValidPropPosition(point)) point = generatePropPosition();
+    return point;
+  };
+
+const len = Math.max(...props.map(([, count]) => count));
+let i = -1;
+while(++i < len) {
   for(const [prop, amount] of props) {
     if(i < amount) {
-      let pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
-
-      for(const pool of pools) {
-        while(pool.collision(pos)) {
-          pos[1]++;
-        }
-      }
-
-      let dir = isOffshore(pos);
-      while(dir) {
-        pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
-        dir = isOffshore(pos);
-      }
-
-      graphics.push(
-        prop(
-          pos, 0
-        )
-      );
+      graphics.push(prop(generateValidPropPoint(), 0));
     }
   }
 }
@@ -256,7 +249,17 @@ const sand = `#fce08c`;
 // sky
 const skyBlue = `#90b4ec`;
 
+<<<<<<< HEAD
 const groundColor = `#6c9850`; //ctx.createLinearGradient(0, 0, 200, 200);
+=======
+const groundGradient = ctx.createLinearGradient(0, 0, 200, 200);
+[
+  [`#e8e85c`, 0.1],
+  [`#646410`, 0.9]
+].map(([stop, pos]) => {
+  groundGradient.addColorStop(pos, stop);
+});
+>>>>>>> Restructure
 
 export const render = () => {
   // Background
@@ -274,32 +277,32 @@ export const render = () => {
     groundPlanePoints,
   );
 
-  const waveScaleFactor = Math.abs(Date.now() % 7200 / (7200 / 2) - 1) / 10;
-  const adjustedWavePoints = calcIslandPoints(1.15 - waveScaleFactor);
-  fillOval(
+  const waveScaleFactor = 1.2 - Math.abs(Date.now() % 7200 / (7200 / 2) - 1) / 10;
+
+  islands.forEach(({ getShoreLine }) => strokeOval(
+    { style: seaFoam, thickness: 4 },
+    [0, 0],
+    getShoreLine(waveScaleFactor),
+  ));
+
+  islands.forEach(({ getShoreLine }) => fillOval(
     sand,
     [0, 0],
-    adjustedWavePoints,
-  );
+    getShoreLine(waveScaleFactor),
+  ));
 
-  strokeOval(
-    { style: seaFoam, thickness: 5 },
-    [0, 0],
-    adjustedWavePoints,
-  );
-
+<<<<<<< HEAD
   fillOval(
     groundColor,
+=======
+  islands.forEach(({ getBase }) => fillOval(
+    groundGradient,
+>>>>>>> Restructure
     [0, 0],
-    calcIslandPoints(1),
-  );
+    getBase(),
+  ));
 
-  for(const pool of pools) {
-    pool.render();
-    pool.testCallback(state.position);
-  }
-
-  // Dynamic
+  // // Dynamic
   graphics
     .map(point => [...perspective(point), point[2], point[3], point[4]])
     .sort((a, b) => b[2] - a[2])
