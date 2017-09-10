@@ -1,6 +1,6 @@
-import { createRectangle, createEqualLateralPolygon } from 'pura/geometry/tuple';
-import { addList, mapList, scaleSet } from 'pura/vector/tuple';
-import { ctx, fillRectangle, fillPolygon, strokePolygon, fillText } from 'pura/canvas/tuple';
+import { createRectangle, getRectanglePoints, createEqualLateralPolygon } from 'pura/geometry/tuple';
+import { addList, mapListSet, scaleSet } from 'pura/vector/tuple';
+import { ctx, fillRectangle, fillPolygon, strokePolygon, strokeOval, fillArc, strokeArc, fillText } from 'pura/canvas/tuple';
 import { contains } from 'pura/array';
 import { hexToVector2d } from 'pura/hex';
 import { viewHeight, viewWidth } from 'dom';
@@ -9,35 +9,40 @@ import { battleData, optionHexes, turnOrder } from 'battle/grid';
 import { makeEvilPool } from 'overworld/pools';
 import state from 'state';
 
-const gridColor = `black`;
-const selectColor = `#fcfc68`;
-const optionColor = `#78005c`;
+// const selectColor = `#fcfc68`;
+const optionColor = `#8f9e6f`;
 
-const baseHex = createEqualLateralPolygon([0, 0], 0, 6, 20);
+const baseSquarePoints = getRectanglePoints(15, 15);
 
-const calculateHexGeometry = data => {
-  const { hex } = data;
-  const position = scaleSet(hexToVector2d(hex), 20);
-  const viewPosition = perspective2d(position);
-  const points = mapList(addList(baseHex.points, position), perspective2d);
-  data.position = viewPosition;
-  data.points = points;
-  return data;
-};
+const calculatePoints = (hex, scale = 1) =>
+  mapListSet(
+    addList(
+      scale === 1
+        ? baseSquarePoints
+        : getRectanglePoints(15 * scale, 15 * scale),
+      scaleSet(hexToVector2d(hex), 20)
+    ),
+    perspective2d
+  );
 
 const drawFill =
-  (options) =>
-    ({ hex, points }) => {
-      if(state.target === hex) Date.now() % 600 > 400 && fillPolygon(selectColor, [0, 0], points, 0);
-      if(contains(options, hex)) {
-        // Date.now() % 600 > 400 && fillPolygon(optionColor, [0, 0], points, 0);
-        strokePolygon({ style: gridColor, thickness: 1 }, [0, 0], points, 0);
-      }
-    };
+  (hex) => {
+    if(!hex) return;
+    if(state.target === hex) {
+      strokeOval({ style: optionColor }, [0, 0], calculatePoints(hex, Math.min(Date.now() % 2000 / 1000), 1));
+    } else {
+      strokeOval({ style: optionColor }, [0, 0], calculatePoints(hex));
+    }
+    // if(state.target === hex) {
+    //   Date.now() % 600 > 400 && fillPolygon(selectColor, [0, 0], points, 0);
+    // } else {
+    //   strokePolygon({ style: gridColor, thickness: 1 }, [0, 0], points, 0);
+    // }
+  };
 
-const drawOutline =
-  ({ points }) =>
-    strokePolygon({ style: gridColor, thickness: 1 }, [0, 0], points, 0);
+// const drawOutline =
+//   ({ points }) =>
+//     strokePolygon({ style: gridColor, thickness: 1 }, [0, 0], points, 0);
 
 // TODO: Draw different things based on status effects (hots/dots).
 const entityTextStyle = { horizontalAlign: true };
@@ -67,9 +72,7 @@ export default ({
       0,
     );
     basePool.render();
-    battleData.forEach(calculateHexGeometry);
-    battleData.forEach(drawFill(optionHexes));
-    // battleData.forEach(drawOutline);
+    [...optionHexes, state.target].forEach(drawFill);
     turnOrder.forEach(drawEntity);
   }
 });
