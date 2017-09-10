@@ -20,7 +20,7 @@ import BattleMap from 'battle/map';
 import { initializeMap, turnOrder, moveCharacter } from 'battle/grid';
 import Move from 'battle/actions/Move';
 import Attack from 'battle/actions/Attack';
-import Swarm from 'battle/actions/Swarm';
+import Swarmer from 'battle/actions/Swarmer';
 import state from 'state';
 
 const cameraOffset = [0, -150];
@@ -46,7 +46,7 @@ export default function createBattleScene(characters, mapSize) {
     // Player Controlled Character Movement
     move: (character) => [`Move`, () => selectedAction = Move(character)],
     attack: (character) => [character[0].abilities.attack.name, () => selectedAction = Attack(character)],
-    swarm: (character) => [`Swarm`, () => selectedAction = Swarm(character)],
+    swarmer: (character) => Swarmer(character),
     // defense: (character, { name, range, percentage, duration }) => ([name, () => selectedAction = function* () {
     //   // 1) Detect & display all eligible characters
     //   const [, , position] = character;
@@ -122,13 +122,17 @@ export default function createBattleScene(characters, mapSize) {
     console.log(`Paning Camera from ${camera} to ${add(cameraOffset, position)}`);
     while(!panCamera()) yield;
     // 3) Look up actions
-    const actions = Object.keys(data.abilities).map(name => action[name](character, data.abilities[name]));
-    // 4) Add actions to the menu
-    const menuUIIndex = uiElements.push(Menu(actions));
-    // 5) Wait for player to select an action.
     selectedAction = null;
-    while(!selectedAction) yield;
-    uiElements.splice(menuUIIndex - 1, 1);
+    if(data.type) {
+      const actions = Object.keys(data.abilities).map(name => action[name](character, data.abilities[name]));
+      // 4) Add actions to the menu
+      const menuUIIndex = uiElements.push(Menu(actions));
+      // 5) Wait for player to select an action.
+      while(!selectedAction) yield;
+      uiElements.splice(menuUIIndex - 1, 1);
+    } else {
+      selectedAction = action[data.name.toLowerCase()](character);
+    }
     // 6) Execute selected action
     while(true) {
       const { done } = selectedAction.next();
