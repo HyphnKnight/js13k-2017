@@ -10,7 +10,7 @@ const state = {
     script: [],
     callback: null
   },
-  position: [0, 0],
+  position: [-500, 800],
   target: null,
   logic: null,
 };

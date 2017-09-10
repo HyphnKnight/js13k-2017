@@ -7,13 +7,13 @@ import { inputs } from 'controls';
 import { viewWidth } from 'dom';
 
 const direction = [0, 0];
-const charSpeed = 3;
+const charSpeed = ()=> inputs.space ? 6 : 3;
 
 const follow =
   (sprite, distance) => {
     const relativePos = subtract(state.position, sprite);
     if(magnitude(relativePos) > distance) {
-      addSet(sprite, scaleToSet(relativePos, charSpeed));
+      addSet(sprite, scaleToSet(relativePos, charSpeed()));
     }
   };
 
@@ -28,12 +28,12 @@ export default () => {
     if(inputs.d || inputs.right) direction[0] += 1;
     if(inputs.a || inputs.left) direction[0] -= 1;
   }
-  const movement = scaleToSet(direction, charSpeed);
+  const movement = scaleToSet(direction, charSpeed());
   addSet(state.position, movement);
   if(state.target !== null) {
     const diff = subtract(state.target, state.position);
     if(magnitudeSqr(diff) < 3) { state.target = null }
-    addSet(state.position, scaleToSet(diff, charSpeed));
+    addSet(state.position, scaleToSet(diff, charSpeed()));
   }
   state.position[1] = Math.max(state.position[1], 5);
   avngSprite[0] = state.position[0];

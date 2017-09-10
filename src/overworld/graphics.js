@@ -18,7 +18,7 @@ import {
 import {
   makeAvengerPool,
   makeChildPool,
-  makeProtectionPool,
+  makeProtectorPool,
   makePersecutorPool,
   makeOriginalPool,
   makeEvilPool,
@@ -43,24 +43,42 @@ const calcIslandPoints =
     );
 
 // Characters.
-export const avngSprite = mkAvenger([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
-export const protSprite = mkProtector([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
-export const chldSprite = mkChild([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
-export const persSprite = mkPersecutor([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
-export const gemSprite = mkGem([Math.random() * 20 - 10, Math.random() * 20 - 10], 0);
+export const avngSprite = mkAvenger([...state.position], 0);
+export const protSprite = mkProtector([state.position[0] + Math.random() * 20 - 10, state.position[1] + Math.random() * 20 - 10], 0);
+export const chldSprite = mkChild([state.position[0] + Math.random() * 20 - 10, state.position[1] + Math.random() * 20 - 10], 0);
+export const persSprite = mkPersecutor([state.position[0] + Math.random() * 20 - 10, state.position[1] + Math.random() * 20 - 10], 0);
+export const gemSprite = mkGem([state.position[0] + Math.random() * 20 - 10, state.position[1] + Math.random() * 20 - 10], 0);
 
 graphics.push(avngSprite, protSprite, chldSprite, persSprite, gemSprite);
 
 // Pools.
 const pools = [
-  makeAvengerPool(50, [0, 600], () => {}),
-  makeProtectionPool(50, [150, 600], () => { }),
-  makeChildPool(50, [75, 600], () => { }),
-  makePersecutorPool(50, [225, 600], () => { }),
-  makeOriginalPool(50, [300, 600], () => { }),
-  makeEvilPool(50, [375, 600], () => {
+  // LEVEL 1: Persector.
+  makePersecutorPool(50, [-400, 800], () => { }),
+  makePersecutorPool(50, [-400, 600], () => { }),
+  makePersecutorPool(50, [-300, 700], () => { }),
+  makeEvilPool(50, [-300, 600], () => {
     state.dialog.script.push([`The person watching wasn't someone you knew.`]);
-  })
+  }),
+
+  // LEVEL 2: Child.
+  makeChildPool(50, [-200, 800], () => { }),
+  makeChildPool(50, [-100, 600], () => { }),
+  makeChildPool(50, [-50, 700], () => { }),
+
+  // LEVEL 3: Protector.
+  makeProtectorPool(50, [50, 700], () => { }),
+  makeProtectorPool(50, [100, 600], () => { }),
+  makeProtectorPool(50, [125, 1000], () => {
+    state.dialog.script.push([`Somewhere, deep inside, was a really good person.`]);
+  }),
+
+  // LEVEL 4: Avenger.
+  makeAvengerPool(50, [200, 900], () => {}),
+  makeAvengerPool(50, [250, 610], () => {}),
+  makeAvengerPool(50, [320, 700], () => {}),
+
+  makeOriginalPool(50, [450, 800], () => { }),
 ];
 
 // Island props.
