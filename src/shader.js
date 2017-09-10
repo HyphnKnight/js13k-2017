@@ -648,8 +648,8 @@ const paLen = atariPalette.length;
 
 const computedStorage = {};
 
-const colorDiff = (r, g, b)=> {
-  const colorKey = `${r/100+0.5|0},${g/100+0.5|0},${b/100+0.5|0}`;
+const colorDiff = (r, g, b) => {
+  const colorKey = `${r / 100 + 0.5 | 0},${g / 100 + 0.5 | 0},${b / 100 + 0.5 | 0}`;
 
   let closestColor = computedStorage[colorKey];
 
@@ -661,9 +661,9 @@ const colorDiff = (r, g, b)=> {
       const [cR, cG, cB] = color;
 
       const distance =
-            ((r - cR) * (r - cR)) +
-            ((g - cG) * (g - cG)) +
-            ((b - cB) * (b - cB));
+        ((r - cR) * (r - cR)) +
+        ((g - cG) * (g - cG)) +
+        ((b - cB) * (b - cB));
 
       if(distance < minDistance) {
         minDistance = distance;
@@ -681,7 +681,7 @@ for(const [r, g, b] of atariPalette) {
   colorDiff(r, g, b);
 }
 
-const Atarify = ()=> {
+const Atarify = () => {
   const img = ctx.getImageData(0, 0, viewWidth, viewHeight);
   const data = img.data;
   const dataLen = data.length;
@@ -691,7 +691,7 @@ const Atarify = ()=> {
     const g = data[i + 1];
     const b = data[i + 2];
 
-    const [ aR, aG, aB ] = colorDiff(r, g, b);
+    const [aR, aG, aB] = colorDiff(r, g, b);
 
     data[i] = aR;
     data[i + 1] = aG;

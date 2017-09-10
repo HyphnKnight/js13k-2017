@@ -16,6 +16,11 @@ export default {
       move: {
         range: 3,
       },
+      magic: {
+        range: 4,
+        effect: 10,
+        duration: 5
+      },
     },
   },
 
@@ -45,6 +50,11 @@ export default {
       move: {
         range: 2,
       },
+      defend: {
+        range: 1,
+        duration: 1,
+        percentage: 1,
+      },
     },
   },
 
@@ -56,6 +66,26 @@ export default {
     abilities: {
       move: {
         range: 5,
+      },
+      attack: {
+        count: 10,
+        range: 4,
+        damage: 30,
+      },
+      defend: {
+        count: 10,
+        range: 3,
+        damage: 0.5,
+        duration: 3,
+      },
+      magic: {
+        count: 10,
+        range: 1,
+        effect: 50,
+        duration: 1
+      },
+      reset: {
+        count: 3
       },
     },
   },
@@ -70,6 +100,10 @@ export default {
     abilities: {
       swarm: {
         range: 5,
+      },
+      aiAttack: {
+        range: 1,
+        damage: 15,
       }
     }
   }

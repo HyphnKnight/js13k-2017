@@ -2,7 +2,7 @@ import { viewWidth, viewHeight } from 'dom';
 import { addSet, subtract } from 'pura/vector/tuple';
 import { keyboardVector } from 'controls';
 
-export let focalLength = 500;
+export const focalLength = 500;
 export const camera = [0, 0, 240];
 
 export const perspective =

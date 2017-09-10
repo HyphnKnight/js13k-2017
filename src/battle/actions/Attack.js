@@ -3,14 +3,13 @@ import {
   getNearbyEnemies,
   getGridHexFromVector2d,
 } from 'battle/grid';
+import { dealDamage } from 'battle/actions/utility';
 import UserSelectLocation from 'battle/actions/UserSelectLocation';
 import PanCameraTo from 'battle/actions/PanCameraTo';
 
 export default function* Attack(character) {
   const [{ abilities: { attack: { damage, range } } }, , position] = character;
   console.log(`1) Detect & Display possible attackers`);
-  console.log(range);
-  console.log(getNearbyEnemies(position, range));
   const selectedLocation = yield* UserSelectLocation(
     getNearbyEnemies(position, range).map(([, , position]) => getGridHexFromVector2d(position))
   );
@@ -18,7 +17,7 @@ export default function* Attack(character) {
   console.log(`2) Wait for player to select target`);
   console.log(`3) Inflict damage on target`);
   const target = getCharacterAtHex(selectedLocation);
-  target[1] -= damage;
+  dealDamage(target, damage);
   yield* PanCameraTo(target[2]);
   console.log(`4) Play animation`);
   return;
