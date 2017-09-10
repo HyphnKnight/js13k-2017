@@ -13,7 +13,7 @@ const state = {
   position: [-500, 800],
   target: null,
   logic: null,
-  miasma: -300
+  miasma: -275
 };
 
 

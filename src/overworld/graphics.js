@@ -61,6 +61,8 @@ const showEvilPool = (evilPool)=> {
     state.dialog.callback = ()=> {
       evilPool.shouldDisplay = true;
     };
+
+    currLevel = 0;
   }
 };
 
@@ -83,13 +85,18 @@ const pools = [
     state.dialog.script.push([`You listened to the stories he invented.`]);
   }),
   makeEvilPool(50, [-300, 600], () => {
+    state.dialog.callback = ()=> {
+      state.miasma = -5;
+      genMiasma();
+    };
     state.dialog.script.push([`The one watching wasn't someone you knew.`]);
   }, false),
 
   // LEVEL 2: Child.
   makeChildPool(50, [-200, 800], () => { }),
   makeChildPool(50, [-100, 600], () => { }),
-  makeChildPool(50, [-50, 700], () => { }),
+  makeChildPool(50, [-50, 700], () => {}),
+  // state.miasma = 150
 
   // LEVEL 3: Protector.
   makeProtectorPool(50, [50, 700], () => { }),
@@ -97,11 +104,13 @@ const pools = [
   makeProtectorPool(50, [125, 1000], () => {
     state.dialog.script.push([`Somewhere, deep inside, was a really good person.`]);
   }),
+  // state.miasma = 400
 
   // LEVEL 4: Avenger.
   makeAvengerPool(50, [200, 900], () => {}),
   makeAvengerPool(50, [250, 610], () => {}),
   makeAvengerPool(50, [320, 700], () => {}),
+  // No miasma
 
   makeOriginalPool(50, [450, 800], () => { }),
 ];
@@ -137,18 +146,29 @@ while(++i < maxProps) {
 }
 
 // Miasma.
-i = 0;
-while(++i < 500) {
-  const pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
-
-  if(pos[0] < state.miasma) {
-    pos[0] -= state.miasma;
+let miasmaOnce = false;
+const genMiasma = ()=> {
+  if(!miasmaOnce) {
+    miasmaOnce = true;
+  } else {
+    graphics.splice(-500, 500);
   }
 
-  graphics.push(
-    mkTulip(pos, 0)
-  );
-}
+  let i = 0;
+
+  while(++i < 500) {
+    const pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
+
+    if(pos[0] < state.miasma) {
+      pos[0] = state.miasma + Math.random()*100;
+    }
+
+    graphics.push(
+      mkTulip(pos, 0)
+    );
+  }
+};
+genMiasma();
 
 // Colors
 // ocean
