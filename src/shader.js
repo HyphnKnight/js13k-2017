@@ -655,7 +655,6 @@ const calcAtariColor =
       ((g - cG) * (g - cG)) +
       ((b - cB) * (b - cB));
 
-// const farthestMin = Infinity;
 const Atarify = () => {
   const img = ctx.getImageData(0, 0, viewWidth, viewHeight);
   const data = img.data;
@@ -683,7 +682,6 @@ const Atarify = () => {
         }
       }
       computedStorage[Number(`${r}${g}${b}`)] = closestColor;
-      // farthestMin = Math.min(minDistance, farthestMin);
     }
 
 
@@ -694,7 +692,6 @@ const Atarify = () => {
     data[i + 1] = aG;
     data[i + 2] = aB;
   }
-  // console.log(farthestMin);
   // // overwrite original image
   ctx.putImageData(img, 0, 0);
 };

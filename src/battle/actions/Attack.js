@@ -9,8 +9,6 @@ import PanCameraTo from 'battle/actions/PanCameraTo';
 export default function* Attack(character) {
   const [{ abilities: { attack: { damage, range } } }, , position] = character;
   console.log(`1) Detect & Display possible attackers`);
-  console.log(range);
-  console.log(getNearbyEnemies(position, range));
   const selectedLocation = yield* UserSelectLocation(
     getNearbyEnemies(position, range).map(([, , position]) => getGridHexFromVector2d(position))
   );
