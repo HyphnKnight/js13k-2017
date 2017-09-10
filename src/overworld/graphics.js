@@ -84,8 +84,8 @@ const pools = [
 
 // Island props.
 const props = [
-  [mkTree, 100],
-  [mkTreeAlt, 100],
+  [mkTree, 50],
+  [mkTreeAlt, 50],
   [mkMountain, 10],
 ];
 
@@ -117,8 +117,8 @@ i = 0;
 while(++i < 500) {
   const pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
 
-  if(pos[0] < -200) {
-    pos[0] -= -200;
+  if(pos[0] < state.miasma) {
+    pos[0] -= state.miasma;
   }
 
   graphics.push(
