@@ -36,6 +36,8 @@ const groundPlanePoints = mapListSet(
 const islandRadius = 1000;
 const islandPoints = getRectanglePoints(islandRadius, islandRadius);
 export const islandOffset = islandRadius;
+const islandX = 0,
+      islandY = islandOffset;
 const calcIslandPoints =
   (scale = 1) =>
     mapListSet(
@@ -159,6 +161,22 @@ const pools = [
 ];
 
 // Island props.
+const isOffshore = (propPos)=> {
+  const [x, y] = propPos;
+
+  // Prop outside circle.
+  if(
+    (islandRadius)*(islandRadius) <
+    (x - islandX)*(x - islandX) +
+    (y - islandY)*(y - islandY)
+  ) {
+    // Direction of center of island.
+    return [x < islandX ? 1 : -1, y < islandY ? 1 : -1];
+  }
+
+  return false;
+};
+
 const props = [
   [mkTree, 50],
   [mkTreeAlt, 50],
@@ -171,12 +189,18 @@ let i = 0;
 while(++i < maxProps) {
   for(const [prop, amount] of props) {
     if(i < amount) {
-      const pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
+      let pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
 
       for(const pool of pools) {
         while(pool.collision(pos)) {
           pos[1]++;
         }
+      }
+
+      let dir = isOffshore(pos);
+      while(dir) {
+        pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
+        dir = isOffshore(pos);
       }
 
       graphics.push(
@@ -208,6 +232,14 @@ const genMiasma = (remove)=> {
 
     if(pos[0] < state.miasma) {
       pos[0] = state.miasma + Math.random()*100;
+    }
+
+    let dir = isOffshore(pos);
+    while(dir) {
+      pos[0] += dir[0];
+      pos[1] += dir[1];
+
+      dir = isOffshore(pos);
     }
 
     graphics.push(
