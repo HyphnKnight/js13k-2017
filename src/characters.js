@@ -16,6 +16,11 @@ export default {
       move: {
         range: 3,
       },
+      magic: {
+        range: 4,
+        effect: 10,
+        duration: 5
+      },
     },
   },
 

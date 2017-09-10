@@ -21,6 +21,7 @@ import { initializeMap, turnOrder, moveCharacter, getGridHexFromVector2d } from 
 import Move from 'battle/actions/Move';
 import Attack from 'battle/actions/Attack';
 import Defend from 'battle/actions/Defend';
+import Magic from 'battle/actions/Magic';
 import Swarmer from 'battle/actions/Swarmer';
 import state from 'state';
 import { handlStatuses } from 'battle/actions/utility';
@@ -48,51 +49,19 @@ export default function createBattleScene(characters, mapSize) {
     // Player Controlled Character Movement
     move: (character) => [`Move`, () => selectedAction = Move(character)],
     attack: (character) => [character[0].abilities.attack.name, () => selectedAction = Attack(character)],
-    swarmer: (character) => Swarmer(character),
     defend: (character) => [`Protect`, () => selectedAction = Defend(character)],
-    // magic: (character, { name, range, effect }) => ([name, () => selectedAction = (function* () {
-    //   const [data, , position] = character;
-    //   // 1) Detect & display all eligible characters
-    //   clear(optionHexes);
-    //   const nearbyTargets = [getNearbyAllies(position, range), getNearbyEnemies(position, range)];
-    //   optionHexes.push(...nearbyTargets);
-    //   // 2) Select Target
-    //   let selectedTarget = null;
-    //   while(!selectedTarget) {
-    //     cameraControls();
-    //     const { click, mousePosition } = inputs;
-    //     if(click === 1) {
-    //       state.target = getGridHexFromVector2d(
-    //         scaleSet(calcWorldPosition(mousePosition), 1 / gridScale)
-    //       );
-    //       if(contains(optionHexes, state.target)) selectedTarget = getCharacterAtHex(state.target);
-    //     }
-    //     yield;
-    //   }
-    //   clear(optionHexes);
-    //   // 3) confirm (maybe?)
-    //   // Will comeback to this is this seems necessary
-    //   // 4) Add status effect
-    //   const [tData, , , tStatus] = selectedTarget;
-    //   tStatus.push({
-    //     name: data.alignment === tData.alignment
-    //       ? `hot`
-    //       : `dot`,
-    //     effect,
-    //   });
-    //   // 5) Play animation
-    // })()]),
+    magic: (character) => [`Forget`, () => selectedAction = Magic(character)],
+    swarmer: (character) => Swarmer(character),
   };
 
   const getCharacter = generateGetCharacter(turnOrder);
   function* Turn() {
     // 1) Determine who's turn it is.
     const { value: character } = getCharacter.next();
-    const [data, , position] = character;
+    const [data, health, position] = character;
     state.target = getGridHexFromVector2d(position);
-    handlStatuses(character);
     console.log(`------------------------------`);
-    console.log(`Start of turn for ${data.name}`);
+    console.log(`${data.name} : ${health}`);
     // 2) Center Camera on that person.
     const panCamera = moveCharacter(camera, add(cameraOffset, position), 2000);
     console.log(`Paning Camera from ${camera} to ${add(cameraOffset, position)}`);
@@ -115,6 +84,7 @@ export default function createBattleScene(characters, mapSize) {
       if(done) break;
       else yield;
     }
+    handlStatuses(character);
     // 7) Check to see if battle is over
     const isVictory = false;//!!turnOrder.find(([data, health]) => !data.alignment && health > 0);
     const isDefeat = false;//!isVictory && !!turnOrder.find(([data, health]) => data.alignment && health > 0);
