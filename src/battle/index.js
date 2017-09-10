@@ -23,6 +23,7 @@ import Attack from 'battle/actions/Attack';
 import Defend from 'battle/actions/Defend';
 import Swarmer from 'battle/actions/Swarmer';
 import state from 'state';
+import { handlStatuses } from 'battle/actions/utility';
 
 const cameraOffset = [0, -150];
 
@@ -87,9 +88,9 @@ export default function createBattleScene(characters, mapSize) {
   function* Turn() {
     // 1) Determine who's turn it is.
     const { value: character } = getCharacter.next();
-    const [data, , position, status] = character;
+    const [data, , position] = character;
     state.target = getGridHexFromVector2d(position);
-    character[3] = status.map(({ duration }) => --duration < 0).filter(x => x);
+    handlStatuses(character);
     console.log(`------------------------------`);
     console.log(`Start of turn for ${data.name}`);
     // 2) Center Camera on that person.
