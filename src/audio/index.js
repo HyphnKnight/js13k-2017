@@ -57,7 +57,7 @@ export default class Song {
     }
 
     if(!this.stopped && repeat) {
-      this.play(repeat);
+      return await this.play(repeat);
     }
 
     return await true;
