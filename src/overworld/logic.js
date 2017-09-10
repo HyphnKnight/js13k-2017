@@ -29,10 +29,6 @@ export default () => {
     if(inputs.a || inputs.left) direction[0] -= 1;
   }
 
-  if(state.position[0] >= state.miasma - direction[0]*charSpeed()) {
-    return;
-  }
-
   const movement = scaleToSet(direction, charSpeed());
   addSet(state.position, movement);
   if(state.target !== null) {
@@ -40,7 +36,6 @@ export default () => {
     if(magnitudeSqr(diff) < 3) { state.target = null }
     addSet(state.position, scaleToSet(diff, charSpeed()));
   }
-  state.position[1] = Math.min(Math.max(state.position[1], 5), 1000);
   avngSprite[0] = state.position[0];
   avngSprite[1] = state.position[1];
   follow(protSprite, 20 + Date.now() % 300 / 30);
