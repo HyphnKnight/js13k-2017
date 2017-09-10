@@ -6,9 +6,10 @@ import { hexToVector2d } from 'pura/hex';
 import { viewHeight, viewWidth } from 'dom';
 import { perspective2d } from 'camera';
 import { battleData, optionHexes, turnOrder } from 'battle/grid';
+import { makeEvilPool } from 'overworld/pools';
 import state from 'state';
 
-const gridColor = `white`;
+const gridColor = `black`;
 const selectColor = `#fcfc68`;
 const optionColor = `#78005c`;
 
@@ -29,7 +30,8 @@ const drawFill =
     ({ hex, points }) => {
       if(state.target === hex) Date.now() % 600 > 400 && fillPolygon(selectColor, [0, 0], points, 0);
       if(contains(options, hex)) {
-        Date.now() % 600 > 400 && fillPolygon(optionColor, [0, 0], points, 0);
+        // Date.now() % 600 > 400 && fillPolygon(optionColor, [0, 0], points, 0);
+        strokePolygon({ style: gridColor, thickness: 1 }, [0, 0], points, 0);
       }
     };
 
@@ -40,8 +42,8 @@ const drawOutline =
 // TODO: Draw different things based on status effects (hots/dots).
 const entityTextStyle = { horizontalAlign: true };
 const drawEntity =
-  ([data, , position,]) =>
-    fillText(entityTextStyle, perspective2d(position), data.emoji);
+  ([data, health, position,]) =>
+    health > 0 && fillText(entityTextStyle, perspective2d(position), data.emoji);
 
 const groundGradient = ctx.createLinearGradient(-100, -100, 200, 200);
 groundGradient.addColorStop(0, `#480078`);
@@ -50,6 +52,8 @@ groundGradient.addColorStop(1, `#78005c`);
 const skyGradient = ctx.createLinearGradient(0, 0, 100, 100);
 skyGradient.addColorStop(0, `#F07241`);
 skyGradient.addColorStop(1, `#601848`);
+
+const basePool = makeEvilPool(400, [0, 0]);
 
 export default ({
   geometry: createRectangle([-viewWidth / 2, -viewHeight / 2], 0, viewWidth, viewHeight),
@@ -62,9 +66,10 @@ export default ({
       viewHeight * 2,
       0,
     );
+    basePool.render();
     battleData.forEach(calculateHexGeometry);
     battleData.forEach(drawFill(optionHexes));
-    battleData.forEach(drawOutline);
+    // battleData.forEach(drawOutline);
     turnOrder.forEach(drawEntity);
   }
 });
