@@ -80,13 +80,10 @@ export const getNearbyCharacters =
   (type) =>
     (position, range) =>
       turnOrder.filter(
-        ([data, health, cPosition]) => {
-          const isType = data.type === type;
-          const isAlive = health > 0;
-          const distanceToSource = distanceFromTo(getGridHexFromVector2d(position), getGridHexFromVector2d(cPosition));
-          const isClose = distanceFromTo(getGridHexFromVector2d(position), getGridHexFromVector2d(cPosition)) <= range;
-          return isType && isAlive && isClose;
-        }
+        ([data, health, cPosition]) =>
+          data.type === type &&
+          health > 0 &&
+          distanceFromTo(getGridHexFromVector2d(position), getGridHexFromVector2d(cPosition)) <= range
       );
 
 export const getNearbyAllies = getNearbyCharacters(true);
