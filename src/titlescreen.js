@@ -9,12 +9,21 @@ import Scene from 'scene';
 import overworld from 'overworld';
 import Movie from 'movie';
 import titleMovie, { endTitle } from 'movies/title';
+import intro from 'movies/intro';
 
-let skipped = false;
+let skipped = false,
+    inIntro = false;
 
 const skipTitle = ()=> {
   if(skipped) {
-    Scene(overworld);
+    if(!inIntro) {
+      inIntro = true;
+
+      title.children = [Movie(0, 0, viewWidth, viewHeight, intro, ()=> {
+        Scene(overworld);
+      })];
+    }
+
     return;
   }
 
