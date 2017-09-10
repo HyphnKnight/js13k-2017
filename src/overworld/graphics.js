@@ -249,17 +249,7 @@ const sand = `#fce08c`;
 // sky
 const skyBlue = `#90b4ec`;
 
-<<<<<<< HEAD
 const groundColor = `#6c9850`; //ctx.createLinearGradient(0, 0, 200, 200);
-=======
-const groundGradient = ctx.createLinearGradient(0, 0, 200, 200);
-[
-  [`#e8e85c`, 0.1],
-  [`#646410`, 0.9]
-].map(([stop, pos]) => {
-  groundGradient.addColorStop(pos, stop);
-});
->>>>>>> Restructure
 
 export const render = () => {
   // Background
