@@ -55,6 +55,7 @@
     "no-console": ["warn", {
       "allow": ["warn", "error", "info"]
     }],
+    "no-debugger": ["warn"],
     "no-var": "error",
     "object-shorthand": "error",
     "prefer-const": "error",
