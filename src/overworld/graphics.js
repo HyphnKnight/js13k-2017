@@ -1,7 +1,7 @@
 import { addSet, rotateSet, scaleSet } from 'pura/vector/tuple';
 import { getRectanglePoints } from 'pura/geometry/tuple';
 import { mapListSet, addListSet, scaleList } from 'pura/vector/tuple';
-import { fillPolygon, fillRectangle, fillText, fillOval, strokeOval, ctx } from 'pura/canvas/tuple';
+import { fillPolygon, fillRectangle, fillText, fillOval, strokeOval } from 'pura/canvas/tuple';
 import { perspective, perspective2d } from 'camera';
 import { viewWidth, viewHeight } from 'dom';
 import state from 'state';
@@ -254,18 +254,12 @@ genMiasma();
 const baseOcean = `#69D2E7`;
 const seaFoam = `#fff`;
 // ground
-const sand = `#CFB590`;
+const sand = `#fce08c`;
 
 // sky
-const skyBlue = `#CCF3FF`;
+const skyBlue = `#90b4ec`;
 
-const groundGradient = ctx.createLinearGradient(0, 0, 200, 200);
-[
-  [`#e8e85c`, 0.1],
-  [`#646410`, 0.9]
-].map(([stop, pos])=> {
-  groundGradient.addColorStop(pos, stop);
-});
+const groundColor = `#6c9850`; //ctx.createLinearGradient(0, 0, 200, 200);
 
 export const render = () => {
   // Background
@@ -298,7 +292,7 @@ export const render = () => {
   );
 
   fillOval(
-    groundGradient,
+    groundColor,
     [0, 0],
     calcIslandPoints(1),
   );
