@@ -9,11 +9,11 @@ const createPool =
       const offset = ((Math.random() * 500)) | 0;
       const interval = 1800 + ((Math.random() * 1000) | 0);
       const speed = baseSize * 12;
-      const basePoints = getRectanglePoints(baseSize, baseSize);
+      const basePoints = getRectanglePoints(baseSize * 2, baseSize * 2);
       const placedPoints = addList(basePoints, position);
       let adjustedPoints;
       return {
-        collision: (targetPosition)=>
+        collision: (targetPosition) =>
           magnitudeSqr(subtract(targetPosition, position)) <= baseSize * baseSize,
 
         testCallback(targetPosition) {
