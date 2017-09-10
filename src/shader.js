@@ -648,10 +648,18 @@ const paLen = atariPalette.length;
 
 const computedStorage = {};
 
-const colorDiff = (r, g, b) => {
-  const colorKey = `${r / 100 + 0.5 | 0},${g / 100 + 0.5 | 0},${b / 100 + 0.5 | 0}`;
+const colorDiff = (r, g, b, bypass) => {
+  let colorKey = `${r},${g},${b}`;
 
   let closestColor = computedStorage[colorKey];
+
+  if(!closestColor && !bypass) {
+    colorKey = `${r / 100 + 0.5 | 0},${g / 100 + 0.5 | 0},${b / 100 + 0.5 | 0}`;
+    closestColor = computedStorage[colorKey];
+  } else if(!closestColor && bypass) {
+    computedStorage[colorKey] = [r, g, b];
+    return;
+  }
 
   if(!closestColor) {
     let minDistance = Infinity;
@@ -678,7 +686,7 @@ const colorDiff = (r, g, b) => {
 };
 
 for(const [r, g, b] of atariPalette) {
-  colorDiff(r, g, b);
+  colorDiff(r, g, b, `bypass`);
 }
 
 const Atarify = () => {
