@@ -67,6 +67,26 @@ export default {
       move: {
         range: 5,
       },
+      attack: {
+        count: 10,
+        range: 4,
+        damage: 30,
+      },
+      defend: {
+        count: 10,
+        range: 3,
+        damage: 0.5,
+        duration: 3,
+      },
+      magic: {
+        count: 10,
+        range: 1,
+        effect: 50,
+        duration: 1
+      },
+      reset: {
+        count: 3
+      },
     },
   },
 

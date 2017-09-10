@@ -22,6 +22,7 @@ import Move from 'battle/actions/Move';
 import Attack from 'battle/actions/Attack';
 import Defend from 'battle/actions/Defend';
 import Magic from 'battle/actions/Magic';
+import Item from 'battle/actions/Item';
 import Swarmer from 'battle/actions/Swarmer';
 import state from 'state';
 import { handlStatuses } from 'battle/actions/utility';
@@ -47,11 +48,12 @@ export default function createBattleScene(characters, mapSize) {
   let selectedAction = null;
   const action = {
     // Player Controlled Character Movement
-    move: (character) => [`Move`, () => selectedAction = Move(character)],
-    attack: (character) => [character[0].abilities.attack.name, () => selectedAction = Attack(character)],
-    defend: (character) => [`Protect`, () => selectedAction = Defend(character)],
-    magic: (character) => [`Forget`, () => selectedAction = Magic(character)],
-    swarmer: (character) => Swarmer(character),
+    move: [`Move`, () => selectedAction = Move],
+    attack: [`Avenge`, () => selectedAction = Attack],
+    defend: [`Protect`, () => selectedAction = Defend],
+    magic: [`Forget`, () => selectedAction = Magic],
+    item: [`Use`, () => selectedAction = Item],
+    swarmer: Swarmer,
   };
 
   const getCharacter = generateGetCharacter(turnOrder);
@@ -69,21 +71,27 @@ export default function createBattleScene(characters, mapSize) {
     // 3) Look up actions
     selectedAction = null;
     if(data.type) {
-      const actions = Object.keys(data.abilities).map(name => action[name](character, data.abilities[name]));
-      // 4) Add actions to the menu
+      let actions;
+      switch(data.name) {
+        case `Persecutor`:
+          actions = [
+            action.move,
+            action.item,
+          ];
+          break;
+        default:
+          actions = Object.keys(data.abilities).map(name => action[name]);
+          // 4) Add actions to the menu
+      }
       const menuUIIndex = uiElements.push(Menu(actions));
       // 5) Wait for player to select an action.
       while(!selectedAction) yield;
       uiElements.splice(menuUIIndex - 1, 1);
     } else {
-      selectedAction = action[data.name.toLowerCase()](character);
+      selectedAction = action[data.name.toLowerCase()];
     }
     // 6) Execute selected action
-    while(true) {
-      const { done } = selectedAction.next();
-      if(done) break;
-      else yield;
-    }
+    yield* selectedAction(character);
     handlStatuses(character);
     // 7) Check to see if battle is over
     const isVictory = false;//!!turnOrder.find(([data, health]) => !data.alignment && health > 0);

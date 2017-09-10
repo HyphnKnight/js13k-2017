@@ -1,37 +1,36 @@
-import {
-  getCharacterAtHex,
-  getNearbyEnemies,
-  getGridHexFromVector2d,
-} from 'battle/grid';
-import UserSelectLocation from 'battle/actions/UserSelectLocation';
-import PanCameraTo from 'battle/actions/PanCameraTo';
+import { uiElements } from 'ui';
+import Menu from 'menu';
+import Attack from 'battle/actions/Attack';
+import Defend from 'battle/actions/Defend';
+import Magic from 'battle/actions/Magic';
 
 export default function* Item(character) {
-  const [{ type, abilities: { item: { effect, range } } }, , position] = character;
+  const [data] = character;
   console.log(`1) Give the option to select for different abilities`);
-  const actions = Object.keys(data.abilities).map(name => action[name](character));
+  let selectedAction = null;
+  const actions = [
+    data.abilities.attack.count && [`Abuse (${data.abilities.attack.count})`, () => {
+      --data.abilities.attack.count;
+      selectedAction = Attack;
+    }],
+    data.abilities.defend.count && [`Pretend (${data.abilities.defend.count})`, () => {
+      --data.abilities.defend.count;
+      selectedAction = Defend;
+    }],
+    data.abilities.magic.count && [`Critique (${data.abilities.magic.count})`, () => {
+      --data.abilities.magic.count;
+      selectedAction = Magic;
+    }],
+    data.abilities.reset.count && [`Remember (${data.abilities.reset.count})`, () => {
+      --data.abilities.reset.count;
+      selectedAction = Attack;
+    }],
+  ].filter(x => x);
   // 4) Add actions to the menu
-  menuUIIndex = uiElements.push(Menu(actions));
+  const menuUIIndex = uiElements.push(Menu(actions)) - 1;
   // 5) Wait for player to select an action.
   while(!selectedAction) yield;
-  uiElements.splice(menuUIIndex - 1, 1);
-  console.log(`2)`);
-  // const [{ type, abilities: { magic: { effect, range } } }, , position] = character;
-  // console.log(`1) Detect & Display all eligible characters`);
-  // console.log(`2) Select Target Character`);
-  // const selectedLocation = yield* UserSelectLocation(
-  //   getNearbyEnemies(position, range).map(([, , position]) => getGridHexFromVector2d(position))
-  // );
-  // const selectedTarget = getCharacterAtHex(selectedLocation);
-  // console.log(`3a) Apply Heal over time to ally`);
-  // console.log(`3b) Apply Damage over time to enemy`);
-  // const [tData, , tPosition, tStatus] = selectedTarget;
-  // yield* PanCameraTo(tPosition);
-  // tStatus.push({
-  //   type: type === tData.type
-  //     ? `heal`
-  //     : `damage`,
-  //   effect,
-  // });
-  // console.log(`4) Play Animation`);
+  uiElements.splice(menuUIIndex, 1);
+  console.log(`2) Do Action`);
+  yield* selectedAction(character);
 }
