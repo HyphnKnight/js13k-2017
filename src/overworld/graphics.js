@@ -14,6 +14,7 @@ import {
   mkPersecutor,
   mkGem,
   mkMountain,
+  mkTulip
 } from 'sprite';
 import {
   makeAvengerPool,
@@ -82,18 +83,18 @@ const pools = [
 ];
 
 // Island props.
-const maxProps = 100;
+const props = [
+  [mkTree, 100],
+  [mkTreeAlt, 100],
+  [mkMountain, 10],
+];
 
-const props = new Map([
-  [mkTree, 1],
-  [mkTreeAlt, 1],
-  [mkMountain, 0.1],
-]);
+const maxProps = props.reduce((prev, next)=> Math.max(prev.length ? prev[1] : prev, next[1]));
 
 let i = 0;
 while(++i < maxProps) {
   for(const [prop, amount] of props) {
-    if(i < maxProps*amount) {
+    if(i < amount) {
       const pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
 
       for(const pool of pools) {
@@ -109,6 +110,20 @@ while(++i < maxProps) {
       );
     }
   }
+}
+
+// Miasma.
+i = 0;
+while(++i < 500) {
+  const pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
+
+  if(pos[0] < -200) {
+    pos[0] -= -200;
+  }
+
+  graphics.push(
+    mkTulip(pos, 0)
+  );
 }
 
 // Colors
@@ -175,7 +190,7 @@ export const render = () => {
     .map(point => [...perspective(point), point[2], point[3], point[4]])
     .sort((a, b) => b[2] - a[2])
     .forEach(([x, y, d, z, emoji, size]) => fillText(
-      { font: `${Math.floor(12 * size * (1 - 2 * (d - 10994) / 8248748))}px monospace` },
+      { font: `${(12 * size * (1 - 2 * (d - 10994) / 8248748)) | 0}px monospace` },
       [x, y - z],
       emoji
     ));

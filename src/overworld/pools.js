@@ -6,8 +6,8 @@ import { perspective2d } from 'camera';
 const createPool =
   (baseColor, shoreColor, waveColor) =>
     (baseSize, position, callBack) => {
-      const offset = Math.floor(Math.random() * 500);
-      const interval = 1800 + Math.floor(Math.random() * 1000);
+      const offset = ((Math.random() * 500)) | 0;
+      const interval = 1800 + ((Math.random() * 1000) | 0);
       const speed = baseSize * 12;
       const basePoints = getRectanglePoints(baseSize, baseSize);
       const placedPoints = addList(basePoints, position);

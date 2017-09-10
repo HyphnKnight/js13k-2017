@@ -8,6 +8,7 @@ import { viewHeight, viewWidth } from 'dom';
 import state from 'state';
 
 let textStart = null;
+let maxChar = 0;
 const textSpeed = 50;
 
 // Dialog box traits.
@@ -64,6 +65,11 @@ const formatText = (ctx, text, maxChar) => {
 };
 
 const nextScriptEntry = ()=> {
+  if(maxChar < state.dialog.script[0][0].length) {
+    textStart = 1;
+    return;
+  }
+
   state.dialog.script.shift();
   textStart = null;
 
@@ -82,7 +88,7 @@ const Dialog = {
     if(!currentScript) return;
     if(!textStart) textStart = Date.now();
 
-    const maxChar = Math.floor((Date.now() - textStart) / textSpeed);
+    maxChar = ((Date.now() - textStart) / textSpeed) | 0;
     drawBox([0, 0], geometry.width, 0, geometry.height);
 
     // Render text
