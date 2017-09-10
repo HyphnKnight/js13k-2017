@@ -28,6 +28,11 @@ export default {
       move: {
         range: 3,
       },
+      attack: {
+        name: `Avenge`,
+        range: 1,
+        damage: 25,
+      }
     },
   },
 
