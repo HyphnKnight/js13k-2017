@@ -70,6 +70,10 @@ export default {
     abilities: {
       swarm: {
         range: 5,
+      },
+      aiAttack: {
+        range: 1,
+        damage: 15,
       }
     }
   }
