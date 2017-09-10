@@ -5,7 +5,7 @@ import { perspective2d } from 'camera';
 
 const createPool =
   (baseColor, shoreColor, waveColor) =>
-    (baseSize, position, callBack) => {
+    (baseSize, position, callBack, shouldDisplay = true) => {
       const offset = ((Math.random() * 500)) | 0;
       const interval = 1800 + ((Math.random() * 1000) | 0);
       const speed = baseSize * 12;
@@ -17,15 +17,20 @@ const createPool =
           magnitudeSqr(subtract(targetPosition, position)) <= baseSize * baseSize,
 
         testCallback(targetPosition) {
-          if(this.collision(targetPosition)) {
+          if(this.shouldDisplay && this.collision(targetPosition)) {
             if(callBack) {
               callBack();
               callBack = null;
             }
           }
         },
+        shouldDisplay,
         render() {
           adjustedPoints = mapList(placedPoints, perspective2d);
+
+          if(!this.shouldDisplay) {
+            return;
+          }
 
           fillOval(
             baseColor,

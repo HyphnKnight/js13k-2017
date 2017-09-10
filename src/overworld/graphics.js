@@ -53,14 +53,38 @@ export const gemSprite = mkGem([state.position[0] + Math.random() * 20 - 10, sta
 graphics.push(avngSprite, protSprite, chldSprite, persSprite, gemSprite);
 
 // Pools.
+let currLevel = 0;
+const showEvilPool = (evilPool)=> {
+  ++currLevel;
+
+  if(currLevel === 3) {
+    state.dialog.callback = ()=> {
+      evilPool.shouldDisplay = true;
+    };
+  }
+};
+
 const pools = [
   // LEVEL 1: Persector.
-  makePersecutorPool(50, [-400, 800], () => { }),
-  makePersecutorPool(50, [-400, 600], () => { }),
-  makePersecutorPool(50, [-300, 700], () => { }),
-  makeEvilPool(50, [-300, 600], () => {
-    state.dialog.script.push([`The person watching wasn't someone you knew.`]);
+  makePersecutorPool(50, [-400, 800], () => {
+    showEvilPool(pools[3]);
+    state.dialog.script.push([`You walked to school and back home.`]);
   }),
+  makePersecutorPool(50, [-400, 600], () => {
+    showEvilPool(pools[3]);
+    state.dialog.script.push(
+      [`You stayed close behind the older kids.`],
+      [`They threw cupcake and candy wrappers right on the sidewalk.`],
+      [`You picked them up silently.`]
+    );
+  }),
+  makePersecutorPool(50, [-300, 700], () => {
+    showEvilPool(pools[3]);
+    state.dialog.script.push([`You listened to the stories he invented.`]);
+  }),
+  makeEvilPool(50, [-300, 600], () => {
+    state.dialog.script.push([`The one watching wasn't someone you knew.`]);
+  }, false),
 
   // LEVEL 2: Child.
   makeChildPool(50, [-200, 800], () => { }),

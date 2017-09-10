@@ -117,7 +117,9 @@ const Dialog = {
   },
   interact: {
     onMouseDown: () => {
-      nextScriptEntry();
+      if(state.dialog.script.length) {
+        nextScriptEntry();
+      }
     },
   }
 };
