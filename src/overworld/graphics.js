@@ -93,24 +93,67 @@ const pools = [
   }, false),
 
   // LEVEL 2: Child.
-  makeChildPool(50, [-200, 800], () => { }),
-  makeChildPool(50, [-100, 600], () => { }),
-  makeChildPool(50, [-50, 700], () => {}),
-  // state.miasma = 150
+  makeChildPool(50, [-200, 800], () => {
+    showEvilPool(pools[7]);
+    state.dialog.script.push([`DIALOG`]);
+  }),
+  makeChildPool(50, [-100, 600], () => {
+    showEvilPool(pools[7]);
+    state.dialog.script.push([`DIALOG`]);
+  }),
+  makeChildPool(50, [-50, 700], () => {
+    showEvilPool(pools[7]);
+    state.dialog.script.push([`DIALOG`]);
+  }),
+  makeEvilPool(50, [-75, 900], () => {
+    state.dialog.callback = ()=> {
+      state.miasma = 150;
+      genMiasma();
+    };
+    state.dialog.script.push([`DIALOG`]);
+  }, false),
 
   // LEVEL 3: Protector.
-  makeProtectorPool(50, [50, 700], () => { }),
-  makeProtectorPool(50, [100, 600], () => { }),
+  makeProtectorPool(50, [50, 700], () => {
+    showEvilPool(pools[11]);
+    state.dialog.script.push([`DIALOG`]);
+  }),
+  makeProtectorPool(50, [100, 600], () => {
+    showEvilPool(pools[11]);
+    state.dialog.script.push([`DIALOG`]);
+  }),
   makeProtectorPool(50, [125, 1000], () => {
+    showEvilPool(pools[11]);
     state.dialog.script.push([`Somewhere, deep inside, was a really good person.`]);
   }),
-  // state.miasma = 400
+  makeEvilPool(50, [125, 800], () => {
+    state.dialog.callback = ()=> {
+      state.miasma = 400;
+      genMiasma();
+    };
+    state.dialog.script.push([`DIALOG`]);
+  }, false),
 
   // LEVEL 4: Avenger.
-  makeAvengerPool(50, [200, 900], () => {}),
-  makeAvengerPool(50, [250, 610], () => {}),
-  makeAvengerPool(50, [320, 700], () => {}),
-  // No miasma
+  makeAvengerPool(50, [200, 900], () => {
+    showEvilPool(pools[15]);
+    state.dialog.script.push([`DIALOG`]);
+  }),
+  makeAvengerPool(50, [250, 610], () => {
+    showEvilPool(pools[15]);
+    state.dialog.script.push([`DIALOG`]);
+  }),
+  makeAvengerPool(50, [320, 700], () => {
+    showEvilPool(pools[15]);
+    state.dialog.script.push([`DIALOG`]);
+  }),
+  makeEvilPool(50, [300, 800], () => {
+    state.dialog.callback = ()=> {
+      state.miasma = Infinity;
+      genMiasma(`remove`);
+    };
+    state.dialog.script.push([`DIALOG`]);
+  }, false),
 
   makeOriginalPool(50, [450, 800], () => { }),
 ];
@@ -147,11 +190,15 @@ while(++i < maxProps) {
 
 // Miasma.
 let miasmaOnce = false;
-const genMiasma = ()=> {
+const genMiasma = (remove)=> {
   if(!miasmaOnce) {
     miasmaOnce = true;
   } else {
     graphics.splice(-500, 500);
+  }
+
+  if(remove) {
+    return;
   }
 
   let i = 0;
