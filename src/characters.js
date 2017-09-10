@@ -45,6 +45,11 @@ export default {
       move: {
         range: 2,
       },
+      defend: {
+        range: 1,
+        duration: 1,
+        percentage: 1,
+      },
     },
   },
 

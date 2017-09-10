@@ -20,6 +20,7 @@ import BattleMap from 'battle/map';
 import { initializeMap, turnOrder, moveCharacter } from 'battle/grid';
 import Move from 'battle/actions/Move';
 import Attack from 'battle/actions/Attack';
+import Defend from 'battle/actions/Defend';
 import Swarmer from 'battle/actions/Swarmer';
 import state from 'state';
 
@@ -47,35 +48,7 @@ export default function createBattleScene(characters, mapSize) {
     move: (character) => [`Move`, () => selectedAction = Move(character)],
     attack: (character) => [character[0].abilities.attack.name, () => selectedAction = Attack(character)],
     swarmer: (character) => Swarmer(character),
-    // defense: (character, { name, range, percentage, duration }) => ([name, () => selectedAction = function* () {
-    //   // 1) Detect & display all eligible characters
-    //   const [, , position] = character;
-    //   // 1) Detect & Display possible attackers
-    //   clear(optionHexes);
-    //   const nearbyTargets = getNearbyAllies(position, range);
-    //   optionHexes.push(...nearbyTargets);
-    //   // 2) Wait for confirmation
-    //   let confirmed = false;
-    //   const confirmMenuIndex = uiElements.push(Menu([
-    //     [`Confirm`, () => confirmed = true],
-    //     [`Cancel`, () => { }],
-    //   ]));
-    //   while(confirmed) {
-    //     cameraControls();
-    //     yield;
-    //   }
-    //   uiElements.splice(confirmMenuIndex, 1);
-    //   // 3) Add status effect
-    //   nearbyTargets
-    //     .map(getCharacterAtHex)
-    //     .filter(x => x)
-    //     .forEach(([, , , status]) => status.push({
-    //       type: `shield`,
-    //       duration,
-    //       percentage,
-    //     }));
-    //   // 4) Play animation
-    // }()]),
+    defend: (character) => [`Protect`, () => selectedAction = Defend(character)],
     // magic: (character, { name, range, effect }) => ([name, () => selectedAction = (function* () {
     //   const [data, , position] = character;
     //   // 1) Detect & display all eligible characters
