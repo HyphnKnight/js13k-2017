@@ -17,7 +17,7 @@ import finalBossMusic from 'songs/winter';
 import Menu from 'menu';
 import StatusBar from 'battle/statusBar';
 import BattleMap from 'battle/map';
-import { initializeMap, turnOrder, moveCharacter } from 'battle/grid';
+import { initializeMap, turnOrder, moveCharacter, getGridHexFromVector2d } from 'battle/grid';
 import Move from 'battle/actions/Move';
 import Attack from 'battle/actions/Attack';
 import Defend from 'battle/actions/Defend';
@@ -87,7 +87,9 @@ export default function createBattleScene(characters, mapSize) {
   function* Turn() {
     // 1) Determine who's turn it is.
     const { value: character } = getCharacter.next();
-    const [data, , position] = character;
+    const [data, , position, status] = character;
+    state.target = getGridHexFromVector2d(position);
+    character[3] = status.map(({ duration }) => --duration < 0).filter(x => x);
     console.log(`------------------------------`);
     console.log(`Start of turn for ${data.name}`);
     // 2) Center Camera on that person.
