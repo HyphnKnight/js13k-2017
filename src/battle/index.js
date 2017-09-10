@@ -19,6 +19,8 @@ import StatusBar from 'battle/statusBar';
 import BattleMap from 'battle/map';
 import { initializeMap, turnOrder, moveCharacter } from 'battle/grid';
 import Move from 'battle/actions/Move';
+import Attack from 'battle/actions/Attack';
+import Swarm from 'battle/actions/Swarm';
 import state from 'state';
 
 const cameraOffset = [0, -150];
@@ -43,37 +45,8 @@ export default function createBattleScene(characters, mapSize) {
   const action = {
     // Player Controlled Character Movement
     move: (character) => [`Move`, () => selectedAction = Move(character)],
-    // Player Controlled Attack
-    // attack: (character, { name, range, damage }) => ([name, () => selectedAction = function* () {
-    //   const [, , position] = character;
-    //   // 1) Detect & Display possible attackers
-    //   clear(optionHexes);
-    //   const nearbyTargets = getNearbyEnemies(position, range);
-    //   optionHexes.push(...nearbyTargets);
-    //   // 1b) If none display warning text ( there are no nearby enemies) and prompt a reselection
-    //   if(!nearbyTargets.length) {
-    //     // TODO: SOMETHING HERE
-    //   }
-    //   // 2) Wait for player to select target.
-    //   let selectedTarget = null;
-    //   while(!selectedTarget) {
-    //     cameraControls();
-    //     const { click, mousePosition } = inputs;
-    //     if(click === 1) {
-    //       state.target = getGridHexFromVector2d(
-    //         scaleSet(calcWorldPosition(mousePosition), 1 / gridScale)
-    //       );
-    //       if(contains(optionHexes, state.target)) selectedTarget = getCharacterAtHex(state.target);
-    //     }
-    //     yield;
-    //   }
-    //   clear(optionHexes);
-    //   // 3) Inflict damage on target
-    //   selectedTarget[1] += damage;
-    //   // 4) Play animation
-    //   // const attackAnimation = animation(character, selectedTarget);
-    //   // while(!attackAnimation()) yield;
-    // }()]),
+    attack: (character) => [character[0].abilities.attack.name, () => selectedAction = Attack(character)],
+    swarm: (character) => [`Swarm`, () => selectedAction = Swarm(character)],
     // defense: (character, { name, range, percentage, duration }) => ([name, () => selectedAction = function* () {
     //   // 1) Detect & display all eligible characters
     //   const [, , position] = character;
@@ -177,7 +150,7 @@ export default function createBattleScene(characters, mapSize) {
     init: () => {
       bgMusic.play(bgMusic);
       camera[2] = 340;
-      uiElements.push(StatusBar, BattleMap);
+      uiElements.push(BattleMap, StatusBar);
       turn = Turn();
       state.logic = () => {
         // done: is turn over.

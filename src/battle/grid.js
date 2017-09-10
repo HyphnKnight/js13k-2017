@@ -9,7 +9,7 @@ import {
 } from 'pura/hex';
 import { pathTo } from 'pura/path/pathTo';
 import { flatten, clear } from 'pura/array';
-import { set, addSet, subtractSet, scale, scaleSet } from 'pura/vector/tuple';
+import { set, magnitudeSqr, addSet, subtract, subtractSet, scale, scaleSet } from 'pura/vector/tuple';
 import { animateFowardNoRepeat } from 'animation';
 import { easeInOutQuart } from 'easing';
 import { calcWorldPosition } from 'camera';
@@ -65,7 +65,7 @@ export const battleData = new Map(flatten(grid).map(hex => [hex, {
 
 export const getPathToTarget = pathTo(
   getNeighborsGrid(grid),
-  (_, dst) => getCharacterAtHex(dst) ? Infinity : 1,
+  (_, dst) => getCharacterAtHex(dst) ? 40 : 1,
   (hex, dest) => distanceFromTo(hex, dest),
   1000
 );
@@ -79,8 +79,15 @@ export const getMovementOptions =
 export const getNearbyCharacters =
   (type) =>
     (position, range) =>
-      getGridHexesWithin(position, range)
-        .filter(hex => turnOrder.find(([data, health, position]) => getGridHexFromVector2d(position) === hex && health > 0 && data.alignment === type));
+      turnOrder.filter(
+        ([data, health, cPosition]) => {
+          const isType = data.type === type;
+          const isAlive = health > 0;
+          const distanceToSource = distanceFromTo(getGridHexFromVector2d(position), getGridHexFromVector2d(cPosition));
+          const isClose = distanceFromTo(getGridHexFromVector2d(position), getGridHexFromVector2d(cPosition)) <= range;
+          return isType && isAlive && isClose;
+        }
+      );
 
 export const getNearbyAllies = getNearbyCharacters(true);
 export const getNearbyEnemies = getNearbyCharacters(false);

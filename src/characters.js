@@ -1,9 +1,16 @@
-import { child, avenger, protector, persecutor } from 'emoji';
+import {
+  child, avenger, protector, persecutor,
+  scorpion,
+} from 'emoji';
 
 export default {
+
+  /* The Good Guys */
+
   child: {
     name: `Child`,
     emoji: child,
+    type: true,
     maxHealth: 40,
     abilities: {
       move: {
@@ -15,17 +22,24 @@ export default {
   avenger: {
     name: `Avenger`,
     emoji: avenger,
+    type: true,
     maxHealth: 80,
     abilities: {
       move: {
         range: 3,
       },
+      attack: {
+        name: `Avenge`,
+        range: 1,
+        damage: 25,
+      }
     },
   },
 
   protector: {
     name: `Protector`,
     emoji: protector,
+    type: true,
     maxHealth: 100,
     abilities: {
       move: {
@@ -37,6 +51,7 @@ export default {
   persecutor: {
     name: `Persecutor`,
     emoji: persecutor,
+    type: true,
     maxHealth: 60,
     abilities: {
       move: {
@@ -44,4 +59,19 @@ export default {
       },
     },
   },
+
+  /* The Bad Guys */
+
+  swarmer: {
+    name: `Swarmer`,
+    emoji: scorpion,
+    type: false,
+    maxHealth: 30,
+    abilities: {
+      swarm: {
+        range: 5,
+      }
+    }
+  }
+
 };
