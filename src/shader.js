@@ -646,14 +646,40 @@ const atariPalette = [
 
 const paLen = atariPalette.length;
 
-const computedStorage = [];
+const computedStorage = {};
 
-const calcAtariColor =
-  (r, g, b) =>
-    (cR, cG, cB) =>
-      ((r - cR) * (r - cR)) +
-      ((g - cG) * (g - cG)) +
-      ((b - cB) * (b - cB));
+const colorDiff = (r, g, b) => {
+  const colorKey = `${r / 100 + 0.5 | 0},${g / 100 + 0.5 | 0},${b / 100 + 0.5 | 0}`;
+
+  let closestColor = computedStorage[colorKey];
+
+  if(!closestColor) {
+    let minDistance = Infinity;
+
+    for(let i = 0; i < paLen; ++i) {
+      const color = atariPalette[i];
+      const [cR, cG, cB] = color;
+
+      const distance =
+        ((r - cR) * (r - cR)) +
+        ((g - cG) * (g - cG)) +
+        ((b - cB) * (b - cB));
+
+      if(distance < minDistance) {
+        minDistance = distance;
+        closestColor = color;
+      }
+    }
+
+    computedStorage[colorKey] = closestColor;
+  }
+
+  return closestColor;
+};
+
+for(const [r, g, b] of atariPalette) {
+  colorDiff(r, g, b);
+}
 
 const Atarify = () => {
   const img = ctx.getImageData(0, 0, viewWidth, viewHeight);
@@ -664,35 +690,15 @@ const Atarify = () => {
     const r = data[i];
     const g = data[i + 1];
     const b = data[i + 2];
-<<<<<<< HEAD
 
-    const [ aR, aG, aB ] = colorDiff(r, g, b);
-=======
-    let closestColor = computedStorage[Number(`${r}${g}${b}`)];
-    if(!closestColor) {
-      const calcDistance = calcAtariColor(r, g, b);
-      let minDistance = Infinity;
-      let i = paLen;
-      while(--i >= 0) {
-        const color = atariPalette[i];
-        const distance = calcDistance(...color);
-        if(distance < minDistance) {
-          minDistance = distance;
-          closestColor = color;
-        }
-      }
-      computedStorage[Number(`${r}${g}${b}`)] = closestColor;
-    }
-
-
-    const [aR, aG, aB] = closestColor;
->>>>>>> Refactor shader
+    const [aR, aG, aB] = colorDiff(r, g, b);
 
     data[i] = aR;
     data[i + 1] = aG;
     data[i + 2] = aB;
   }
-  // // overwrite original image
+
+  // overwrite original image
   ctx.putImageData(img, 0, 0);
 };
 
