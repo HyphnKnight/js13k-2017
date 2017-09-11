@@ -1,7 +1,7 @@
-import { addSet, subtract, magnitude, rotateSet, scaleSet, mapListSet, addListSet, scaleList, average } from 'pura/vector/tuple';
+import { addSet, subtract, magnitude, rotateSet, scaleSet, mapListSet, addListSet, average } from 'pura/vector/tuple';
 import { getRectanglePoints } from 'pura/geometry/tuple';
 import { isPointInCircle } from 'pura/intersection/tuple';
-import { fillPolygon, fillRectangle, fillText, fillOval, strokeOval, ctx } from 'pura/canvas/tuple';
+import { fillPolygon, fillRectangle, fillText, fillOval, strokeOval } from 'pura/canvas/tuple';
 import { perspective, perspective2d } from 'camera';
 import { viewWidth, viewHeight } from 'dom';
 import state from 'state';
@@ -36,17 +36,6 @@ const groundPlanePoints = mapListSet(
 // Island Geometry
 const islandPosition = average(islands.map(({ position }) => position));
 const islandRadius = Math.max(...islands.map(({ position }) => magnitude(subtract(position, islandPosition)))) + 200;
-// const islandRadius = islands;
-// const islandPoints = getRectanglePoints(islandRadius, islandRadius);
-// export const islandOffset = islandRadius;
-// const islandX = 0,
-//       islandY = islandOffset;
-// const calcIslandPoints =
-//   (scale = 1) =>
-//     mapListSet(
-//       addListSet(scaleList(islandPoints, scale), [0, islandOffset]),
-//       perspective2d,
-//     );
 
 // Characters.
 export const avngSprite = mkAvenger([...state.position], 0);
@@ -58,117 +47,138 @@ export const gemSprite = mkGem([state.position[0] + Math.random() * 20 - 10, sta
 graphics.push(avngSprite, protSprite, chldSprite, persSprite, gemSprite);
 
 // Pools.
-let currLevel = 0;
-const showEvilPool = (evilPool) => {
-  ++currLevel;
+const advLevel = function* () {
+  let currLevel = 0,
+      currPool = 0;
 
-  if(currLevel === 3) {
+  while(currLevel < levels.length) {
+    while(currPool < levels[currLevel][0].length) {
+      yield ++currPool;
+    }
+
+    levels[currLevel][1].shouldDisplay = true;
     state.dialog.callback = () => {
-      evilPool.shouldDisplay = true;
+      genMiasma();
     };
-
-    currLevel = 0;
+    currPool = 0;
+    yield ++currLevel;
   }
+
+  yield;
 };
 
-const pools = [
-  // LEVEL 1: Persector.
-  makePersecutorPool(25, [-400, 800], () => {
-    showEvilPool(pools[3]);
-    state.dialog.script.push([`You walked to school and back home.`]);
-  }),
-  makePersecutorPool(25, [-400, 600], () => {
-    showEvilPool(pools[3]);
-    state.dialog.script.push(
-      [`You stayed close behind the older kids.`],
-      [`They threw cupcake and candy wrappers right on the sidewalk.`],
-      [`You picked them up silently.`]
-    );
-  }),
-  makePersecutorPool(25, [-300, 700], () => {
-    showEvilPool(pools[3]);
-    state.dialog.script.push([`You listened to the stories he invented.`]);
-  }),
-  makeEvilPool(25, [-300, 600], () => {
-    state.dialog.callback = () => {
+const leveler = advLevel();
+
+const levels = [
+  // LEVEL 1.
+  [
+    [
+      makePersecutorPool(25, [-500, 800], () => {
+        leveler.next();
+        state.dialog.script.push([`You walked to school and back home.`]);
+      }),
+      makePersecutorPool(25, [-520, 1000], () => {
+        leveler.next();
+        state.dialog.script.push(
+          [`You stayed close behind the older kids.`],
+          [`They threw cupcake and candy wrappers right on the sidewalk.`],
+          [`You picked them up silently.`]
+        );
+      }),
+      makePersecutorPool(25, [-400, 700], () => {
+        leveler.next();
+        state.dialog.script.push([`You listened to the stories he invented.`]);
+      }),
+    ],
+    makeEvilPool(25, [-300, 600], () => {
+      leveler.next();
       state.miasma = -5;
-      // genMiasma();
-    };
-    state.dialog.script.push([`The one watching wasn't someone you knew.`]);
-  }, false),
+      state.dialog.script.push([`The one watching wasn't someone you knew.`]);
+    }, false)
+  ],
 
-  // LEVEL 2: Child.
-  makeChildPool(25, [-200, 800], () => {
-    showEvilPool(pools[7]);
-    state.dialog.script.push([`DIALOG`]);
-  }),
-  makeChildPool(25, [-100, 600], () => {
-    showEvilPool(pools[7]);
-    state.dialog.script.push([`DIALOG`]);
-  }),
-  makeChildPool(25, [-50, 700], () => {
-    showEvilPool(pools[7]);
-    state.dialog.script.push([`DIALOG`]);
-  }),
-  makeEvilPool(25, [-75, 900], () => {
-    state.dialog.callback = () => {
+  // LEVEL 2.
+  [
+    [
+      makeChildPool(25, [-200, 800], () => {
+        leveler.next();
+        state.dialog.script.push([`DIALOG`]);
+      }),
+      makeChildPool(25, [-100, 600], () => {
+        leveler.next();
+        state.dialog.script.push([`DIALOG`]);
+      }),
+      makeChildPool(25, [-50, 700], () => {
+        leveler.next();
+        state.dialog.script.push([`DIALOG`]);
+      })
+    ],
+    makeEvilPool(25, [-75, 900], () => {
+      leveler.next();
       state.miasma = 150;
-      // genMiasma();
-    };
-    state.dialog.script.push([`DIALOG`]);
-  }, false),
+      state.dialog.script.push([`DIALOG`]);
+    }, false),
+  ],
 
-  // LEVEL 3: Protector.
-  makeProtectorPool(25, [50, 700], () => {
-    showEvilPool(pools[11]);
-    state.dialog.script.push([`DIALOG`]);
-  }),
-  makeProtectorPool(25, [100, 600], () => {
-    showEvilPool(pools[11]);
-    state.dialog.script.push([`DIALOG`]);
-  }),
-  makeProtectorPool(25, [125, 1000], () => {
-    showEvilPool(pools[11]);
-    state.dialog.script.push([`Somewhere, deep inside, was a really good person.`]);
-  }),
-  makeEvilPool(25, [125, 800], () => {
-    state.dialog.callback = () => {
+  // LEVEL 3.
+  [
+    [
+      makeProtectorPool(25, [50, 700], () => {
+        leveler.next();
+        state.dialog.script.push([`DIALOG`]);
+      }),
+      makeProtectorPool(25, [100, 600], () => {
+        leveler.next();
+        state.dialog.script.push([`DIALOG`]);
+      }),
+      makeProtectorPool(25, [125, 1000], () => {
+        leveler.next();
+        state.dialog.script.push([`Somewhere, deep inside, was a really good person.`]);
+      })
+    ],
+    makeEvilPool(25, [125, 800], () => {
       state.miasma = 400;
-      // genMiasma();
-    };
-    state.dialog.script.push([`DIALOG`]);
-  }, false),
+      state.dialog.script.push([`DIALOG`]);
+    }, false),
+  ],
 
-  // LEVEL 4: Avenger.
-  makeAvengerPool(25, [200, 900], () => {
-    showEvilPool(pools[15]);
-    state.dialog.script.push([`DIALOG`]);
-  }),
-  makeAvengerPool(25, [250, 610], () => {
-    showEvilPool(pools[15]);
-    state.dialog.script.push([`DIALOG`]);
-  }),
-  makeAvengerPool(25, [320, 700], () => {
-    showEvilPool(pools[15]);
-    state.dialog.script.push([`DIALOG`]);
-  }),
-  makeEvilPool(25, [300, 800], () => {
-    state.dialog.callback = () => {
+  // LEVEL 4.
+  [
+    [
+      makeAvengerPool(25, [200, 900], () => {
+        leveler.next();
+        state.dialog.script.push([`DIALOG`]);
+      }),
+      makeAvengerPool(25, [250, 610], () => {
+        leveler.next();
+        state.dialog.script.push([`DIALOG`]);
+      }),
+      makeAvengerPool(25, [320, 700], () => {
+        leveler.next();
+        state.dialog.script.push([`DIALOG`]);
+      })
+    ],
+    makeEvilPool(25, [300, 800], () => {
       state.miasma = Infinity;
-      // genMiasma(`remove`);
-    };
-    state.dialog.script.push([`DIALOG`]);
-  }, false),
-
-  makeOriginalPool(25, [450, 800], () => { }),
+      state.dialog.script.push([`DIALOG`]);
+    }, false)
+  ]
 ];
 
+const pools = [
+  makeOriginalPool(25, [350, 900], () => { }),
+];
+
+for(const level of levels) {
+  pools.unshift(...level[0], level[1]);
+}
+
+// Props.
 const props = [
   [mkTree, 50],
   [mkTreeAlt, 50],
   [mkMountain, 10],
 ];
-
 
 const generatePropPosition =
   () =>
@@ -184,7 +194,7 @@ export const isValidPropPosition =
   (point) => {
     const isOnIsland = isPointInCircle(point, islandPosition, islandRadius);
     const isOnASubIsland = !!islands.find(({ collision }) => collision(point));
-    const isNotInAPool = true;//!pools.find(({ collision }) => collision(point));
+    const isNotInAPool = !pools.find(({ collision }) => collision(point));
     return isOnIsland && isOnASubIsland && isNotInAPool;
   };
 
@@ -206,38 +216,31 @@ while(++i < len) {
 }
 
 // Miasma.
-// let miasmaOnce = false;
-// const genMiasma = (remove) => {
-//   if(!miasmaOnce) {
-//     miasmaOnce = true;
-//   } else {
-//     graphics.splice(-500, 500);
-//   }
+let miasmaOnce = false;
+const genMiasma = (remove) => {
+  if(!miasmaOnce) {
+    miasmaOnce = true;
+  } else {
+    graphics.splice(-500, 500);
+  }
 
-//   if(remove) {
-//     return;
-//   }
+  if(remove) {
+    return;
+  }
 
-//   let i = 0;
+  let i = 0;
 
-//   while(++i < 500) {
-//     // const pos = addSet(scaleSet(rotateSet([0, 1], Math.random() * 2 * Math.PI), islandOffset * 0.5 * Math.random()), [0, islandOffset]);
+  while(++i < 500) {
+    const pos = generateValidPropPoint();
 
-//     // if(pos[0] < state.miasma) {
-//     //   pos[0] = state.miasma + Math.random() * 100;
-//     // }
+    if(pos[0] < state.miasma) {
+      pos[0] = state.miasma + Math.random() * 100;
+    }
 
-//     // let dir = isOffshore(pos);
-//     // while(dir) {
-//     //   pos[0] += dir[0];
-//     //   pos[1] += dir[1];
-
-//     //   dir = isOffshore(pos);
-//     // }
-//     graphics.push(mkTulip(generateValidPropPoint(), 0));
-//   }
-// };
-// genMiasma();
+    graphics.push(mkTulip(pos, 0));
+  }
+};
+genMiasma();
 
 // Colors
 // ocean
@@ -287,7 +290,12 @@ export const render = () => {
     getBase(),
   ));
 
-  // // Dynamic
+  for(const pool of pools) {
+    pool.render();
+    pool.testCallback(state.position);
+  }
+
+  // Dynamic
   graphics
     .map(point => [...perspective(point), point[2], point[3], point[4]])
     .sort((a, b) => b[2] - a[2])

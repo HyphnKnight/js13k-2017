@@ -31,7 +31,7 @@ export default () => {
 
   const movement = scaleToSet(direction, charSpeed());
   const newPosition = add(state.position, movement);
-  if(isValidPropPosition(newPosition)) {
+  if(isValidPropPosition(newPosition) && newPosition[0] < state.miasma) {
     set(state.position, ...newPosition);
   }
 
