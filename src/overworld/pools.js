@@ -16,12 +16,10 @@ const createPool =
         collision: (targetPosition) =>
           magnitudeSqr(subtract(targetPosition, position)) <= baseSize * baseSize,
 
-        testCallback(targetPosition) {
-          if(this.shouldDisplay && this.collision(targetPosition)) {
-            if(callBack) {
-              callBack();
-              callBack = null;
-            }
+        test(targetPosition) {
+          if(callBack && this.shouldDisplay && this.collision(targetPosition)) {
+            callBack();
+            callBack = null;
           }
         },
         shouldDisplay,
