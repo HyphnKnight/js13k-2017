@@ -149,7 +149,7 @@ export default {
     name: `Resentment`,
     emoji: mask,
     type: false,
-    maxHealth: 100,
+    maxHealth: 60,
     abilities: {
       hunt: {
         range: 5,
