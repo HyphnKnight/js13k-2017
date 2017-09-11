@@ -6,7 +6,6 @@ export default {
   name: `Alter`,
   input: `src/index.js`,
   output: {
-    file: `docs/script.js`,
     format: `iife`,
     sourcemap: false
   },
