@@ -4,7 +4,7 @@ import PanCameraTo from 'battle/actions/PanCameraTo';
 export default function* AIMagic(character, nearbyGoodGuys) {
   const [{ type, abilities: { aiMagic: { effect } } }] = character;
   console.log(`1) Detect & Display possible attackers`);
-  const target = mergeSort(nearbyGoodGuys, ([, health]) => health)[0];
+  const target = mergeSort(nearbyGoodGuys, ([, health]) => -health)[0];
   console.log(`2) Inflict damage on target`);
   const [tData, , tPosition, tStatus] = target;
   yield* PanCameraTo(tPosition);
