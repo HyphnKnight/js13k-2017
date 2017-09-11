@@ -76,7 +76,7 @@ export default {
       defend: {
         count: 10,
         range: 3,
-        damage: 0.5,
+        percentage: 0.5,
         duration: 3,
       },
       magic: {
