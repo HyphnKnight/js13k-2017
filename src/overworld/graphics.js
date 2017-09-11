@@ -256,7 +256,7 @@ export const render = () => {
     getBase(),
   ));
 
-  pools.forEach(({ render, test }) => { render(); test() });
+  pools.forEach(({ render, test }) => { render(); test(state.position) });
 
 
   // Dynamic
