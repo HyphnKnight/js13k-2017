@@ -6,7 +6,7 @@
   "scripts": {
     "start": "rollup --config rollup.config.dev.js --watch",
     "compile": "rollup --config rollup.config.prod.js",
-    "compress": "minify docs -d docs",
+    "compress": "minify --removeConsole docs -d docs",
     "zip": "bestzip Alter.zip docs",
     "test-size": "stat Alter.zip",
     "build": "npm run compile && npm run compress && npm run zip && npm run test-size",
@@ -27,6 +27,7 @@
   "homepage": "https://github.com/HyphnKnight/js13k-2017#readme",
   "devDependencies": {
     "babel-minify": "^0.2.0",
+    "babel-plugin-transform-remove-console": "^6.8.5",
     "bestzip": "^1.1.4",
     "eslint": "^4.6.1",
     "rollup": "^0.49.3",
