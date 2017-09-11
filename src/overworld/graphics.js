@@ -58,7 +58,6 @@ const advLevel = function* () {
       yield ++currPool;
     }
 
-    levels[currLevel][1].shouldDisplay = true;
     state.dialog.callback = filterMiasma;
     currPool = 0;
     yield ++currLevel;
