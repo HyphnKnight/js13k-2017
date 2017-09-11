@@ -74,14 +74,10 @@ const Menu = (commands)=> {
       drawBox([0, 0], menuWidth, 0, menuHeight);
 
       // Keyboard controls.
-      if(inputs.down === 1) {
-        if(activeCommandIndex < commands.length - 1) {
-          activeCommandIndex++;
-        }
-      } else if(inputs.up === 1) {
-        if(activeCommandIndex > 0) {
-          activeCommandIndex--;
-        }
+      if(inputs.down === 1 && activeCommandIndex < commands.length - 1) {
+        activeCommandIndex++;
+      } else if(inputs.up === 1 && activeCommandIndex > 0) {
+        activeCommandIndex--;
       }
       if(inputs.space === 1 || inputs.return === 1) {
         commands[activeCommandIndex][1]();
