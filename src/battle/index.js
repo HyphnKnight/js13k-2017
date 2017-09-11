@@ -19,10 +19,9 @@ import StatusBar from 'battle/statusBar';
 import BattleMap from 'battle/map';
 import { initializeMap, turnOrder, moveCharacter, getGridHexFromVector2d } from 'battle/grid';
 import Move from 'battle/actions/Move';
-import Attack from 'battle/actions/Attack';
-import Defend from 'battle/actions/Defend';
-import Magic from 'battle/actions/Magic';
-import Item from 'battle/actions/Item';
+import {
+  Attack, Defend, Magic, Item,
+} from 'battle/actions/PlayerAbilities';
 import Swarmer from 'battle/actions/Swarmer';
 import Vamp from 'battle/actions/Vamp';
 import Skeli from 'battle/actions/Skeli';

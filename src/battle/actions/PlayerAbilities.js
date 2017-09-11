@@ -1,0 +1,74 @@
+import {
+  getCharacterAtHex,
+  getNearbyEnemies,
+  getNearbyAllies,
+  getNearbyCharacters,
+  getNearbyCharacterHexes,
+} from 'battle/grid';
+import { dealDamage } from 'battle/actions/utility';
+import UserSelectLocation from 'battle/actions/UserSelectLocation';
+import PanCameraTo from 'battle/actions/PanCameraTo';
+
+import { uiElements } from 'ui';
+import Menu from 'menu';
+
+function* GetUserSelectTarget(fetch, position, range) {
+  const selectedLocation = yield* UserSelectLocation(fetch(position, range));
+  return getCharacterAtHex(selectedLocation);
+}
+
+export function* Attack([{ abilities: { attack: { damage, range } } }, , position]) {
+  const target = yield* GetUserSelectTarget(getNearbyCharacterHexes(getNearbyEnemies), position, range);
+  dealDamage(target, damage);
+  yield* PanCameraTo(target[2]);
+}
+
+export function* Defend([{ abilities: { defend: { range, duration, percentage } } }, , position]) {
+  getNearbyAllies(position, range)
+    .map(getCharacterAtHex)
+    .filter(x => x)
+    .forEach(([, , , status]) => status.push({
+      type: `shield`,
+      duration,
+      percentage,
+    }));
+  yield;
+}
+
+export function* Magic([{ type, abilities: { magic: { effect, range } } }, , position]) {
+  const [{ type: tType }, , tPosition, tStatus] = yield* GetUserSelectTarget(getNearbyCharacterHexes(getNearbyCharacters(null)), position, range);
+  tStatus.push({
+    type: type === tType
+      ? `heal`
+      : `damage`,
+    effect,
+  });
+  yield* PanCameraTo(tPosition);
+}
+
+export function* Item(character) {
+  const [{ abilities: { attack, defend, magic, reset } }] = character;
+  let selectedAction = null;
+  const actions = [
+    attack.count && [`Abuse (${attack.count})`, () => {
+      --attack.count;
+      selectedAction = Attack;
+    }],
+    defend.count && [`Pretend (${defend.count})`, () => {
+      --defend.count;
+      selectedAction = Defend;
+    }],
+    magic.count && [`Critique (${magic.count})`, () => {
+      --magic.count;
+      selectedAction = Magic;
+    }],
+    reset.count && [`Remember (${reset.count})`, () => {
+      --reset.count;
+      selectedAction = Attack;
+    }],
+  ].filter(x => x);
+  const menuUIIndex = uiElements.push(Menu(actions)) - 1;
+  while(!selectedAction) yield;
+  uiElements.splice(menuUIIndex, 1);
+  yield* selectedAction(character);
+}
