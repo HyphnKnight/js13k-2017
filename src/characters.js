@@ -1,6 +1,6 @@
 import {
   child, avenger, protector, persecutor,
-  scorpion,
+  scorpion, bat,
 } from 'emoji';
 
 export default {
@@ -102,6 +102,22 @@ export default {
         range: 5,
       },
       aiAttack: {
+        range: 1,
+        damage: 15,
+      }
+    }
+  },
+
+  vamp: {
+    name: `Vamp`,
+    emoji: bat,
+    type: false,
+    maxHealth: 40,
+    abilities: {
+      hunt: {
+        range: 5,
+      },
+      aiMagic: {
         range: 1,
         damage: 15,
       }

@@ -24,6 +24,7 @@ import Defend from 'battle/actions/Defend';
 import Magic from 'battle/actions/Magic';
 import Item from 'battle/actions/Item';
 import Swarmer from 'battle/actions/Swarmer';
+import Vamp from 'battle/actions/Vamp';
 import state from 'state';
 import { handlStatuses } from 'battle/actions/utility';
 
@@ -54,6 +55,7 @@ export default function createBattleScene(characters, mapSize) {
     magic: [`Forget`, () => selectedAction = Magic],
     item: [`Use`, () => selectedAction = Item],
     swarmer: Swarmer,
+    vamp: Vamp,
   };
 
   const getCharacter = generateGetCharacter(turnOrder);
