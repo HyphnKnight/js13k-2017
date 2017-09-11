@@ -66,7 +66,7 @@ export default function createBattleScene(characters, mapSize) {
     doubt: Doubt,
     deceit: Deceit,
     *harm() {
-      yield* action[[`doubt`, `resentment`, `deceit`][++harmTurns % 9 / 3 | 0]];
+      yield* [Doubt, Resentment, Deceit][++harmTurns % 9 / 3 | 0];
     }
   };
 
