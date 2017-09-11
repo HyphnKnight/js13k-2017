@@ -174,4 +174,30 @@ export default {
     }
   },
 
+  deceit: {
+    name: `Deceit`,
+    emoji: mask,
+    type: false,
+    maxHealth: 120,
+    abilities: {
+      swarm: {
+        range: 3,
+      },
+      aiAttack: {
+        range: 1,
+        damage: 20,
+      },
+      aiMagic: {
+        range: 3,
+        effect: 10,
+        duration: 3,
+      },
+      aiDefend: {
+        range: 2,
+        duration: 2,
+        percentage: 0.25,
+      },
+    }
+  },
+
 };

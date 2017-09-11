@@ -28,6 +28,7 @@ import Vamp from 'battle/actions/Vamp';
 import Skeli from 'battle/actions/Skeli';
 import Resentment from 'battle/actions/Resentment';
 import Doubt from 'battle/actions/Doubt';
+import Deceit from 'battle/actions/Deceit';
 import state from 'state';
 import { handlStatuses } from 'battle/actions/utility';
 
@@ -62,6 +63,7 @@ export default function createBattleScene(characters, mapSize) {
     skeli: Skeli,
     resentment: Resentment,
     doubt: Doubt,
+    deceit: Deceit,
   };
 
   const getCharacter = generateGetCharacter(turnOrder);
