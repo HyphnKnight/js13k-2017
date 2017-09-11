@@ -4,6 +4,7 @@ import { isPointInCircle } from 'pura/intersection/tuple';
 import { fillPolygon, fillRectangle, fillText, fillOval, strokeOval } from 'pura/canvas/tuple';
 import { perspective, perspective2d } from 'camera';
 import { viewWidth, viewHeight } from 'dom';
+import { tulip } from 'emoji';
 import state from 'state';
 import { islands } from 'overworld/island';
 import {
@@ -26,7 +27,7 @@ import {
   makeEvilPool,
 } from 'overworld/pools';
 
-export const graphics = [];
+export let graphics = [];
 
 const groundPlanePoints = mapListSet(
   addListSet(getRectanglePoints(10000, 1600), [0, 1600 / 2]),
@@ -57,9 +58,7 @@ const advLevel = function* () {
     }
 
     levels[currLevel][1].shouldDisplay = true;
-    state.dialog.callback = () => {
-      genMiasma();
-    };
+    state.dialog.callback = filterMiasma;
     currPool = 0;
     yield ++currLevel;
   }
@@ -178,6 +177,7 @@ const props = [
   [mkTree, 50],
   [mkTreeAlt, 50],
   [mkMountain, 10],
+  [mkTulip, 500]
 ];
 
 const generatePropPosition =
@@ -217,32 +217,7 @@ while(++i < len) {
   }
 }
 
-// Miasma.
-let miasmaOnce = false;
-const genMiasma = (remove) => {
-  if(!miasmaOnce) {
-    miasmaOnce = true;
-  } else {
-    graphics.splice(-500, 500);
-  }
-
-  if(remove) {
-    return;
-  }
-
-  let i = 0;
-
-  while(++i < 500) {
-    const pos = generateValidPropPoint();
-
-    if(pos[0] < state.miasma) {
-      pos[0] = state.miasma + Math.random() * 100;
-    }
-
-    graphics.push(mkTulip(pos, 0));
-  }
-};
-genMiasma();
+const filterMiasma = () => graphics = graphics.filter(([x, , , emoji]) => emoji === tulip && x < state.miasma);
 
 // Colors
 // ocean
