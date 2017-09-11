@@ -18,6 +18,11 @@ export const title_text = `24px ${header}`;
 export const button_text = `16px ${mono}`;
 export const base_text = `${textSize}px ${mono}`;
 
+// font objects
+export const statusBarHeartFont = { font: `6px mono` };
+export const statusBarFont = { style: white, font: `10px mono` };
+export const whiteFont = { style: white };
+
 // stroke styles
 export const stroke = 2;
 export const strokeOptions = {

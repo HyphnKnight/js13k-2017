@@ -2,7 +2,7 @@
 
 import { createRectangle } from 'pura/geometry/tuple';
 import { ctx, fillText } from 'pura/canvas/tuple';
-import { drawBox, stroke, textSize, lineHeight, white } from 'style';
+import { drawBox, stroke, textSize, lineHeight, whiteFont } from 'style';
 import { inputs } from 'controls';
 import { viewHeight, viewWidth } from 'dom';
 import state from 'state';
@@ -14,7 +14,7 @@ const textSpeed = 50;
 // Dialog box traits.
 // Renders over bottom half of screen.
 const dialogWidth = viewWidth - stroke;
-const dialogHeight = lineHeight*5;
+const dialogHeight = lineHeight * 5;
 
 // Text traits.
 const textWidth = dialogWidth - stroke * 4;
@@ -64,7 +64,7 @@ const formatText = (ctx, text, maxChar) => {
   return formattedText;
 };
 
-const nextScriptEntry = ()=> {
+const nextScriptEntry = () => {
   if(maxChar < state.dialog.script[0][0].length) {
     textStart = 1;
     return;
@@ -82,7 +82,7 @@ const nextScriptEntry = ()=> {
 const Dialog = {
   geometry: createRectangle([0, viewHeight / 2 - dialogHeight / 2], 0, dialogWidth, dialogHeight),
 
-  render: ({ geometry })=> {
+  render: ({ geometry }) => {
     const { script } = state.dialog;
     const [currentScript] = script;
     if(!currentScript) return;
@@ -103,12 +103,12 @@ const Dialog = {
       const topOffset = -dialogHeight / 2 - stroke * 2;
       drawBox([leftOffset, topOffset], boxWidth, 1, stroke * 4);
       ctx.font = `${textSize}px monospace`;
-      fillText({ style: white }, [leftOffset - 6 + stroke * 4 - boxWidth / 2, topOffset - lineHeight/2 - stroke], emoji);
-      fillText({ style: white }, [leftOffset - 6 + stroke * 4 - boxWidth / 2 + 16, topOffset - lineHeight/2 - stroke], name);
-      offset = lineHeight*0.33;
+      fillText(whiteFont, [leftOffset - 6 + stroke * 4 - boxWidth / 2, topOffset - lineHeight / 2 - stroke], emoji);
+      fillText(whiteFont, [leftOffset - 6 + stroke * 4 - boxWidth / 2 + 16, topOffset - lineHeight / 2 - stroke], name);
+      offset = lineHeight * 0.33;
     }
     formattedText.forEach(([x, y, line]) => {
-      fillText({ style: white }, [x, y + offset], line);
+      fillText(whiteFont, [x, y + offset], line);
     });
 
     if(inputs.space === 1) {

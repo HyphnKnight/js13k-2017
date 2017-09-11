@@ -10,7 +10,7 @@
 
 import { createRectangle } from 'pura/geometry/tuple';
 import { ctx, fillText } from 'pura/canvas/tuple';
-import { drawBox, stroke, lineHeight, white } from 'style';
+import { drawBox, stroke, lineHeight, whiteFont } from 'style';
 import { inputs } from 'controls';
 import { viewHeight, viewWidth } from 'dom';
 import { pointRight } from 'emoji';
@@ -43,7 +43,7 @@ const Menu = (commands)=> {
         ),
 
         render() {
-          fillText({ style: white }, [0, 0], label);
+          fillText(whiteFont, [0, 0], label);
 
           // Render pointer hand.
           if(activeCommandIndex === index) {
