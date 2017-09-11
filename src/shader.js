@@ -648,62 +648,55 @@ const paLen = atariPalette.length;
 
 const computedStorage = {};
 
-const colorDiff = (r, g, b, bypass) => {
-  let colorKey = `${r},${g},${b}`;
+const roundKey = (x) => x / 100 + 0.5 | 0;
 
-  let closestColor = computedStorage[colorKey];
+const genColorKey = (r, g, b) => `${roundKey(r)},${roundKey(g)},${roundKey(b)}`;
 
-  if(!closestColor && !bypass) {
-    colorKey = `${r / 100 + 0.5 | 0},${g / 100 + 0.5 | 0},${b / 100 + 0.5 | 0}`;
-    closestColor = computedStorage[colorKey];
-  } else if(!closestColor && bypass) {
-    computedStorage[colorKey] = [r, g, b];
-    return;
-  }
+const colorDiff = (r, g, b) => {
+  const key = genColorKey(r, g, b);
 
-  if(!closestColor) {
-    let minDistance = Infinity;
+  if(computedStorage[key]) return computedStorage[key];
 
-    for(let i = 0; i < paLen; ++i) {
-      const color = atariPalette[i];
-      const [cR, cG, cB] = color;
+  let minDistance = Infinity;
 
-      const distance =
+  let i = -1;
+  let correctIndex = 0;
+  while(++i < paLen) {
+    const [cR, cG, cB] = atariPalette[i];
+
+    const distance =
         ((r - cR) * (r - cR)) +
         ((g - cG) * (g - cG)) +
         ((b - cB) * (b - cB));
 
-      if(distance < minDistance) {
-        minDistance = distance;
-        closestColor = color;
-      }
+    if(distance < minDistance) {
+      minDistance = distance;
+      correctIndex = i;
     }
-
-    computedStorage[colorKey] = closestColor;
   }
 
-  return closestColor;
+  return computedStorage[key] = atariPalette[correctIndex];
 };
 
-for(const [r, g, b] of atariPalette) {
-  colorDiff(r, g, b, `bypass`);
-}
+let i = -1;
+while(++i < paLen) computedStorage[genColorKey(...atariPalette[i])] = atariPalette[i];
 
 const Atarify = () => {
   const img = ctx.getImageData(0, 0, viewWidth, viewHeight);
   const data = img.data;
   const dataLen = data.length;
 
-  for(let i = 0; i < dataLen; i += 4) {
-    const r = data[i];
-    const g = data[i + 1];
-    const b = data[i + 2];
-
-    const [aR, aG, aB] = colorDiff(r, g, b);
-
-    data[i] = aR;
-    data[i + 1] = aG;
-    data[i + 2] = aB;
+  let i = 0;
+  while(i < dataLen) {
+    const [nR, nG, mB] = colorDiff( // <- WTF is happening here?
+      data[i],
+      data[i + 1],
+      data[i + 2],
+    );
+    data[i] = nR;
+    data[i + 1] = nG;
+    data[i + 2] = mB;
+    i += 4;
   }
 
   // overwrite original image
