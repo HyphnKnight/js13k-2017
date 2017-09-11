@@ -1,7 +1,7 @@
 import mergeSort from 'pura/array/mergeSort';
 import PanCameraTo from 'battle/actions/PanCameraTo';
 
-export default function* AIAttack(character, nearbyGoodGuys) {
+export default function* AIMagic(character, nearbyGoodGuys) {
   const [{ type, abilities: { aiMagic: { effect } } }] = character;
   console.log(`1) Detect & Display possible attackers`);
   const target = mergeSort(nearbyGoodGuys, ([, health]) => health)[0];
