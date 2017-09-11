@@ -2,16 +2,16 @@
 
 export const dealDamage = (defChar, damage) => {
   console.log(`Dealing Damage`);
-  const [data, , , status] = defChar;
+  const [, , , status] = defChar;
   const shield = status.find(({ type }) => type === `shield`);
   if(shield) damage *= (1 - shield.effect);
-  console.log(`Deal ${damage} Damage to ${data.name}`);
+  console.log(`Deal ${damage} Damage to ${defChar[0].name}`);
   defChar[1] -= damage;
 };
 
-export const heal = (defChar, heal) => {
-  defChar[1] = Math.min(defChar[1] + heal, defChar[0].maxHealth);
-};
+export const heal =
+  (defChar, heal) =>
+    defChar[1] = Math.min(defChar[1] + heal, defChar[0].maxHealth);
 
 export const handlStatuses = (character) => {
   const [, , , statuses] = character;
