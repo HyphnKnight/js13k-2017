@@ -1,6 +1,7 @@
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const startTime = Date.now();
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
 const context = new AudioContext();
 
