@@ -9,7 +9,7 @@ import {
 } from 'pura/hex';
 import { pathTo } from 'pura/path/pathTo';
 import { flatten, clear } from 'pura/array';
-import { set, magnitudeSqr, addSet, subtract, subtractSet, scale, scaleSet } from 'pura/vector/tuple';
+import { set, addSet, subtractSet, scale, scaleSet } from 'pura/vector/tuple';
 import { animateFowardNoRepeat } from 'animation';
 import { easeInOutQuart } from 'easing';
 import { calcWorldPosition } from 'camera';

@@ -24,6 +24,11 @@ import Defend from 'battle/actions/Defend';
 import Magic from 'battle/actions/Magic';
 import Item from 'battle/actions/Item';
 import Swarmer from 'battle/actions/Swarmer';
+import Vamp from 'battle/actions/Vamp';
+import Skeli from 'battle/actions/Skeli';
+import Resentment from 'battle/actions/Resentment';
+import Doubt from 'battle/actions/Doubt';
+import Deceit from 'battle/actions/Deceit';
 import state from 'state';
 import { handlStatuses } from 'battle/actions/utility';
 
@@ -41,6 +46,8 @@ function* generateGetCharacter(turnOrder) {
   }
 }
 
+let harmTurns = 0;
+
 export default function createBattleScene(characters, mapSize) {
   initializeMap(characters, mapSize);
 
@@ -54,6 +61,14 @@ export default function createBattleScene(characters, mapSize) {
     magic: [`Forget`, () => selectedAction = Magic],
     item: [`Use`, () => selectedAction = Item],
     swarmer: Swarmer,
+    vamp: Vamp,
+    skeli: Skeli,
+    resentment: Resentment,
+    doubt: Doubt,
+    deceit: Deceit,
+    *harm() {
+      yield* action[[`doubt`, `resentment`, `deceit`][++harmTurns % 9 / 3 | 0]];
+    }
   };
 
   const getCharacter = generateGetCharacter(turnOrder);
@@ -81,7 +96,7 @@ export default function createBattleScene(characters, mapSize) {
           break;
         default:
           actions = Object.keys(data.abilities).map(name => action[name]);
-          // 4) Add actions to the menu
+        // 4) Add actions to the menu
       }
       const menuUIIndex = uiElements.push(Menu(actions));
       // 5) Wait for player to select an action.
