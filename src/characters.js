@@ -100,7 +100,7 @@ export default {
     maxHealth: 30,
     abilities: {
       swarm: {
-        range: 5,
+        range: 3,
       },
       aiAttack: {
         range: 1,
@@ -120,7 +120,8 @@ export default {
       },
       aiMagic: {
         range: 1,
-        damage: 15,
+        duration: 1,
+        effect: 5,
       }
     }
   },
@@ -138,9 +139,10 @@ export default {
         range: 1,
         damage: 20,
       },
-      aiProtect: {
+      aiDefend: {
         range: 1,
-        damage: 20,
+        duration: 1,
+        percentage: 0.25,
       }
     }
   },
