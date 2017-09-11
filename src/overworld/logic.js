@@ -1,13 +1,13 @@
 import { scaleToSet, add, addSet, set, subtract, magnitude, magnitudeSqr } from 'pura/vector/tuple';
 import { sign } from 'pura/math';
 import state from 'state';
-import { avngSprite, chldSprite, protSprite, persSprite, gemSprite } from 'overworld/graphics';
+import { avngSprite, chldSprite, protSprite, persSprite, gemSprite, isValidPropPosition } from 'overworld/graphics';
 import { camera } from 'camera';
 import { inputs } from 'controls';
 import { viewWidth } from 'dom';
 
 const direction = [0, 0];
-const charSpeed = ()=> inputs.space || inputs.shift ? 6 : 3;
+const charSpeed = () => inputs.space || inputs.shift ? 6 : 3;
 
 const follow =
   (sprite, distance) => {
@@ -21,7 +21,7 @@ export default () => {
   // Character Controls
   direction[0] = 0;
   direction[1] = 0;
-  if(!state.dialog.script.length){
+  if(!state.dialog.script.length) {
     if(inputs.w || inputs.up || inputs.s || inputs.down || inputs.d || inputs.right || inputs.a || inputs.left) state.target = null;
     if(inputs.w || inputs.up) direction[1] += 1;
     if(inputs.s || inputs.down) direction[1] -= 1;
@@ -30,7 +30,11 @@ export default () => {
   }
 
   const movement = scaleToSet(direction, charSpeed());
-  addSet(state.position, movement);
+  const newPosition = add(state.position, movement);
+  if(isValidPropPosition(newPosition)) {
+    set(state.position, ...newPosition);
+  }
+
   if(state.target !== null) {
     const diff = subtract(state.target, state.position);
     if(magnitudeSqr(diff) < 3) { state.target = null }

@@ -180,7 +180,7 @@ const generatePropPosition =
       islandPosition
     );
 
-const isValidPropPosition =
+export const isValidPropPosition =
   (point) => {
     const isOnIsland = isPointInCircle(point, islandPosition, islandRadius);
     const isOnASubIsland = !!islands.find(({ collision }) => collision(point));
@@ -249,7 +249,7 @@ const sand = `#fce08c`;
 // sky
 const skyBlue = `#90b4ec`;
 
-const groundColor = `#6c9850`; //ctx.createLinearGradient(0, 0, 200, 200);
+const groundColor = `#6c9850`;
 
 export const render = () => {
   // Background
@@ -281,13 +281,8 @@ export const render = () => {
     getShoreLine(waveScaleFactor),
   ));
 
-<<<<<<< HEAD
-  fillOval(
-    groundColor,
-=======
   islands.forEach(({ getBase }) => fillOval(
-    groundGradient,
->>>>>>> Restructure
+    groundColor,
     [0, 0],
     getBase(),
   ));
