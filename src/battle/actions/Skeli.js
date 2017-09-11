@@ -4,7 +4,7 @@ import AIDefend from 'battle/actions/AIDefend';
 import AIAttack from 'battle/actions/AIAttack';
 
 export default function* Skeli(character) {
-  const [{ abilities: { aiMagic: { range } } }, , position] = character;
+  const [{ abilities: { aiAttack: { range } } }, , position] = character;
   const nearbyGoodGuys = getNearbyAllies(position, range);
   const nearbyBadGuys = getNearbyEnemies(position, range);
   if(nearbyGoodGuys.length === 0) {
