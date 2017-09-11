@@ -161,7 +161,7 @@ export default {
     }
   },
 
-  winter: {
+  doubt: {
     name: `Doubt`,
     emoji: mask,
     type: false,
