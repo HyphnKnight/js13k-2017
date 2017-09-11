@@ -103,7 +103,7 @@ export default {
       },
       aiAttack: {
         range: 1,
-        damage: 15,
+        damage: 10,
       }
     }
   },
