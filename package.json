@@ -6,6 +6,7 @@
   "scripts": {
     "start": "rollup --config rollup.config.dev.js --watch",
     "compile": "rollup --config rollup.config.prod.js",
+    "uglify": "uglifyjs --compress --mangle --mangle-props -- docs/script.js > docs/script2.js",
     "zip": "bestzip Alter.zip docs",
     "test-size": "stat Alter.zip",
     "build": "npm run compile && npm run zip && npm run test-size",
@@ -35,6 +36,7 @@
     "rollup-plugin-includepaths": "^0.2.2",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-plugin-serve": "^0.4.2",
+    "uglify-es": "^3.1.0",
     "xml2js": "^0.4.19"
   },
   "dependencies": {
