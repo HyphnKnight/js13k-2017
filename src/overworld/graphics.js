@@ -5,6 +5,7 @@ import { fillPolygon, fillRectangle, fillText, fillOval, strokeOval } from 'pura
 import { perspective, perspective2d } from 'camera';
 import { viewWidth, viewHeight } from 'dom';
 import { tulip } from 'emoji';
+import { white } from 'style';
 import state from 'state';
 import { islands } from 'overworld/island';
 import {
@@ -219,22 +220,10 @@ while(++i < len) {
 
 const filterMiasma = () => graphics = graphics.filter(([x, , , emoji]) => emoji === tulip && x < state.miasma);
 
-// Colors
-// ocean
-const baseOcean = `#69D2E7`;
-const seaFoam = `#fff`;
-// ground
-const sand = `#fce08c`;
-
-// sky
-const skyBlue = `#90b4ec`;
-
-const groundColor = `#6c9850`;
-
 export const render = () => {
   // Background
   fillRectangle(
-    skyBlue,
+    `#90b4ec`,
     [0, 0],
     viewWidth * 2,
     viewHeight * 2,
@@ -242,7 +231,7 @@ export const render = () => {
   );
 
   fillPolygon(
-    baseOcean,
+    `#69D2E7`,
     [0, 0],
     groundPlanePoints,
   );
@@ -250,27 +239,25 @@ export const render = () => {
   const waveScaleFactor = 1.2 - Math.abs(Date.now() % 7200 / (7200 / 2) - 1) / 10;
 
   islands.forEach(({ getShoreLine }) => strokeOval(
-    { style: seaFoam, thickness: 4 },
+    { style: white, thickness: 4 },
     [0, 0],
     getShoreLine(waveScaleFactor),
   ));
 
   islands.forEach(({ getShoreLine }) => fillOval(
-    sand,
+    `#fce08c`,
     [0, 0],
     getShoreLine(waveScaleFactor),
   ));
 
   islands.forEach(({ getBase }) => fillOval(
-    groundColor,
+    `#6c9850`,
     [0, 0],
     getBase(),
   ));
 
-  for(const pool of pools) {
-    pool.render();
-    pool.testCallback(state.position);
-  }
+  pools.forEach(({ render, test }) => { render(); test() });
+
 
   // Dynamic
   graphics
