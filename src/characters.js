@@ -1,6 +1,6 @@
 import {
   child, avenger, protector, persecutor,
-  scorpion, bat,
+  scorpion, bat, skull,
 } from 'emoji';
 
 export default {
@@ -122,6 +122,26 @@ export default {
         damage: 15,
       }
     }
-  }
+  },
+
+  skeli: {
+    name: `Skeli`,
+    emoji: skull,
+    type: false,
+    maxHealth: 40,
+    abilities: {
+      hunt: {
+        range: 5,
+      },
+      aiAttack: {
+        range: 1,
+        damage: 20,
+      },
+      aiProtect: {
+        range: 1,
+        damage: 20,
+      }
+    }
+  },
 
 };

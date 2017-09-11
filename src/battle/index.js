@@ -25,6 +25,7 @@ import Magic from 'battle/actions/Magic';
 import Item from 'battle/actions/Item';
 import Swarmer from 'battle/actions/Swarmer';
 import Vamp from 'battle/actions/Vamp';
+import Skeli from 'battle/actions/Skeli';
 import state from 'state';
 import { handlStatuses } from 'battle/actions/utility';
 
@@ -56,6 +57,7 @@ export default function createBattleScene(characters, mapSize) {
     item: [`Use`, () => selectedAction = Item],
     swarmer: Swarmer,
     vamp: Vamp,
+    skeli: Skeli,
   };
 
   const getCharacter = generateGetCharacter(turnOrder);
