@@ -190,13 +190,15 @@ const generatePropPosition =
       islandPosition
     );
 
-export const isValidPropPosition =
-  (point) => {
-    const isOnIsland = isPointInCircle(point, islandPosition, islandRadius);
-    const isOnASubIsland = !!islands.find(({ collision }) => collision(point));
-    const isNotInAPool = !pools.find(({ collision }) => collision(point));
-    return isOnIsland && isOnASubIsland && isNotInAPool;
-  };
+export const isOnIsland =
+  (point) =>
+    isPointInCircle(point, islandPosition, islandRadius) &&
+    !!islands.find(({ collision }) => collision(point));
+
+const isValidPropPosition =
+  (point) =>
+    isOnIsland(point) &&
+    !pools.find(({ collision }) => collision(point));
 
 const generateValidPropPoint =
   () => {

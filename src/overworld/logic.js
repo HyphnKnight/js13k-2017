@@ -1,7 +1,7 @@
 import { scaleToSet, add, addSet, set, subtract, magnitude, magnitudeSqr } from 'pura/vector/tuple';
 import { sign } from 'pura/math';
 import state from 'state';
-import { avngSprite, chldSprite, protSprite, persSprite, gemSprite, isValidPropPosition } from 'overworld/graphics';
+import { avngSprite, chldSprite, protSprite, persSprite, gemSprite, isOnIsland } from 'overworld/graphics';
 import { camera } from 'camera';
 import { inputs } from 'controls';
 import { viewWidth } from 'dom';
@@ -31,7 +31,7 @@ export default () => {
 
   const movement = scaleToSet(direction, charSpeed());
   const newPosition = add(state.position, movement);
-  if(isValidPropPosition(newPosition) && newPosition[0] < state.miasma) {
+  if(isOnIsland(newPosition)) {
     set(state.position, ...newPosition);
   }
 
