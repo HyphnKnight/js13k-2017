@@ -1,24 +1,11 @@
-import includePaths from 'rollup-plugin-includepaths';
-import resolve from 'rollup-plugin-node-resolve';
-import analyze from 'rollup-analyzer-plugin';
+import config from './rollup.config.base.js';
+import minify from 'rollup-plugin-babel-minify';
 
-export default {
-  name: `Alter`,
-  input: `src/index.js`,
-  output: {
-    file: `docs/script.js`,
-    format: `iife`,
-    sourcemap: false
-  },
+config.plugins.push(minify({
+  comments: false,
+  removeConsole: true,
+  removeDebugger: true,
+  removeUndefined: true,
+}));
 
-  plugins: [
-    includePaths({
-      include: {},
-      paths: [`src`],
-      external: [],
-      extensions: [`.js`]
-    }),
-    resolve(),
-    analyze()
-  ],
-};
+export default config;

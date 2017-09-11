@@ -1,5 +1,5 @@
 import serve from 'rollup-plugin-serve';
-import config from './rollup.config.prod.js';
+import config from './rollup.config.base.js';
 
 config.output.file = `dev/script.js`;
 
