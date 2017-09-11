@@ -1,6 +1,7 @@
 import {
   child, avenger, protector, persecutor,
   scorpion, bat, skull,
+  mask,
 } from 'emoji';
 
 export default {
@@ -141,6 +142,22 @@ export default {
         range: 1,
         damage: 20,
       }
+    }
+  },
+
+  resentment: {
+    name: `Resentment`,
+    emoji: mask,
+    type: false,
+    maxHealth: 100,
+    abilities: {
+      hunt: {
+        range: 5,
+      },
+      aiAttack: {
+        range: 1,
+        damage: 40,
+      },
     }
   },
 

@@ -26,6 +26,7 @@ import Item from 'battle/actions/Item';
 import Swarmer from 'battle/actions/Swarmer';
 import Vamp from 'battle/actions/Vamp';
 import Skeli from 'battle/actions/Skeli';
+import Resentment from 'battle/actions/Resentment';
 import state from 'state';
 import { handlStatuses } from 'battle/actions/utility';
 
@@ -58,6 +59,7 @@ export default function createBattleScene(characters, mapSize) {
     swarmer: Swarmer,
     vamp: Vamp,
     skeli: Skeli,
+    resentment: Resentment,
   };
 
   const getCharacter = generateGetCharacter(turnOrder);
@@ -85,7 +87,7 @@ export default function createBattleScene(characters, mapSize) {
           break;
         default:
           actions = Object.keys(data.abilities).map(name => action[name]);
-          // 4) Add actions to the menu
+        // 4) Add actions to the menu
       }
       const menuUIIndex = uiElements.push(Menu(actions));
       // 5) Wait for player to select an action.
