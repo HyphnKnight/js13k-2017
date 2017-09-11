@@ -244,13 +244,13 @@ export const render = () => {
   ));
 
   islands.forEach(({ getShoreLine }) => fillOval(
-    `#fce08c`,
+    `#fafac8`,
     [0, 0],
     getShoreLine(waveScaleFactor),
   ));
 
   islands.forEach(({ getBase }) => fillOval(
-    `#6c9850`,
+    `#00c864`,
     [0, 0],
     getBase(),
   ));
