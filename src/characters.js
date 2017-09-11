@@ -1,7 +1,7 @@
 import {
   child, avenger, protector, persecutor,
   scorpion, bat, skull,
-  mask, winter,
+  mask, winter, drama,
 } from 'emoji';
 
 export default {
@@ -165,7 +165,7 @@ export default {
 
   doubt: {
     name: `Doubt`,
-    emoji: mask,
+    emoji: winter,
     type: false,
     maxHealth: 120,
     abilities: {
@@ -178,7 +178,7 @@ export default {
 
   deceit: {
     name: `Deceit`,
-    emoji: mask,
+    emoji: drama,
     type: false,
     maxHealth: 120,
     abilities: {
