@@ -4,7 +4,7 @@ import { fillOval, strokeOval } from 'pura/canvas/tuple';
 import { perspective2d } from 'camera';
 
 const createPool =
-  (baseColor, shoreColor, waveColor) =>
+  (baseColor, shoreColor) =>
     (baseSize, position, callBack, display = true) => {
       const offset = ((Math.random() * 500)) | 0;
       const interval = 1800 + ((Math.random() * 1000) | 0);
@@ -39,7 +39,7 @@ const createPool =
         const rippleScale = (Date.now() + offset) % interval / speed;
 
         strokeOval(
-          { style: waveColor, thickness: 1 },
+          { style: shoreColor, thickness: 1 },
           [0, 0],
           mapList(
             addListSet(
@@ -65,9 +65,9 @@ const createPool =
       return { collision, test, render, toggle };
     };
 
-export const makeAvengerPool = createPool(`#c05858`, `#9c2020`, `#fcb4b4`);
-export const makeChildPool = createPool(`#EDE574`, `#F9D423`, `#E1F5C4`);
-export const makeProtectorPool = createPool(`#00B4CC`, `#005F6B`, `#00DFFC`);
-export const makePersecutorPool = createPool(`#8F9A9C`, `#65727A`, `#BEC3BC`);
-export const makeOriginalPool = createPool(`#EDEDF2`, `#CFD5E1`, `#FCFDFF`);
-export const makeEvilPool = createPool(`#4F364C`, `#8F9E6F`, `#B1CF72`);
+export const makeAvengerPool = createPool(`#fa96fa`, `#65727A`); // Pink/gray
+export const makeChildPool = createPool(`#EDE574`, `#F9D423`); // orange/yellow
+export const makeProtectorPool = createPool(`#3296fa`, `#0032fa`); // Blue
+export const makePersecutorPool = createPool(`#fa96fa`, `#65727A`); // Green
+export const makeOriginalPool = createPool(`#EDEDF2`, `#CFD5E1`); // Gray/White
+export const makeEvilPool = createPool(`#4F364C`, `#8F9E6F`); // Purple/Green

@@ -279,13 +279,9 @@ genMiasma();
 // ocean
 const baseOcean = `#69D2E7`;
 const seaFoam = `#fff`;
-// ground
-const sand = `#fce08c`;
 
 // sky
 const skyBlue = `#90b4ec`;
-
-const groundColor = `#6c9850`;
 
 export const render = () => {
   // Background
@@ -312,13 +308,13 @@ export const render = () => {
   ));
 
   islands.forEach(({ getShoreLine }) => fillOval(
-    sand,
+    `#fafac8`,
     [0, 0],
     getShoreLine(waveScaleFactor),
   ));
 
   islands.forEach(({ getBase }) => fillOval(
-    groundColor,
+    `#00c864`,
     [0, 0],
     getBase(),
   ));

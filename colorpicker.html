@@ -1,0 +1,47 @@
+<html>
+
+<body>
+  <style>
+    html,
+    body {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    div {
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+  <li></li>
+  <script>
+    const rgbToHex = (r, g, b) => '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    const colorLabel = document.querySelector('li');
+    const offset = 50;
+    const getColor = (x) => ((x) | 0) * offset;
+    let r = -1;
+    let g = -1;
+    let b = -1;
+    const onClick = (color) => () => colorLabel.innerHTML = color;
+    while (++r < (256 / offset)) {
+      while (++g < (256 / offset)) {
+        while (++b < (256 / offset)) {
+          const div = document.createElement('div');
+          const color = rgbToHex(getColor(r), getColor(g), getColor(b));
+          div.style.backgroundColor = color;
+          div.addEventListener('click', onClick(color));
+          document.body.appendChild(div);
+        }
+        b = -1;
+        document.body.appendChild(document.createElement('br'));
+      }
+      g = -1;
+    }
+  </script>
+</body>
+
+</html>
