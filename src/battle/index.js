@@ -80,7 +80,6 @@ export default function createBattleScene(characters, mapSize) {
     console.log(`${data.name} : ${health}`);
     // 2) Center Camera on that person.
     const panCamera = moveCharacter(camera, add(cameraOffset, position), 2000);
-    console.log(`Paning Camera from ${camera} to ${add(cameraOffset, position)}`);
     while(!panCamera()) yield;
     // 3) Look up actions
     selectedAction = null;
