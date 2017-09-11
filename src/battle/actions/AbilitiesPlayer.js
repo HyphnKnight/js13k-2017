@@ -4,8 +4,12 @@ import {
   getNearbyAllies,
   getNearbyCharacters,
   getNearbyCharacterHexes,
+  getPathToTarget,
+  getGridHexFromVector2d,
+  getMovementOptions,
 } from 'battle/grid';
 import { dealDamage } from 'battle/actions/utility';
+import MoveCharacterOnPath from 'battle/actions/MoveCharacterOnPath';
 import UserSelectLocation from 'battle/actions/UserSelectLocation';
 import PanCameraTo from 'battle/actions/PanCameraTo';
 
@@ -71,4 +75,11 @@ export function* Item(character) {
   while(!selectedAction) yield;
   uiElements.splice(menuUIIndex, 1);
   yield* selectedAction(character);
+}
+
+export function* Move([{ abilities: { move: { range } } }, , position]) {
+  const positionHex = getGridHexFromVector2d(position);
+  const selectedLocation = yield* GetUserSelectTarget(getMovementOptions, positionHex,range);
+  yield* PanCameraTo(position);
+  yield* MoveCharacterOnPath(position, getPathToTarget(positionHex, selectedLocation));
 }

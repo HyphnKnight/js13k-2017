@@ -18,16 +18,13 @@ import Menu from 'menu';
 import StatusBar from 'battle/statusBar';
 import BattleMap from 'battle/map';
 import { initializeMap, turnOrder, moveCharacter, getGridHexFromVector2d } from 'battle/grid';
-import Move from 'battle/actions/Move';
 import {
-  Attack, Defend, Magic, Item,
-} from 'battle/actions/PlayerAbilities';
-import Swarmer from 'battle/actions/Swarmer';
-import Vamp from 'battle/actions/Vamp';
-import Skeli from 'battle/actions/Skeli';
-import Resentment from 'battle/actions/Resentment';
-import Doubt from 'battle/actions/Doubt';
-import Deceit from 'battle/actions/Deceit';
+  Attack, Defend, Magic, Item, Move
+} from 'battle/actions/AbilitiesPlayer';
+import {
+  Swarmer, Vamp, Skeli,
+  Resentment, Doubt, Deceit,
+} from 'battle/actions/BehaviorAI';
 import state from 'state';
 import { handlStatuses } from 'battle/actions/utility';
 

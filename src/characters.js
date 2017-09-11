@@ -99,7 +99,8 @@ export default {
     type: false,
     maxHealth: 30,
     abilities: {
-      swarm: {
+      aiMove: {
+        type: true,
         range: 3,
       },
       aiAttack: {
@@ -115,7 +116,8 @@ export default {
     type: false,
     maxHealth: 40,
     abilities: {
-      hunt: {
+      aiMove: {
+        type: false,
         range: 5,
       },
       aiMagic: {
@@ -132,7 +134,8 @@ export default {
     type: false,
     maxHealth: 40,
     abilities: {
-      hunt: {
+      aiMove: {
+        type: false,
         range: 5,
       },
       aiAttack: {
@@ -153,7 +156,8 @@ export default {
     type: false,
     maxHealth: 60,
     abilities: {
-      hunt: {
+      aiMove: {
+        type: false,
         range: 5,
       },
       aiAttack: {
@@ -182,7 +186,8 @@ export default {
     type: false,
     maxHealth: 120,
     abilities: {
-      swarm: {
+      aiMove: {
+        type: true,
         range: 3,
       },
       aiAttack: {
@@ -208,11 +213,9 @@ export default {
     type: false,
     maxHealth: 120,
     abilities: {
-      swarm: {
+      aiMove: {
+        type: true,
         range: 3,
-      },
-      hunt: {
-        range: 5,
       },
       aiAttack: {
         range: 3,
