@@ -19,6 +19,7 @@ const skipTitle = ()=> {
     if(!inIntro) {
       inIntro = true;
 
+      bgMusic.stop();
       title.children = [Movie(0, 0, viewWidth, viewHeight, intro, ()=> {
         Scene(overworld);
       })];

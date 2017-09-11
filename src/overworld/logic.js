@@ -31,7 +31,7 @@ export default () => {
   }
 
   const newPosition = add(state.position, movement);
-  if(isOnIsland(newPosition)) set(state.position, ...newPosition);
+  if(isOnIsland(newPosition) && newPosition[0] < state.miasma && !state.dialog.script.length) set(state.position, ...newPosition);
 
   set(avngSprite, ...state.position);
   follow(protSprite, 20 + Date.now() % 300 / 30);

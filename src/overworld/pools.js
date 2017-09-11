@@ -5,23 +5,30 @@ import { perspective2d } from 'camera';
 
 const createPool =
   (baseColor, shoreColor, waveColor) =>
-    (baseSize, position, callBack) => {
+    (baseSize, position, callBack, display = true) => {
       const offset = ((Math.random() * 500)) | 0;
       const interval = 1800 + ((Math.random() * 1000) | 0);
       const speed = baseSize * 12;
       const basePoints = getRectanglePoints(baseSize * 2, baseSize * 2);
       const placedPoints = addList(basePoints, position);
       let adjustedPoints;
+      const toggle = {
+        display
+      };
       const collision = (targetPosition) =>
         magnitudeSqr(subtract(targetPosition, position)) <= baseSize * baseSize;
       const test = (targetPosition) => {
-        if(callBack && collision(targetPosition)) {
+        if(toggle.display && callBack && collision(targetPosition)) {
           callBack();
           callBack = null;
         }
       };
       const render = () => {
         adjustedPoints = mapList(placedPoints, perspective2d);
+
+        if(!toggle.display) {
+          return;
+        }
 
         fillOval(
           baseColor,
@@ -55,7 +62,7 @@ const createPool =
         );
 
       };
-      return { collision, test, render };
+      return { collision, test, render, toggle };
     };
 
 export const makeAvengerPool = createPool(`#c05858`, `#9c2020`, `#fcb4b4`);

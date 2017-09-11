@@ -1,5 +1,4 @@
-import overworld from 'overworld';
-import battle from 'battle';
+import titlescreen from 'titlescreen';
 import Scene from 'scene';
 import state from 'state';
 import loop from 'loop';
@@ -8,9 +7,7 @@ import { render } from 'ui';
 import { clear } from 'pura/canvas/tuple';
 import Atarify from 'shader';
 
-Scene(overworld);
-
-setTimeout(() => battle, 300);
+Scene(titlescreen);
 
 loop((dt) => {
   clear();
