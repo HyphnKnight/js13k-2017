@@ -1,7 +1,7 @@
 import {
   child, avenger, protector, persecutor,
   scorpion, bat, skull,
-  mask, winter, drama,
+  mask, winter, drama, dragon,
 } from 'emoji';
 
 export default {
@@ -187,6 +187,35 @@ export default {
       },
       aiAttack: {
         range: 1,
+        damage: 20,
+      },
+      aiMagic: {
+        range: 3,
+        effect: 10,
+        duration: 3,
+      },
+      aiDefend: {
+        range: 2,
+        duration: 2,
+        percentage: 0.25,
+      },
+    }
+  },
+
+  harm: {
+    name: `Harm`,
+    emoji: dragon,
+    type: false,
+    maxHealth: 120,
+    abilities: {
+      swarm: {
+        range: 3,
+      },
+      hunt: {
+        range: 5,
+      },
+      aiAttack: {
+        range: 3,
         damage: 20,
       },
       aiMagic: {

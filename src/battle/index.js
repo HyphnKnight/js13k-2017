@@ -46,6 +46,8 @@ function* generateGetCharacter(turnOrder) {
   }
 }
 
+let harmTurns = 0;
+
 export default function createBattleScene(characters, mapSize) {
   initializeMap(characters, mapSize);
 
@@ -64,6 +66,9 @@ export default function createBattleScene(characters, mapSize) {
     resentment: Resentment,
     doubt: Doubt,
     deceit: Deceit,
+    *harm() {
+      yield* action[[`doubt`, `resentment`, `deceit`][++harmTurns % 9 / 3 | 0]];
+    }
   };
 
   const getCharacter = generateGetCharacter(turnOrder);
