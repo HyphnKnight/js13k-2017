@@ -6,6 +6,7 @@ import { perspective, perspective2d } from 'camera';
 import { viewWidth, viewHeight } from 'dom';
 import state from 'state';
 import { islands } from 'overworld/island';
+import { tulip } from 'emoji';
 import {
   mkTree,
   mkTreeAlt,
@@ -28,7 +29,7 @@ import {
 import Scene from 'scene';
 import ending from 'ending';
 
-export const graphics = [];
+export let graphics = [];
 
 const groundPlanePoints = mapListSet(
   addListSet(getRectanglePoints(10000, 1600), [0, 1600 / 2]),
@@ -59,14 +60,12 @@ const advLevel = function* () {
       yield currPool;
     }
 
-    state.dialog.callback = () => {
-      genMiasma();
-    };
+    state.dialog.callback = filterMiasma;
     currPool = 0;
     yield ++currLevel;
   }
 
-  genMiasma();
+  filterMiasma();
 
   yield;
 };
@@ -207,6 +206,7 @@ const props = [
   [mkTree, 50],
   [mkTreeAlt, 50],
   [mkMountain, 10],
+  [mkTulip, 500]
 ];
 
 const generatePropPosition =
@@ -247,33 +247,8 @@ while(++i < len) {
 }
 
 // Miasma.
-let miasmaOnce = false;
-const genMiasma = () => {
-  if(!miasmaOnce) {
-    miasmaOnce = true;
-  } else {
-    graphics.splice(-500, 500);
-  }
-
-  if(state.miasma === Infinity) {
-    return;
-  }
-
-  let i = 0;
-
-  while(++i < 500) {
-    let pos = generateValidPropPoint();
-
-    if(pos[0] < state.miasma) {
-      --i;
-      pos = generateValidPropPoint();
-      continue;
-    }
-
-    graphics.push(mkTulip(pos, 0));
-  }
-};
-genMiasma();
+const filterMiasma = () => graphics = graphics.filter(([x, , , emoji]) => emoji !== tulip || x > state.miasma);
+filterMiasma();
 
 // Colors
 // ocean
@@ -282,6 +257,7 @@ const seaFoam = `#fff`;
 
 // sky
 const skyBlue = `#90b4ec`;
+
 
 export const render = () => {
   // Background
