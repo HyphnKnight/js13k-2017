@@ -1,7 +1,7 @@
 import {
   child, avenger, protector, persecutor,
   scorpion, bat, skull,
-  mask,
+  mask, winter,
 } from 'emoji';
 
 export default {
@@ -157,6 +157,19 @@ export default {
       aiAttack: {
         range: 1,
         damage: 40,
+      },
+    }
+  },
+
+  winter: {
+    name: `Doubt`,
+    emoji: mask,
+    type: false,
+    maxHealth: 120,
+    abilities: {
+      aiAttack: {
+        range: 10,
+        damage: 30,
       },
     }
   },

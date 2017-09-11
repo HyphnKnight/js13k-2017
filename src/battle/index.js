@@ -27,6 +27,7 @@ import Swarmer from 'battle/actions/Swarmer';
 import Vamp from 'battle/actions/Vamp';
 import Skeli from 'battle/actions/Skeli';
 import Resentment from 'battle/actions/Resentment';
+import Winter from 'battle/actions/Winter';
 import state from 'state';
 import { handlStatuses } from 'battle/actions/utility';
 
@@ -60,6 +61,7 @@ export default function createBattleScene(characters, mapSize) {
     vamp: Vamp,
     skeli: Skeli,
     resentment: Resentment,
+    winter: Winter,
   };
 
   const getCharacter = generateGetCharacter(turnOrder);
