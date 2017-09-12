@@ -44,8 +44,35 @@ function* generateGetCharacter(turnOrder) {
 
 let harmTurns = 0;
 
-export default function createBattleScene(characters, mapSize) {
-  initializeMap(characters, mapSize);
+const baseArray = [
+  [`avenger`, [0, 0, 0]],
+  [`child`, [1, 0, -1]],
+  [`protector`, [-1, 1, 0]],
+  [`persecutor`, [-1, 0, 1]],
+];
+
+export const randomEnemyLocation =
+  () => ([
+    Math.floor(Math.random() * 3 + 2) * (Math.ceil(Math.random() * 2) - 1),
+    Math.floor(Math.random() * 3 + 2) * (Math.ceil(Math.random() * 2) - 1),
+  ]);
+
+export const generateBattle =
+  (swarmers, vamps, skelis, boss) => {
+    const battle = [...baseArray];
+    let i = -1;
+    const len = Math.max(swarmers, vamps, skelis);
+    while(++i < len) {
+      if(i < swarmers) battle.unshift([`swarmer`, randomEnemyLocation()]);
+      if(i < vamps) battle.unshift([`vamp`, randomEnemyLocation()]);
+      if(i < skelis) battle.unshift([`skeli`, randomEnemyLocation()]);
+    }
+    boss && battle.unshift([boss, randomEnemyLocation()]);
+    return battle;
+  };
+
+export default function createBattleScene(characters) {
+  initializeMap(characters);
 
   let turn = null;
   let selectedAction = null;
