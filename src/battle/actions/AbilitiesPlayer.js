@@ -29,8 +29,6 @@ export function* Attack([{ abilities: { attack: { damage, range } } }, , positio
 
 export function* Defend([{ abilities: { defend: { range, duration, percentage } } }, , position]) {
   getNearbyAllies(position, range)
-    .map(getCharacterAtHex)
-    .filter(x => x)
     .forEach(([, , , status]) => status.push({
       type: `shield`,
       duration,
