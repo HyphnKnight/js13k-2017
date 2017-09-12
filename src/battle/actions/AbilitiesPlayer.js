@@ -54,7 +54,7 @@ export function* Magic([{ type, abilities: { magic: { effect, range } } }, , pos
 }
 
 export function* Item(character) {
-  const [{ abilities: { attack, defend, magic, reset } }] = character;
+  const [{ abilities: { attack, defend, magic } }] = character;
   let selectedAction = null;
   const actions = [
     attack.count && [`Abuse (${attack.count})`, () => {
@@ -69,10 +69,6 @@ export function* Item(character) {
       --magic.count;
       selectedAction = Magic;
     }],
-    // reset.count && [`Remember (${reset.count})`, () => {
-    //   --reset.count;
-    //   selectedAction = Attack;
-    // }],
   ].filter(x => x);
 
   const menuUIIndex = uiElements.push(Menu(actions)) - 1;
