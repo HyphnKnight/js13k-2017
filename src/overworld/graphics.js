@@ -27,6 +27,7 @@ import {
   makeEvilPool,
 } from 'overworld/pools';
 import Scene from 'scene';
+import battle from 'battle';
 import ending from 'ending';
 
 export let graphics = [];
@@ -60,7 +61,14 @@ const advLevel = function* () {
       yield currPool;
     }
 
-    state.dialog.callback = filterMiasma;
+    state.dialog.callback = ()=> {
+      Scene(battle([
+        [`avenger`, [0, 0, 0]],
+        [`child`, [1, 0, -1]],
+        [`protector`, [-1, 1, 0]],
+        [`persecutor`, [-1, 0, 1]],
+      ], 5));
+    };
     currPool = 0;
     yield ++currLevel;
   }
@@ -251,8 +259,7 @@ while(++i < len) {
 }
 
 // Miasma.
-const filterMiasma = () => graphics = graphics.filter(([x, , , emoji]) => emoji !== tulip || x > state.miasma);
-filterMiasma();
+export const filterMiasma = () => graphics = graphics.filter(([x, , , emoji]) => emoji !== tulip || x > state.miasma);
 
 // Colors
 // ocean

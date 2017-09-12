@@ -13,7 +13,8 @@ const state = {
   position: [-545, 700],
   target: null,
   logic: null,
-  miasma: -275
+  miasma: -275,
+  battle: 0
   // miasma: Infinity
 };
 

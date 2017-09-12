@@ -25,8 +25,10 @@ import {
   Swarmer, Vamp, Skeli,
   Resentment, Doubt, Deceit,
 } from 'battle/actions/BehaviorAI';
-import state from 'state';
 import { handlStatuses } from 'battle/actions/utility';
+import state from 'state';
+import Scene from 'scene';
+import overworld from 'overworld';
 
 const cameraOffset = [0, -150];
 
@@ -130,6 +132,8 @@ export default function createBattleScene(characters, mapSize) {
           turn = Turn();
         } else if(done && value === 1) {
           // 9B) VICTORY
+          state.battle++;
+          Scene(overworld);
         } else if(done && value === 2) {
           // 9C) DEFEAT
         }
@@ -137,6 +141,7 @@ export default function createBattleScene(characters, mapSize) {
     },
     dismiss: () => {
       // bgMusic.stop();
+
     },
   };
 }
