@@ -53,9 +53,9 @@ const checkStatus =
 
 
 const checks = [
-  checkStatus(`shield`, `blue`, `S`, -5),
-  checkStatus(`heal`, `green`, `H`, 0),
-  checkStatus(`damage`, `red`, `D`, 5),
+  checkStatus(`shield`, `#0064fa`, `S`, -5),
+  checkStatus(`heal`, `#32fa00`, `H`, 0),
+  checkStatus(`damage`, `#fa3200`, `D`, 5),
 ];
 
 const drawEntity =
