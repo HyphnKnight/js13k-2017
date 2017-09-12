@@ -1,7 +1,7 @@
 import { createRectangle } from 'pura/geometry/tuple';
 import { viewWidth, viewHeight } from 'dom';
-import Song from 'audio';
-import canond from 'songs/canond';
+// import Song from 'audio';
+// import canond from 'songs/canond';
 import { inputs } from 'controls';
 import state from 'state';
 import { uiElements } from 'ui';
@@ -19,7 +19,7 @@ const skipTitle = ()=> {
     if(!inIntro) {
       inIntro = true;
 
-      bgMusic.stop();
+      // bgMusic.stop();
       title.children = [Movie(0, 0, viewWidth, viewHeight, intro, ()=> {
         Scene(overworld);
       })];
@@ -56,13 +56,13 @@ const title = {
   }
 };
 
-const bgMusic = new Song(canond);
+// const bgMusic = new Song(canond);
 
 export default {
   init: () => {
     uiElements.push(title);
-    bgMusic.play();
+    // bgMusic.play();
     state.logic = null;
   },
-  dismiss: () => bgMusic.stop(),
+  dismiss: () => {}//bgMusic.stop(),
 };
