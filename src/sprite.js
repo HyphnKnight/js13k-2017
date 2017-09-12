@@ -11,6 +11,7 @@ import {
   ghost,
   pool,
   gem,
+  grass,
 } from 'emoji';
 
 // size is a scale relative to 16px.
@@ -24,6 +25,8 @@ export const mkAvenger = createSprite(avenger);
 export const mkCloud = createSprite(cloud);
 export const mkMountain = createSprite(mountain, 4);
 export const mkTulip = createSprite(tulip, 0.5);
+export const mkGrass = createSprite(grass, 0.5);
 export const mkGhost = createSprite(ghost);
 export const mkPool = createSprite(pool);
 export const mkGem = createSprite(gem);
+

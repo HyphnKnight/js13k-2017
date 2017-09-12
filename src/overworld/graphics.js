@@ -17,7 +17,8 @@ import {
   mkPersecutor,
   mkGem,
   mkMountain,
-  mkTulip
+  mkTulip,
+  mkGrass,
 } from 'sprite';
 import {
   makeAvengerPool,
@@ -174,6 +175,7 @@ const props = [
   [mkTreeAlt, 50],
   [mkMountain, 10],
   [mkTulip, 500],
+  [mkGrass, 500]
 ];
 
 const generatePropPosition =
@@ -266,7 +268,7 @@ export const render = () => {
       return;
     }
 
-    pools.push(makeOriginalPool(25 + (diff/3000)*(200 - 25), [350, 900]));
+    pools.push(makeOriginalPool(25 + (diff / 3000) * (200 - 25), [350, 900]));
   }
   for(const pool of pools) {
     pool.render();

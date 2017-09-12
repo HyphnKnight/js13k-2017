@@ -37,3 +37,4 @@ export const clock2 = `\uD83D\uDD57`;
 export const clock3 = `\uD83D\uDD55`;
 export const clock4 = `\uD83D\uDD53`;
 export const clock5 = `\uD83D\uDD51`;
+export const grass = `\uD83C\uDF31`;
