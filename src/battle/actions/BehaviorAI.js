@@ -57,7 +57,7 @@ const getAIPath = (position, tPosition, range) => {
   return path;
 };
 
-export function* AIMove([{ abilities: { moveAI: { range, type } } }, , position]) {
+export function* AIMove([{ abilities: { aiMove: { range, type } } }, , position]) {
   yield* PanCameraTo(position);
   const goodGuys = mergeSort(
     getNearbyAllies(position, 100),
