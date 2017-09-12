@@ -96,7 +96,7 @@ const Dialog = {
       fillText(whiteFont, [x, y + offset], line);
     });
 
-    if(inputs.space === 1 || inputs.mouse === 1) {
+    if(inputs.space === 1 || inputs.click === 1) {
       if(maxChar < text.length) {
         textStart = 1;
       } else {
