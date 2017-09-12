@@ -161,7 +161,6 @@ export function createBattleScene(swarmers, vamps, skelis, boss) {
           turn = Turn();
         } else if(done && value === 1) {
           // 9B) VICTORY
-          state.battle++;
           Scene(overworld);
         } else if(done && value === 2) {
           // 9C) DEFEAT
