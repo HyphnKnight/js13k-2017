@@ -8,7 +8,7 @@ Scene(createBattleScene([
 ],5));
 */
 
-import { add } from 'pura/vector/tuple';
+import { add, rotateSet, scaleSet } from 'pura/vector/tuple';
 import { camera, } from 'camera';
 import { uiElements } from 'ui';
 // import Song from 'audio';
@@ -50,10 +50,15 @@ const baseArray = [
   [`protector`, [-1, 1, 0]],
   [`persecutor`, [-1, 0, 1]],
 ];
-
-const randomValue = () => ((Math.random() * 3 + 2) | 0) * (Math.random() > 0.5 ? 1 : -1);
-
-export const randomEnemyLocation = () => ([randomValue(), randomValue()]);
+const randomEnemyLocation = () => getGridHexFromVector2d(
+  rotateSet(
+    scaleSet(
+      [0, 1],
+      60 + Math.random() * 100
+    ),
+    Math.random() * Math.PI
+  )
+);
 
 export const generateBattle =
   (swarmers, vamps, skelis, boss) => {
@@ -61,11 +66,11 @@ export const generateBattle =
     let i = -1;
     const len = Math.max(swarmers, vamps, skelis);
     while(++i < len) {
-      if(i < swarmers) battle.unshift([`swarmer`, randomEnemyLocation()]);
-      if(i < vamps) battle.unshift([`vamp`, randomEnemyLocation()]);
-      if(i < skelis) battle.unshift([`skeli`, randomEnemyLocation()]);
+      if(i < swarmers) battle.push([`swarmer`, randomEnemyLocation()]);
+      if(i < vamps) battle.push([`vamp`, randomEnemyLocation()]);
+      if(i < skelis) battle.push([`skeli`, randomEnemyLocation()]);
     }
-    boss && battle.unshift([boss, randomEnemyLocation()]);
+    boss && battle.push([boss, randomEnemyLocation()]);
     return battle;
   };
 

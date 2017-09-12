@@ -153,6 +153,7 @@ export default {
   resentment: {
     name: `Resentment`,
     emoji: mask,
+    isBoss: true,
     type: false,
     maxHealth: 60,
     abilities: {
@@ -170,6 +171,7 @@ export default {
   doubt: {
     name: `Doubt`,
     emoji: winter,
+    isBoss: true,
     type: false,
     maxHealth: 120,
     abilities: {
@@ -183,6 +185,7 @@ export default {
   deceit: {
     name: `Deceit`,
     emoji: drama,
+    isBoss: true,
     type: false,
     maxHealth: 120,
     abilities: {
@@ -210,6 +213,7 @@ export default {
   harm: {
     name: `Harm`,
     emoji: dragon,
+    isBoss: true,
     type: false,
     maxHealth: 120,
     abilities: {
