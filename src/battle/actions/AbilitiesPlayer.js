@@ -17,12 +17,15 @@ import { uiElements } from 'ui';
 import Menu from 'menu';
 
 function* GetUserSelectTarget(fetch, position, range) {
-  const selectedLocation = yield* UserSelectLocation(fetch(position, range));
+  const options = fetch(position, range);
+  if(!options.length) return null;
+  const selectedLocation = yield* UserSelectLocation(options);
   return getCharacterAtHex(selectedLocation);
 }
 
 export function* Attack([{ abilities: { attack: { damage, range } } }, , position]) {
   const target = yield* GetUserSelectTarget(getNearbyCharacterHexes(getNearbyEnemies), position, range);
+  if(!target) return yield* Move(arguments[0]);
   dealDamage(target, damage);
   yield* PanCameraTo(target[2]);
 }
@@ -38,7 +41,9 @@ export function* Defend([{ abilities: { defend: { range, duration, percentage } 
 }
 
 export function* Magic([{ type, abilities: { magic: { effect, range } } }, , position]) {
-  const [{ type: tType }, , tPosition, tStatus] = yield* GetUserSelectTarget(getNearbyCharacterHexes(getNearbyCharacters(null)), position, range);
+  const target = yield* GetUserSelectTarget(getNearbyCharacterHexes(getNearbyCharacters(null)), position, range);
+  if(!target) return yield* Move(arguments[0]);
+  const [{ type: tType }, , tPosition, tStatus] = target;
   tStatus.push({
     type: type === tType
       ? `heal`
@@ -64,10 +69,10 @@ export function* Item(character) {
       --magic.count;
       selectedAction = Magic;
     }],
-    reset.count && [`Remember (${reset.count})`, () => {
-      --reset.count;
-      selectedAction = Attack;
-    }],
+    // reset.count && [`Remember (${reset.count})`, () => {
+    //   --reset.count;
+    //   selectedAction = Attack;
+    // }],
   ].filter(x => x);
 
   const menuUIIndex = uiElements.push(Menu(actions)) - 1;
