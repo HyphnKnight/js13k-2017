@@ -20,7 +20,7 @@ export default {
       logic(dt);
       renderGraphics(dt);
       // Input
-      if(inputs.click && !state.dialog.script.length) {
+      if(inputs.click && !state.dialog.length) {
         state.target = calcWorldPosition(inputs.mousePosition);
       }
     };

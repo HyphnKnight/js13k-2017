@@ -64,28 +64,13 @@ const formatText = (ctx, text, maxChar) => {
   return formattedText;
 };
 
-const nextScriptEntry = () => {
-  if(maxChar < state.dialog.script[0][0].length) {
-    textStart = 1;
-    return;
-  }
-
-  state.dialog.script.shift();
-  textStart = null;
-
-  if(!state.dialog.script.length && state.dialog.callback) {
-    state.dialog.callback();
-    state.dialog.callback = null;
-  }
-};
-
 const Dialog = {
   geometry: createRectangle([0, viewHeight / 2 - dialogHeight / 2], 0, dialogWidth, dialogHeight),
 
   render: ({ geometry }) => {
-    const { script } = state.dialog;
-    const [currentScript] = script;
+    const [currentScript] = state.dialog;
     if(!currentScript) return;
+    if(typeof currentScript === `function`) return state.dialog.shift()();
     if(!textStart) textStart = Date.now();
 
     maxChar = ((Date.now() - textStart) / textSpeed) | 0;
@@ -111,16 +96,14 @@ const Dialog = {
       fillText(whiteFont, [x, y + offset], line);
     });
 
-    if(inputs.space === 1) {
-      nextScriptEntry();
-    }
-  },
-  interact: {
-    onMouseDown: () => {
-      if(state.dialog.script.length) {
-        nextScriptEntry();
+    if(inputs.space === 1 || inputs.mouse === 1) {
+      if(maxChar < text.length) {
+        textStart = 1;
+      } else {
+        state.dialog.shift();
+        textStart = null;
       }
-    },
+    }
   }
 };
 

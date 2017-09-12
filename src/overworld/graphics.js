@@ -7,6 +7,7 @@ import { viewWidth, viewHeight } from 'dom';
 import state from 'state';
 import { islands } from 'overworld/island';
 import { tulip } from 'emoji';
+import { createBattleScene } from 'battle';
 import {
   mkTree,
   mkTreeAlt,
@@ -27,7 +28,6 @@ import {
   makeEvilPool,
 } from 'overworld/pools';
 import Scene from 'scene';
-import battle from 'battle';
 import ending from 'ending';
 
 export let graphics = [];
@@ -43,174 +43,129 @@ const islandRadius = Math.max(...islands.map(({ position }) => magnitude(subtrac
 
 // Characters.
 export const avngSprite = mkAvenger([...state.position], 0);
-export const protSprite = mkProtector([state.position[0] + Math.random() * 20 - 10, state.position[1] + Math.random() * 20 - 10], 0);
-export const chldSprite = mkChild([state.position[0] + Math.random() * 20 - 10, state.position[1] + Math.random() * 20 - 10], 0);
-export const persSprite = mkPersecutor([state.position[0] + Math.random() * 20 - 10, state.position[1] + Math.random() * 20 - 10], 0);
-export const gemSprite = mkGem([state.position[0] + Math.random() * 20 - 10, state.position[1] + Math.random() * 20 - 10], 0);
+export const protSprite = mkProtector(addSet([0, 10], state.position), 0);
+export const chldSprite = mkChild(addSet([-10, 0], state.position), 0);
+export const persSprite = mkPersecutor(addSet([10, 0], state.position), 0);
+export const gemSprite = mkGem(addSet([0, -10], state.position), 0);
 
 graphics.push(avngSprite, protSprite, chldSprite, persSprite, gemSprite);
 
-// Pools / Levels.
-const advLevel = function* () {
-  let currLevel = 0,
-      currPool = 0;
+/*
+  Miasma / Pool Creation
+*/
 
-  while(currLevel < levels.length) {
-    while(currPool < levels[currLevel][0].length) {
-      levels[currLevel][1].toggle.display = ++currPool === levels[currLevel][0].length;
-      yield currPool;
-    }
 
-    state.dialog.callback = ()=> {
-      Scene(battle([
-        [`avenger`, [0, 0, 0]],
-        [`child`, [1, 0, -1]],
-        [`protector`, [-1, 1, 0]],
-        [`persecutor`, [-1, 0, 1]],
-      ], 5));
-    };
-    currPool = 0;
-    yield ++currLevel;
-  }
-
-  filterMiasma();
-
-  yield;
+const updateMiasma = (inc) => {
+  state.miasma += 60 * inc;
+  graphics = graphics.filter(([x, , , emoji]) => emoji !== tulip || x > state.miasma);
 };
 
-const leveler = advLevel();
+let triggerEnding = false;
+let endingStart = 0;
+const createPool =
+  (maker, dialog, position) => maker(
+    25,
+    position,
+    () => state.dialog.push(...dialog),
+  );
 
-const avengerAuthor = [avngSprite[3], `Avenger`],
-      persecutorAuthor = [persSprite[3], `Persecutor`],
-      protectorAuthor = [protSprite[3], `Protector`],
-      childAuthor = [chldSprite[3], `Child`],
-      originalAuthor = [gemSprite[3], `     `];
+const avengerAuthor = [avngSprite[3], `Avenger`];
+const persecutorAuthor = [persSprite[3], `Persecutor`];
+const protectorAuthor = [protSprite[3], `Protector`];
+const childAuthor = [chldSprite[3], `Child`];
+const originalAuthor = [gemSprite[3], `Origin`];
 
-const levels = [
+const pools = [];
+
+const poolScript = [
   // LEVEL 1 - Adulthood.
-  [
-    [
-      makeAvengerPool(25, [-500, 800], () => {
-        leveler.next();
-        state.dialog.script.push(
-          [`I hate them, and everything they created.`, avengerAuthor],
-          [`I'll take them with me if I can.`, avengerAuthor]
-        );
-      }),
-      makePersecutorPool(25, [-520, 1000], () => {
-        leveler.next();
-        state.dialog.script.push([`It couldn't hurt to try, right? Once - only once.`, persecutorAuthor]);
-      }),
-      makeChildPool(25, [-400, 700], () => {
-        leveler.next();
-        state.dialog.script.push(
-          [`I have a new coat, with stars!`, childAuthor],
-          [`I'm going to do all my favorite things today.`, childAuthor]
-        );
-      }),
-      makeProtectorPool(25, [-450, 1100], () => {
-        leveler.next();
-        state.dialog.script.push([`It takes so much effort at times, but we're worth all of it.`, protectorAuthor]);
-      }),
-    ],
-    makeEvilPool(25, [-450, 900], () => {
-      leveler.next();
-      state.miasma = -5;
-      state.dialog.script.push(
-        [`You take out groceries one-by-one, and stack them in the pantry.`, originalAuthor],
-        [`At least three of your things were already in there.`, originalAuthor],
-      );
-    }, false)
-  ],
-
+  [makeAvengerPool, [
+    [`I hate them, and everything they created.`, avengerAuthor],
+    [`I'll take them with me if I can.`, avengerAuthor]
+  ]],
+  [makePersecutorPool, [
+    [`It couldn't hurt to try, right? Once - only once.`, persecutorAuthor]
+  ]],
+  [makeChildPool, [
+    [`I have a new coat, with stars!`, childAuthor],
+    [`I'm going to do all my favorite things today.`, childAuthor]
+  ]],
+  [makeProtectorPool, [
+    [`It takes so much effort at times, but we're worth all of it.`, protectorAuthor]
+  ]],
+  [makeEvilPool, [
+    [`You take out groceries one-by-one, and stack them in the pantry.`, originalAuthor],
+    [`At least three of your things were already in there.`, originalAuthor],
+    () => { updateMiasma(4); Scene(createBattleScene(8, 0, 0, `resentment`)) },
+  ]],
   // LEVEL 2 - Young Adulthood.
-  [
-    [
-      makeChildPool(25, [-200, 800], () => {
-        leveler.next();
-        state.dialog.script.push([`I made a lot of new friends.`, childAuthor]);
-      }),
-      makeProtectorPool(25, [-100, 1200], () => {
-        leveler.next();
-        state.dialog.script.push(
-          [`Two years and we're beginning to take a turn.`, protectorAuthor],
-        );
-      }),
-      makePersecutorPool(25, [-50, 700], () => {
-        leveler.next();
-        state.dialog.script.push([`Liars can never get close to me.  I'm a liar too.`, persecutorAuthor]);
-      })
-    ],
-    makeEvilPool(25, [-75, 900], () => {
-      leveler.next();
-      state.miasma = 150;
-      state.dialog.script.push([`Some of your friends only know one of you.`, originalAuthor]);
-    }, false),
-  ],
+  [makeChildPool, [
+    [`I made a lot of new friends.`, childAuthor],
+  ]],
+  [makeProtectorPool, [
+    [`Two years and we're beginning to take a turn.`, protectorAuthor],
+  ]],
+  [makePersecutorPool, [
+    [`Liars can never get close to me.  I'm a liar too.`, persecutorAuthor],
+  ]],
+  [makeEvilPool, [
+    [`Some of your friends only know one of you.`, originalAuthor],
+    () => { updateMiasma(3); Scene(createBattleScene(6, 6, 0, `doubt`)) },
+  ]],
 
   // LEVEL 3 - Teenhood.
-  [
-    [
-      makePersecutorPool(25, [50, 800], () => {
-        leveler.next();
-        state.dialog.script.push(
-          [`That little piss hung up on me.`, persecutorAuthor]
-        );
-      }),
-      makeChildPool(25, [100, 700], () => {
-        leveler.next();
-        state.dialog.script.push(
-          [`He said he doesn't like me anymore.`, childAuthor],
-          [`I was too hard to be around.`, childAuthor]
-        );
-      }),
-    ],
-    makeEvilPool(25, [125, 800], () => {
-      leveler.next();
-      state.miasma = 300;
-      state.dialog.script.push(
-        [`You went to his house for dinner.`, originalAuthor],
-        [`Everyone was was confused when you arrived.`, originalAuthor],
-        [`You were afraid.`, originalAuthor],
-      );
-    }, false),
-  ],
+  [makePersecutorPool, [
+    [`That little piss hung up on me.`, persecutorAuthor]
+  ]],
+  [makeChildPool, [
+    [`He said he doesn't like me anymore.`, childAuthor],
+    [`I was too hard to be around.`, childAuthor]
+  ]],
+  [makeEvilPool, [
+    [`You went to his house for dinner.`, originalAuthor],
+    [`Everyone was was confused when you arrived.`, originalAuthor],
+    [`You were afraid.`, originalAuthor],
+    () => { updateMiasma(2); Scene(createBattleScene(0, 8, 2, `deceit`)) },
+  ]],
 
   // LEVEL 4 - Childhood.
-  [
-    [
-      makeChildPool(25, [200, 900], () => {
-        leveler.next();
-        state.dialog.script.push(
-          [`I walked to school and back home every day.`, childAuthor],
-          [`I stayed close behind the older kids.`, childAuthor],
-          [`They threw cupcake and candy wrappers right on the sidewalk.`, childAuthor],
-          [`I picked them up.`, childAuthor],
-          [`The one watching wasn't someone I knew.`, childAuthor],
-          [`I listened to his stories.`, childAuthor]
-        );
-      })
-    ],
-    makeEvilPool(25, [250, 800], () => {
-      leveler.next();
-      state.miasma = Infinity;
-      state.dialog.script.push([`When he kissed you, it wasn't the same.`, originalAuthor]);
-    }, false)
-  ]
+
+  [makeChildPool, [
+    [`I walked to school and back home every day.`, childAuthor],
+    [`I stayed close behind the older kids.`, childAuthor],
+    [`They threw cupcake and candy wrappers right on the sidewalk.`, childAuthor],
+    [`I picked them up.`, childAuthor],
+    [`The one watching wasn't someone I knew.`, childAuthor],
+    [`I listened to his stories.`, childAuthor]
+  ]],
+
+
+  [makeEvilPool, [
+    [`When he kissed you, it wasn't the same.`, originalAuthor],
+    () => { updateMiasma(100); Scene(createBattleScene(6, 6, 3, `harm`)) },
+  ]],
+
+  [makeOriginalPool, [
+    () => {
+      graphics = [];
+      pools.splice(0, pools.length - 1);
+      endingStart = Date.now();
+      triggerEnding = true;
+    }
+  ]]
 ];
 
-let triggerEnding = false,
-    endingStart;
-const originalPool = makeOriginalPool(25, [350, 900], () => {
-  graphics = [];
-  pools.splice(0, pools.length - 1);
-  endingStart = Date.now();
-  triggerEnding = true;
-});
-let pools = [originalPool];
-
-for(const level of levels) {
-  pools.unshift(...level[0], level[1]);
+{
+  const length = poolScript.length + 4;
+  let i = -1;
+  while(++i < length) {
+    const [maker, text] = poolScript.shift();
+    pools.push(createPool(maker, text, [
+      i * 60 - 550,
+      700 + Math.random() * 300 | 0,
+    ]));
+    if(maker === makeEvilPool)++i;
+  }
 }
 
 // Props.
@@ -218,7 +173,7 @@ const props = [
   [mkTree, 50],
   [mkTreeAlt, 50],
   [mkMountain, 10],
-  [mkTulip, 500]
+  [mkTulip, 500],
 ];
 
 const generatePropPosition =
@@ -258,9 +213,6 @@ while(++i < len) {
   }
 }
 
-// Miasma.
-export const filterMiasma = () => graphics = graphics.filter(([x, , , emoji]) => emoji !== tulip || x > state.miasma);
-
 // Colors
 // ocean
 const baseOcean = `#69D2E7`;
@@ -268,7 +220,7 @@ const seaFoam = `#fff`;
 
 // sky
 const skyBlue = `#90b4ec`;
-
+updateMiasma(5);
 export const render = () => {
   // Background
   fillRectangle(
@@ -314,7 +266,7 @@ export const render = () => {
       return;
     }
 
-    pools = [makeOriginalPool(25 + (diff/3000)*(200 - 25), [350, 900])];
+    pools.push(makeOriginalPool(25 + (diff/3000)*(200 - 25), [350, 900]));
   }
   for(const pool of pools) {
     pool.render();

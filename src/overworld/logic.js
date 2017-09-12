@@ -22,6 +22,7 @@ export default () => {
   // TODO: USE KEYBOARD VECTOR
   // Character Controls
   let movement;
+  if(inputs.w || inputs.a || inputs.s || inputs.d || inputs.up || inputs.down || inputs.left || inputs.right) state.target = null;
   if(state.target !== null) {
     const diff = subtract(state.target, state.position);
     if(magnitudeSqr(diff) < 3) state.target = null;
@@ -31,7 +32,7 @@ export default () => {
   }
 
   const newPosition = add(state.position, movement);
-  if(isOnIsland(newPosition) && newPosition[0] < state.miasma && !state.dialog.script.length) set(state.position, ...newPosition);
+  if(isOnIsland(newPosition) && newPosition[0] < state.miasma && !state.dialog.length) set(state.position, ...newPosition);
 
   set(avngSprite, ...state.position);
   follow(protSprite, 20 + Date.now() % 300 / 30);

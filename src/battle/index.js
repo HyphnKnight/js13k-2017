@@ -52,6 +52,7 @@ const baseArray = [
   [`protector`, [-1, 1, 0]],
   [`persecutor`, [-1, 0, 1]],
 ];
+
 const randomEnemyLocation = () => getGridHexFromVector2d(
   rotateSet(
     scaleSet(
@@ -76,7 +77,8 @@ export const generateBattle =
     return battle;
   };
 
-export default function createBattleScene(characters) {
+export function createBattleScene(swarmers, vamps, skelis, boss) {
+  const characters = generateBattle(swarmers, vamps, skelis, boss);
   initializeMap(characters);
 
   let turn = null;

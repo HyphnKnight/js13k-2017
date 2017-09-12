@@ -65,9 +65,9 @@ const createPool =
       return { collision, test, render, toggle };
     };
 
-export const makeAvengerPool = createPool(`#fa96fa`, `#65727A`); // Pink/gray
+export const makeAvengerPool = createPool(`#F9CDAD`, `#FE4365`); // Pink/gray
 export const makeChildPool = createPool(`#EDE574`, `#F9D423`); // orange/yellow
-export const makeProtectorPool = createPool(`#3296fa`, `#0032fa`); // Blue
-export const makePersecutorPool = createPool(`#fa96fa`, `#65727A`); // Green
+export const makeProtectorPool = createPool(`#69D2E7`, `#E0E4CC`); // Blue
+export const makePersecutorPool = createPool(`#CFF09E`, `#3B8686`); // Green
 export const makeOriginalPool = createPool(`#EDEDF2`, `#CFD5E1`); // Gray/White
 export const makeEvilPool = createPool(`#4F364C`, `#8F9E6F`); // Purple/Green
