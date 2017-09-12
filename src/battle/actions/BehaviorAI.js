@@ -35,7 +35,6 @@ export function* AIMagic(character, nearbyGoodGuys) {
   const target = mergeSort(nearbyGoodGuys, ([, health]) => -health)[0];
   const [tData, , tPosition, tStatus] = target;
   yield* PanCameraTo(tPosition);
-  //TODO: EXTRACT
   tStatus.push({
     type: type === tData.type
       ? `heal`

@@ -1,11 +1,12 @@
-import { createRectangle, getRectanglePoints, createEqualLateralPolygon } from 'pura/geometry/tuple';
+import mergeSort from 'pura/array/mergeSort';
+import { createRectangle, getRectanglePoints } from 'pura/geometry/tuple';
 import { addList, mapListSet, scaleSet } from 'pura/vector/tuple';
-import { ctx, fillRectangle, fillPolygon, strokePolygon, strokeOval, fillArc, strokeArc, fillText } from 'pura/canvas/tuple';
-import { contains } from 'pura/array';
+import { ctx, fillRectangle, strokeOval, fillText } from 'pura/canvas/tuple';
 import { hexToVector2d } from 'pura/hex';
+import { statusBarHeartFont } from 'style';
 import { viewHeight, viewWidth } from 'dom';
 import { perspective2d } from 'camera';
-import { battleData, optionHexes, turnOrder } from 'battle/grid';
+import { optionHexes, turnOrder } from 'battle/grid';
 import { makeEvilPool } from 'overworld/pools';
 import state from 'state';
 
@@ -33,32 +34,46 @@ const drawFill =
     } else {
       strokeOval({ style: optionColor }, [0, 0], calculatePoints(hex));
     }
-    // if(state.target === hex) {
-    //   Date.now() % 600 > 400 && fillPolygon(selectColor, [0, 0], points, 0);
-    // } else {
-    //   strokePolygon({ style: gridColor, thickness: 1 }, [0, 0], points, 0);
-    // }
   };
 
-// const drawOutline =
-//   ({ points }) =>
-//     strokePolygon({ style: gridColor, thickness: 1 }, [0, 0], points, 0);
-
 // TODO: Draw different things based on status effects (hots/dots).
-const entityTextStyle = { horizontalAlign: true };
-const drawEntity =
-  ([data, health, position,]) =>
-    health > 0 && fillText(entityTextStyle, perspective2d(position), data.emoji);
+const entityTextStyle = ({ name, isBoss }) => ({ horizontalAlign: true, font: `${isBoss ? (name === `Harm` ? 30 : 20) : 12}px mono` });
 
-const groundGradient = ctx.createLinearGradient(-100, -100, 200, 200);
-groundGradient.addColorStop(0, `#480078`);
-groundGradient.addColorStop(1, `#78005c`);
+const hasStatus =
+  (status, match) =>
+    !!status.find(({ type }) => type === match);
+
+
+const checkStatus =
+  (name, style, icon, offset) =>
+    (position, status) =>
+      hasStatus(status, name)
+        ? fillText({ style, font: `6px mono` }, [position[0] + offset, position[1] + 5], icon)
+        : null;
+
+
+const checks = [
+  checkStatus(`shield`, `#0064fa`, `S`, -5),
+  checkStatus(`heal`, `#32fa00`, `H`, 0),
+  checkStatus(`damage`, `#fa3200`, `D`, 5),
+];
+
+const drawEntity =
+  ([data, health, position, status]) => {
+    if(health > 0) {
+      const adjustedPosition = perspective2d(position);
+      fillText(entityTextStyle(data), adjustedPosition, data.emoji);
+      checks.forEach(check => check(adjustedPosition, status));
+    } else if(data.type) {
+      //render DEAD GUY
+    }
+  };
 
 const skyGradient = ctx.createLinearGradient(0, 0, 100, 100);
 skyGradient.addColorStop(0, `#F07241`);
 skyGradient.addColorStop(1, `#601848`);
 
-const basePool = makeEvilPool(400, [0, 0]);
+const basePool = makeEvilPool(200, [0, 0]);
 
 export default ({
   geometry: createRectangle([-viewWidth / 2, -viewHeight / 2], 0, viewWidth, viewHeight),
@@ -73,6 +88,6 @@ export default ({
     );
     basePool.render();
     [...optionHexes, state.target].forEach(drawFill);
-    turnOrder.forEach(drawEntity);
+    mergeSort([...turnOrder], ([, , [, y]]) => -y).forEach(drawEntity);
   }
 });
