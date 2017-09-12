@@ -46,8 +46,33 @@ function* generateGetCharacter(turnOrder) {
 
 let harmTurns = 0;
 
-export default function createBattleScene(characters, mapSize) {
-  initializeMap(characters, mapSize);
+const baseArray = [
+  [`avenger`, [0, 0, 0]],
+  [`child`, [1, 0, -1]],
+  [`protector`, [-1, 1, 0]],
+  [`persecutor`, [-1, 0, 1]],
+];
+
+const randomValue = () => ((Math.random() * 3 + 2) | 0) * (Math.random() > 0.5 ? 1 : -1);
+
+export const randomEnemyLocation = () => ([randomValue(), randomValue()]);
+
+export const generateBattle =
+  (swarmers, vamps, skelis, boss) => {
+    const battle = [...baseArray];
+    let i = -1;
+    const len = Math.max(swarmers, vamps, skelis);
+    while(++i < len) {
+      if(i < swarmers) battle.unshift([`swarmer`, randomEnemyLocation()]);
+      if(i < vamps) battle.unshift([`vamp`, randomEnemyLocation()]);
+      if(i < skelis) battle.unshift([`skeli`, randomEnemyLocation()]);
+    }
+    boss && battle.unshift([boss, randomEnemyLocation()]);
+    return battle;
+  };
+
+export default function createBattleScene(characters) {
+  initializeMap(characters);
 
   let turn = null;
   let selectedAction = null;
@@ -73,10 +98,8 @@ export default function createBattleScene(characters, mapSize) {
   function* Turn() {
     // 1) Determine who's turn it is.
     const { value: character } = getCharacter.next();
-    const [data, health, position] = character;
+    const [data, , position] = character;
     state.target = getGridHexFromVector2d(position);
-    console.log(`------------------------------`);
-    console.log(`${data.name} : ${health}`);
     // 2) Center Camera on that person.
     const panCamera = moveCharacter(camera, add(cameraOffset, position), 2000);
     while(!panCamera()) yield;
@@ -108,7 +131,6 @@ export default function createBattleScene(characters, mapSize) {
     // 7) Check to see if battle is over
     const isVictory = false;//!!turnOrder.find(([data, health]) => !data.alignment && health > 0);
     const isDefeat = false;//!isVictory && !!turnOrder.find(([data, health]) => data.alignment && health > 0);
-    console.log(`------------------------------`);
     return isVictory ? 1 :
       isDefeat ? 2 :
         0;
