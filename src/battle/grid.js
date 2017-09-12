@@ -1,6 +1,5 @@
 import {
   generateGrid,
-  get,
   getNeighborsGrid,
   distanceFromTo,
   getWithinGrid,

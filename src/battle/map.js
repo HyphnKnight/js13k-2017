@@ -3,7 +3,6 @@ import { createRectangle, getRectanglePoints } from 'pura/geometry/tuple';
 import { addList, mapListSet, scaleSet } from 'pura/vector/tuple';
 import { ctx, fillRectangle, strokeOval, fillText } from 'pura/canvas/tuple';
 import { hexToVector2d } from 'pura/hex';
-import { statusBarHeartFont } from 'style';
 import { viewHeight, viewWidth } from 'dom';
 import { perspective2d } from 'camera';
 import { optionHexes, turnOrder } from 'battle/grid';
