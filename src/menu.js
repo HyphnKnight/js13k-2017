@@ -30,15 +30,15 @@ const Menu = (commands)=> {
   for(const [index, [text, handler]] of commands.entries()) {
     const label = text.toUpperCase();
 
-    const txtMetrics = ctx.measureText(label);
-    menuWidth = Math.max(menuWidth, txtMetrics.width + stroke*4);
+    const { width:textW } = ctx.measureText(label);
+    menuWidth = Math.max(menuWidth, textW + stroke*4);
 
     children.push(
       {
         geometry: createRectangle(
           [
             -menuWidth/2 + stroke*2,
-            index*lineHeight - stroke*2
+            -menuHeight/2 + lineHeight + index*lineHeight - stroke
           ], 0, menuWidth, lineHeight
         ),
 
@@ -59,6 +59,11 @@ const Menu = (commands)=> {
         }
       }
     );
+  }
+
+  // Make sure all menu options align to the maximum menu width.
+  for(const child of children) {
+    child.geometry.position[0] = -menuWidth/2 + stroke*2;
   }
 
   // Reposition menu.

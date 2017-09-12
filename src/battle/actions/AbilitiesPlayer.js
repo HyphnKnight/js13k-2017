@@ -71,6 +71,7 @@ export function* Item(character) {
       selectedAction = Attack;
     }],
   ].filter(x => x);
+
   const menuUIIndex = uiElements.push(Menu(actions)) - 1;
   while(!selectedAction) yield;
   uiElements.splice(menuUIIndex, 1);
