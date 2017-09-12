@@ -163,7 +163,8 @@ export function createBattleScene(swarmers, vamps, skelis, boss) {
           // 9B) VICTORY
           Scene(overworld);
         } else if(done && value === 2) {
-          // 9C) DEFEAT
+          const characters = generateBattle(swarmers, vamps, skelis, boss);
+          initializeMap(characters);
         }
       };
     },
