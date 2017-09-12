@@ -67,7 +67,7 @@ const createPool =
       };
       return {
         propCollision: collision(2 * baseSize),
-        collision: collision(baseSize),
+        collision: collision(baseSize * 0.5),
         test,
         render,
         toggle,
