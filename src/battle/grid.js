@@ -34,14 +34,13 @@ export const initializeMap = (characters) => {
   ])));
 };
 
-export const getGridHex = get(grid);
 export const getHexFromVector2d = getFromVector2d(grid);
 export const getGridHexFromVector2d =
   position =>
     getHexFromVector2d(scale(position, 1 / 20));
 export const getGridHexFromClick =
   position =>
-    getHexFromVector2d(scaleSet(calcWorldPosition(position), 1 / 20));
+    getGridHexFromVector2d(calcWorldPosition(position));
 export const getVector2dFromHex =
   hex =>
     scaleSet(hexToVector2d(hex), 20);
