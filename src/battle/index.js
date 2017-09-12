@@ -51,11 +51,9 @@ const baseArray = [
   [`persecutor`, [-1, 0, 1]],
 ];
 
-export const randomEnemyLocation =
-  () => ([
-    Math.floor(Math.random() * 3 + 2) * (Math.ceil(Math.random() * 2) - 1),
-    Math.floor(Math.random() * 3 + 2) * (Math.ceil(Math.random() * 2) - 1),
-  ]);
+const randomValue = () => ((Math.random() * 3 + 2) | 0) * (Math.random() > 0.5 ? 1 : -1);
+
+export const randomEnemyLocation = () => ([randomValue(), randomValue()]);
 
 export const generateBattle =
   (swarmers, vamps, skelis, boss) => {
@@ -98,10 +96,8 @@ export default function createBattleScene(characters) {
   function* Turn() {
     // 1) Determine who's turn it is.
     const { value: character } = getCharacter.next();
-    const [data, health, position] = character;
+    const [data, , position] = character;
     state.target = getGridHexFromVector2d(position);
-    console.log(`------------------------------`);
-    console.log(`${data.name} : ${health}`);
     // 2) Center Camera on that person.
     const panCamera = moveCharacter(camera, add(cameraOffset, position), 2000);
     while(!panCamera()) yield;
@@ -133,7 +129,6 @@ export default function createBattleScene(characters) {
     // 7) Check to see if battle is over
     const isVictory = false;//!!turnOrder.find(([data, health]) => !data.alignment && health > 0);
     const isDefeat = false;//!isVictory && !!turnOrder.find(([data, health]) => data.alignment && health > 0);
-    console.log(`------------------------------`);
     return isVictory ? 1 :
       isDefeat ? 2 :
         0;
