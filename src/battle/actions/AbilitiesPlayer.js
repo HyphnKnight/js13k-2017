@@ -79,7 +79,7 @@ export function* Item(character) {
 
 export function* Move([{ abilities: { move: { range } } }, , position]) {
   const positionHex = getGridHexFromVector2d(position);
-  const selectedLocation = yield* GetUserSelectTarget(getMovementOptions, positionHex,range);
+  const selectedLocation = yield* UserSelectLocation(getMovementOptions(positionHex, range));
   yield* PanCameraTo(position);
   yield* MoveCharacterOnPath(position, getPathToTarget(positionHex, selectedLocation));
 }
