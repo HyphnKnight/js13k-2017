@@ -22,6 +22,7 @@ export const pool = `\uD83C\uDF75`;
 export const gem = `\uD83D\uDC8E`;
 export const heart = `\u2764\uFE0F`;
 export const heartBlack = `\uD83D\uDDA4`;
+export const heartGrow = `\uD83D\uDC97`;
 export const heartPurple = `\uD83D\uDC9C`;
 export const flame = `\uD83D\uDD25`;
 export const flake = `\u2744\uFE0F`;
