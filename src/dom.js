@@ -23,5 +23,5 @@ const calcCanvasSize = () => {
 };
 
 calcCanvasSize();
-
+document.addEventListener(`DOMContentLoaded`, calcCanvasSize);
 window.addEventListener(`resize`, calcCanvasSize);
