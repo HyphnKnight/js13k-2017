@@ -1,11 +1,9 @@
 
 
 export const dealDamage = (defChar, damage) => {
-  console.log(`Dealing Damage`);
   const [, , , status] = defChar;
   const shield = status.find(({ type }) => type === `shield`);
   if(shield) damage *= (1 - shield.effect);
-  console.log(`Deal ${damage} Damage to ${defChar[0].name}`);
   defChar[1] -= damage;
 };
 
@@ -15,10 +13,8 @@ export const heal =
 
 export const handlStatuses = (character) => {
   const [, , , statuses] = character;
-  console.log(`handling Statuses: ${statuses.length}`);
   character[3] = statuses.map((status) => --status.duration < 0 ? false : status).filter(x => x);
   statuses.forEach(status => {
-    console.log(`handling Status: ${status.type}`);
     switch(status.type) {
       case `damage`:
         dealDamage(character, status.effect);

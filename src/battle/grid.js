@@ -25,8 +25,6 @@ export const optionHexes = [];
 export const turnOrder = [];
 
 export const initializeMap = (characters) => {
-  console.log(`initializeMap`);
-  console.log(`initializeMap: adding new turn order`);
   clear(turnOrder);
   turnOrder.push(...characters.map(([name, position]) => ([
     characterData[name], // Store Character Data
@@ -34,14 +32,6 @@ export const initializeMap = (characters) => {
     scaleSet(hexToVector2d(position), 20), // Set Position to a Vector instead of hex
     [], // Array of status Effects
   ])));
-  console.log(`initializeMap: reset battleData`);
-  // battleData = new Map(flatten(grid).map(hex => [hex, {
-  //   hex,
-  //   status: [],
-  //   position: null,
-  //   points: null,
-  // }]));
-  console.log(`initializeMap: Done`);
 };
 
 export const getGridHex = get(grid);
