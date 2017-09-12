@@ -191,11 +191,15 @@ const levels = [
   ]
 ];
 
-let triggerEnding = false;
+let triggerEnding = false,
+    endingStart;
 const originalPool = makeOriginalPool(25, [350, 900], () => {
+  graphics = [];
+  pools.splice(0, pools.length - 1);
+  endingStart = Date.now();
   triggerEnding = true;
 });
-const pools = [originalPool];
+let pools = [originalPool];
 
 for(const level of levels) {
   pools.unshift(...level[0], level[1]);
@@ -258,7 +262,6 @@ const seaFoam = `#fff`;
 // sky
 const skyBlue = `#90b4ec`;
 
-
 export const render = () => {
   // Background
   fillRectangle(
@@ -295,6 +298,17 @@ export const render = () => {
     getBase(),
   ));
 
+  // Ending segment within map.
+  if(triggerEnding) {
+    const diff = Date.now() - endingStart;
+
+    if(diff > 3000) {
+      Scene(ending);
+      return;
+    }
+
+    pools = [makeOriginalPool(25 + (diff/3000)*(200 - 25), [350, 900])];
+  }
   for(const pool of pools) {
     pool.render();
     pool.test(state.position);
