@@ -19,16 +19,17 @@ const follow =
 const characterControls = keyboardVector(1);
 
 export default () => {
-  // TODO: USE KEYBOARD VECTOR
   // Character Controls
   let movement;
-  if(inputs.w || inputs.a || inputs.s || inputs.d || inputs.up || inputs.down || inputs.left || inputs.right) state.target = null;
+  const speed = charSpeed();
+  const vec = characterControls();
+  if(magnitudeSqr(vec) > 0.5) state.target = null;
   if(state.target !== null) {
     const diff = subtract(state.target, state.position);
     if(magnitudeSqr(diff) < 3) state.target = null;
-    movement = scaleToSet(diff, charSpeed());
+    movement = scaleToSet(diff, speed);
   } else {
-    movement = scaleToSet(characterControls(), charSpeed());
+    movement = scaleToSet(vec, speed);
   }
 
   const newPosition = add(state.position, movement);

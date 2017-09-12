@@ -29,13 +29,7 @@ import { ctx, fillText } from 'pura/canvas/tuple';
 const Movie = (x, y, width, height, timeline, callback)=> {
   // Determine movie duration.
   // Find max time among all layers in timeline.
-  const duration = timeline.reduce((currDur, layer)=> {
-    return Math.max(
-      // Is prev element a number or array?
-      currDur,
-      layer[1][layer[1].length - 1][0]
-    );
-  }, 0);
+  const duration = Math.max(...timeline.map(layer=>layer[1][layer[1].length-1][0]));
 
   // Convert plaintext into a cEl render object.
   const bootstrapText = (text, fontOptions)=> {
