@@ -3,6 +3,7 @@ import { mapList, addList, addListSet, subtract, scaleList, magnitudeSqr } from 
 import { fillOval, strokeOval } from 'pura/canvas/tuple';
 import { perspective2d } from 'camera';
 
+
 const createPool =
   (baseColor, shoreColor) =>
     (baseSize, position, callBack, display = true) => {
@@ -15,10 +16,12 @@ const createPool =
       const toggle = {
         display
       };
-      const collision = (targetPosition) =>
-        magnitudeSqr(subtract(targetPosition, position)) <= baseSize * baseSize;
+      const collision =
+        (size) =>
+          (targetPosition) =>
+            magnitudeSqr(subtract(targetPosition, position)) <= size * size;
       const test = (targetPosition) => {
-        if(toggle.display && callBack && collision(targetPosition)) {
+        if(toggle.display && callBack && collision(baseSize)(targetPosition)) {
           callBack();
           callBack = null;
         }
@@ -62,7 +65,13 @@ const createPool =
         );
 
       };
-      return { collision, test, render, toggle };
+      return {
+        propCollision: collision(2 * baseSize),
+        collision: collision(baseSize),
+        test,
+        render,
+        toggle,
+      };
     };
 
 export const makeAvengerPool = createPool(`#F9CDAD`, `#FE4365`); // Pink/gray

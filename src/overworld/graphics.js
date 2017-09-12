@@ -194,7 +194,7 @@ export const isOnIsland =
 const isValidPropPosition =
   (point) =>
     isOnIsland(point) &&
-    !pools.find(({ collision }) => collision(point));
+    !pools.find(({ propCollision }) => propCollision(point));
 
 const generateValidPropPoint =
   () => {
