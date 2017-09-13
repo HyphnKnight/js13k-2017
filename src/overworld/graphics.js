@@ -81,53 +81,54 @@ const pools = [];
 const poolScript = [
   // LEVEL 1 - Adulthood.
   [makeAvengerPool, [
-    [`I hate them, and everything they created.`, avengerAuthor],
+    [`No more running, I'm coming for him`, avengerAuthor],
     // [`I'll take them with me if I can.`, avengerAuthor]
   ]],
-  [makePersecutorPool, [
-    [`It couldn't hurt to try, right? Once - only once.`, persecutorAuthor]
-  ]],
   [makeChildPool, [
-    [`I have a new coat, with stars!`, childAuthor],
+    [`Why isn't she returning my calls, this is not like her.`, childAuthor],
     // [`I'm going to do all my favorite things today.`, childAuthor]
+  ]],
+  [makePersecutorPool, [
+    [`She broke up with me, of course she did.`, persecutorAuthor]
   ]],
   [makeProtectorPool, [
     [`It takes so much effort at times, but we're worth all of it.`, protectorAuthor]
   ]],
   [makeEvilPool, [
-    [`You take out groceries, and stack them in the pantry.`, originalAuthor],
-    [`At least three of your things were already in there.`, originalAuthor],
-    () => { updateMiasma(5); Scene(createBattleScene(6, 0, 0, `resentment`)) },
+    [`I saw him again, after all these years.`, originalAuthor],
+    [`He greeted me like we were old friends.`, originalAuthor],
+    () => { updateMiasma(5); Scene(createBattleScene(6, 0, 0, `deceit`)) },
   ]],
   // LEVEL 2 - Young Adulthood.
   [makeChildPool, [
-    [`I made a lot of new friends.`, childAuthor],
+    [`I can't believe it she said YES!`, childAuthor],
   ]],
   [makeProtectorPool, [
-    [`Two years and we're beginning to take a turn.`, protectorAuthor],
+    [`One or two bar fights later,`, protectorAuthor],
+    [`people didn't mess with me anymore.`, protectorAuthor]
   ]],
   [makePersecutorPool, [
-    [`Liars can never get close to me.  I'm a liar too.`, persecutorAuthor],
+    [`She will never say yes to someone like us.`, persecutorAuthor],
   ]],
   [makeEvilPool, [
-    [`Some of your friends only know one of you.`, originalAuthor],
-    () => { updateMiasma(4); Scene(createBattleScene(6, 4, 0, `doubt`)) },
+    [`People pushed me around in college,`, originalAuthor],
+    [`until I couldn't take it anymore.`, originalAuthor],
+    () => { updateMiasma(4); Scene(createBattleScene(6, 4, 0, `resentment`)) },
   ]],
 
   // LEVEL 3 - Teenhood.
   [makePersecutorPool, [
-    [`That little piss hung up on me.`, persecutorAuthor]
+    [`It hurt, but its worth it.`, persecutorAuthor]
   ]],
   [makeChildPool, [
-    [`He said he doesn't like me anymore.`, childAuthor],
+    [`My daddy yelled at me, for playing with my toys.`, childAuthor],
     // [`I was too hard to be around.`, childAuthor]
   ]],
   [makeEvilPool, [
-    [`You went to his house for dinner.`, originalAuthor],
-    // [`Everyone was was confused when you arrived.`, originalAuthor],
-    [`There were confused.`, originalAuthor],
-    [`You were afraid.`, originalAuthor],
-    () => { updateMiasma(2); Scene(createBattleScene(0, 4, 2, `deceit`)) },
+    [`I think it was at highschool graduation.`, originalAuthor],
+    [`Thats when I realized,`, originalAuthor],
+    [`it was all my fault.`, originalAuthor],
+    () => { updateMiasma(2); Scene(createBattleScene(0, 4, 2, `doubt`)) },
   ]],
 
   // LEVEL 4 - Childhood.
@@ -136,14 +137,13 @@ const poolScript = [
     // [`I walked to school and back home every day.`, childAuthor],
     [`I stayed close behind the older kids.`, childAuthor],
     [`They threw cupcake and candy wrappers right on the sidewalk.`, childAuthor],
-    [`I picked them up.`, childAuthor],
-    [`The one watching wasn't someone I knew.`, childAuthor],
+    [`He didn't talk to me, when I was with them.`, childAuthor],
     // [`I listened to his stories.`, childAuthor]
   ]],
 
 
   [makeEvilPool, [
-    [`When he kissed you, it wasn't the same.`, originalAuthor],
+    [`It hurt he told you it wasn't meant to, but it did.`, originalAuthor],
     () => { updateMiasma(100); Scene(createBattleScene(6, 4, 2, `harm`)) },
   ]],
 
