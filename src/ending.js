@@ -1,5 +1,6 @@
 import { viewWidth, viewHeight } from 'dom';
 import { uiElements } from 'ui';
+import state from 'state';
 import Movie from 'movie';
 // import Song from 'audio';
 // import autumn from 'songs/autumn';
@@ -10,6 +11,7 @@ import endingMovie from 'movies/ending';
 export default {
   init: ()=> {
     // bgMusic.play(`repeat`);
+    state.logic = null;
     uiElements.push(Movie(0, 0, viewWidth, viewHeight, endingMovie));
   },
   dismiss: ()=> {}
