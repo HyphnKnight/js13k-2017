@@ -63,8 +63,6 @@ const drawEntity =
       const adjustedPosition = perspective2d(position);
       fillText(entityTextStyle(data), adjustedPosition, data.emoji);
       checks.forEach(check => check(adjustedPosition, status));
-    } else if(data.type) {
-      //render DEAD GUY
     }
   };
 
