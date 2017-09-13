@@ -97,7 +97,7 @@ const poolScript = [
   [makeEvilPool, [
     [`You take out groceries, and stack them in the pantry.`, originalAuthor],
     [`At least three of your things were already in there.`, originalAuthor],
-    () => { updateMiasma(5); Scene(createBattleScene(8, 0, 0, `resentment`)) },
+    () => { updateMiasma(5); Scene(createBattleScene(6, 0, 0, `resentment`)) },
   ]],
   // LEVEL 2 - Young Adulthood.
   [makeChildPool, [
@@ -111,7 +111,7 @@ const poolScript = [
   ]],
   [makeEvilPool, [
     [`Some of your friends only know one of you.`, originalAuthor],
-    () => { updateMiasma(4); Scene(createBattleScene(6, 6, 0, `doubt`)) },
+    () => { updateMiasma(4); Scene(createBattleScene(6, 4, 0, `doubt`)) },
   ]],
 
   // LEVEL 3 - Teenhood.
@@ -127,7 +127,7 @@ const poolScript = [
     // [`Everyone was was confused when you arrived.`, originalAuthor],
     [`There were confused.`, originalAuthor],
     [`You were afraid.`, originalAuthor],
-    () => { updateMiasma(2); Scene(createBattleScene(0, 8, 2, `deceit`)) },
+    () => { updateMiasma(2); Scene(createBattleScene(0, 4, 2, `deceit`)) },
   ]],
 
   // LEVEL 4 - Childhood.
@@ -144,7 +144,7 @@ const poolScript = [
 
   [makeEvilPool, [
     [`When he kissed you, it wasn't the same.`, originalAuthor],
-    () => { updateMiasma(100); Scene(createBattleScene(6, 6, 3, `harm`)) },
+    () => { updateMiasma(100); Scene(createBattleScene(6, 4, 2, `harm`)) },
   ]],
 
   [makeOriginalPool, [
