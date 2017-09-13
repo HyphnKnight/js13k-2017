@@ -81,7 +81,7 @@ const pools = [];
 const poolScript = [
   // LEVEL 1 - Adulthood.
   [makeAvengerPool, [
-    [`No more running, I'm coming for him`, avengerAuthor],
+    [`No more running, I'm coming for him.`, avengerAuthor],
     // [`I'll take them with me if I can.`, avengerAuthor]
   ]],
   [makeChildPool, [
