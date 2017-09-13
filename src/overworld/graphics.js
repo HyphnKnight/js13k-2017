@@ -216,18 +216,11 @@ while(++i < len) {
   }
 }
 
-// Colors
-// ocean
-const baseOcean = `#69D2E7`;
-const seaFoam = `#fff`;
-
-// sky
-const skyBlue = `#90b4ec`;
 updateMiasma(5);
 export const render = () => {
   // Background
   fillRectangle(
-    skyBlue,
+    `#90b4ec`,
     [0, 0],
     viewWidth * 2,
     viewHeight * 2,
@@ -235,7 +228,7 @@ export const render = () => {
   );
 
   fillPolygon(
-    baseOcean,
+    `#69D2E7`,
     [0, 0],
     groundPlanePoints,
   );
@@ -243,7 +236,7 @@ export const render = () => {
   const waveScaleFactor = 1.2 - Math.abs(Date.now() % 7200 / (7200 / 2) - 1) / 10;
 
   islands.forEach(({ getShoreLine }) => strokeOval(
-    { style: seaFoam, thickness: 4 },
+    { style: `#fff`, thickness: 4 },
     [0, 0],
     getShoreLine(waveScaleFactor),
   ));
