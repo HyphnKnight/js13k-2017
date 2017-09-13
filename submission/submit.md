@@ -24,7 +24,7 @@ Alter
 
 ## Description
 
-A Strategy RPG adventure, exploring the frequently-misunderstood world of Dissociative Identity Disorder.
+A Strategy RPG adventure, exploring the frequently-misunderstood world of Dissociative Identity Disorder.  Rendered in a style designed to mimic the Atari 2600.
 
 Genre:
 Strategy RPG
