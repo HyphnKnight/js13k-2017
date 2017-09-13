@@ -19,8 +19,8 @@ export default {
       },
       magic: {
         range: 4,
-        effect: 10,
-        duration: 5
+        effect: 20,
+        duration: 3
       },
     },
   },
@@ -54,7 +54,7 @@ export default {
       defend: {
         range: 1,
         duration: 1,
-        percentage: 1,
+        percentage: 0.8,
       },
     },
   },
@@ -97,7 +97,7 @@ export default {
     name: `Swarmer`,
     emoji: scorpion,
     type: false,
-    maxHealth: 30,
+    maxHealth: 20,
     abilities: {
       aiMove: {
         type: true,
@@ -105,7 +105,7 @@ export default {
       },
       aiAttack: {
         range: 1,
-        damage: 10,
+        damage: 5,
       }
     }
   },
@@ -114,7 +114,7 @@ export default {
     name: `Vamp`,
     emoji: bat,
     type: false,
-    maxHealth: 40,
+    maxHealth: 20,
     abilities: {
       aiMove: {
         type: false,
@@ -132,7 +132,7 @@ export default {
     name: `Skeli`,
     emoji: skull,
     type: false,
-    maxHealth: 40,
+    maxHealth: 30,
     abilities: {
       aiMove: {
         type: false,
@@ -140,7 +140,7 @@ export default {
       },
       aiAttack: {
         range: 1,
-        damage: 20,
+        damage: 10,
       },
       aiDefend: {
         range: 1,
@@ -173,11 +173,11 @@ export default {
     emoji: winter,
     isBoss: true,
     type: false,
-    maxHealth: 120,
+    maxHealth: 60,
     abilities: {
       aiAttack: {
         range: 10,
-        damage: 30,
+        damage: 10,
       },
     }
   },
@@ -187,7 +187,7 @@ export default {
     emoji: drama,
     isBoss: true,
     type: false,
-    maxHealth: 120,
+    maxHealth: 60,
     abilities: {
       aiMove: {
         type: true,
@@ -195,7 +195,7 @@ export default {
       },
       aiAttack: {
         range: 1,
-        damage: 20,
+        damage: 10,
       },
       aiMagic: {
         range: 3,
@@ -215,7 +215,7 @@ export default {
     emoji: dragon,
     isBoss: true,
     type: false,
-    maxHealth: 120,
+    maxHealth: 60,
     abilities: {
       aiMove: {
         type: true,
@@ -223,7 +223,7 @@ export default {
       },
       aiAttack: {
         range: 3,
-        damage: 20,
+        damage: 10,
       },
       aiMagic: {
         range: 3,
