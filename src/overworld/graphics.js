@@ -95,7 +95,7 @@ const poolScript = [
     [`It takes so much effort at times, but we're worth all of it.`, protectorAuthor]
   ]],
   [makeEvilPool, [
-    [`You take out groceries one-by-one, and stack them in the pantry.`, originalAuthor],
+    [`You take out groceries, and stack them in the pantry.`, originalAuthor],
     [`At least three of your things were already in there.`, originalAuthor],
     () => { updateMiasma(4); Scene(createBattleScene(8, 0, 0, `resentment`)) },
   ]],
