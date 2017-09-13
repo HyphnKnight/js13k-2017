@@ -82,14 +82,14 @@ const poolScript = [
   // LEVEL 1 - Adulthood.
   [makeAvengerPool, [
     [`I hate them, and everything they created.`, avengerAuthor],
-    [`I'll take them with me if I can.`, avengerAuthor]
+    // [`I'll take them with me if I can.`, avengerAuthor]
   ]],
   [makePersecutorPool, [
     [`It couldn't hurt to try, right? Once - only once.`, persecutorAuthor]
   ]],
   [makeChildPool, [
     [`I have a new coat, with stars!`, childAuthor],
-    [`I'm going to do all my favorite things today.`, childAuthor]
+    // [`I'm going to do all my favorite things today.`, childAuthor]
   ]],
   [makeProtectorPool, [
     [`It takes so much effort at times, but we're worth all of it.`, protectorAuthor]
@@ -120,11 +120,12 @@ const poolScript = [
   ]],
   [makeChildPool, [
     [`He said he doesn't like me anymore.`, childAuthor],
-    [`I was too hard to be around.`, childAuthor]
+    // [`I was too hard to be around.`, childAuthor]
   ]],
   [makeEvilPool, [
     [`You went to his house for dinner.`, originalAuthor],
-    [`Everyone was was confused when you arrived.`, originalAuthor],
+    // [`Everyone was was confused when you arrived.`, originalAuthor],
+    [`There were confused.`, originalAuthor],
     [`You were afraid.`, originalAuthor],
     () => { updateMiasma(2); Scene(createBattleScene(0, 8, 2, `deceit`)) },
   ]],
@@ -132,12 +133,12 @@ const poolScript = [
   // LEVEL 4 - Childhood.
 
   [makeChildPool, [
-    [`I walked to school and back home every day.`, childAuthor],
+    // [`I walked to school and back home every day.`, childAuthor],
     [`I stayed close behind the older kids.`, childAuthor],
     [`They threw cupcake and candy wrappers right on the sidewalk.`, childAuthor],
     [`I picked them up.`, childAuthor],
     [`The one watching wasn't someone I knew.`, childAuthor],
-    [`I listened to his stories.`, childAuthor]
+    // [`I listened to his stories.`, childAuthor]
   ]],
 
 

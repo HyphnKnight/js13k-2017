@@ -3,7 +3,7 @@ import { fillRectangle } from 'pura/canvas/tuple';
 import { viewWidth, viewHeight } from 'dom';
 import { avenger, protector, persecutor, child, gem } from 'emoji';
 
-const characters = [avenger, protector, persecutor, child].map((character, index)=> [
+const characters = [avenger, protector, persecutor, child, gem].map((character, index)=> [
   character,
   [
     [
@@ -39,44 +39,44 @@ const characters = [avenger, protector, persecutor, child].map((character, index
 
 const ending = [
   ...characters,
+  // [
+  //   gem,
+  //   [
+  //     [
+  //       6000 + characters.length*800,
+  //       {
+  //         x: viewWidth/4,
+  //         y: viewHeight/2
+  //       }
+  //     ],
+  //     [
+  //       6000 + characters.length*800 + 2000,
+  //       {
+  //         x: 0,
+  //         y: 0
+  //       }
+  //     ],
+  //     [
+  //       6000 + characters.length*800 + 2800,
+  //       {
+  //         x: 0,
+  //         y: 0
+  //       }
+  //     ],
+  //     [
+  //       6000 + characters.length*800 + 3800,
+  //       {
+  //         x: 0,
+  //         y: -viewHeight
+  //       }
+  //     ]
+  //   ]
+  // ],
   [
-    gem,
+    `~ fin  RL, BB`,
     [
       [
-        6000 + characters.length*800,
-        {
-          x: viewWidth/4,
-          y: viewHeight/2
-        }
-      ],
-      [
-        6000 + characters.length*800 + 2000,
-        {
-          x: 0,
-          y: 0
-        }
-      ],
-      [
-        6000 + characters.length*800 + 2800,
-        {
-          x: 0,
-          y: 0
-        }
-      ],
-      [
-        6000 + characters.length*800 + 3800,
-        {
-          x: 0,
-          y: -viewHeight
-        }
-      ]
-    ]
-  ],
-  [
-    `~ fin    Rafe Lepre, Brian Blakely`,
-    [
-      [
-        6000 + characters.length*800 + 4800,
+        14000,
         {
           fontOptions: {
             style: `#000`
