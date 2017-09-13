@@ -44,8 +44,6 @@ function* generateGetCharacter(turnOrder) {
   }
 }
 
-let harmTurns = 0;
-
 const baseArray = [
   [`avenger`, [0, 0, 0]],
   [`child`, [1, 0, -1]],
@@ -96,9 +94,7 @@ export function createBattleScene(swarmers, vamps, skelis, boss) {
     resentment: Resentment,
     doubt: Doubt,
     deceit: Deceit,
-    *harm() {
-      yield* [Doubt, Resentment, Deceit][++harmTurns % 9 / 3 | 0];
-    }
+    harm: Deceit,
   };
 
   const getCharacter = generateGetCharacter(turnOrder);

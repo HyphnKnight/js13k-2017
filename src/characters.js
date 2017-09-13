@@ -215,7 +215,7 @@ export default {
     emoji: dragon,
     isBoss: true,
     type: false,
-    maxHealth: 60,
+    maxHealth: 120,
     abilities: {
       aiMove: {
         type: true,
