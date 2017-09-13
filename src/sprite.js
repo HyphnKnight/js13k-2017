@@ -25,7 +25,11 @@ export const mkAvenger = createSprite(avenger);
 export const mkCloud = createSprite(cloud);
 export const mkMountain = createSprite(mountain, 4);
 export const mkTulip = createSprite(tulip, 0.5);
+<<<<<<< HEAD
 export const mkGrass = createSprite(grass, 0.2);
+=======
+export const mkGrass = createSprite(grass, 0.25);
+>>>>>>> 7a87d5b5e47aa339574cb8d49f1acb94eabfea0d
 export const mkGhost = createSprite(ghost);
 export const mkPool = createSprite(pool);
 export const mkGem = createSprite(gem);

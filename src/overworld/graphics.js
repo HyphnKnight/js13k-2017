@@ -175,7 +175,7 @@ const props = [
   [mkTreeAlt, 50],
   [mkMountain, 10],
   [mkTulip, 500],
-  [mkGrass, 500]
+  [mkGrass, 300]
 ];
 
 const generatePropPosition =
