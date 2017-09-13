@@ -57,7 +57,7 @@ graphics.push(avngSprite, protSprite, chldSprite, persSprite, gemSprite);
 
 
 const updateMiasma = (inc) => {
-  state.miasma += 60 * inc;
+  state.miasma += 50 * inc;
   graphics = graphics.filter(([x, , , emoji]) => emoji !== tulip || x > state.miasma);
 };
 
@@ -97,7 +97,7 @@ const poolScript = [
   [makeEvilPool, [
     [`You take out groceries, and stack them in the pantry.`, originalAuthor],
     [`At least three of your things were already in there.`, originalAuthor],
-    () => { updateMiasma(4); Scene(createBattleScene(8, 0, 0, `resentment`)) },
+    () => { updateMiasma(5); Scene(createBattleScene(8, 0, 0, `resentment`)) },
   ]],
   // LEVEL 2 - Young Adulthood.
   [makeChildPool, [
@@ -111,7 +111,7 @@ const poolScript = [
   ]],
   [makeEvilPool, [
     [`Some of your friends only know one of you.`, originalAuthor],
-    () => { updateMiasma(3); Scene(createBattleScene(6, 6, 0, `doubt`)) },
+    () => { updateMiasma(4); Scene(createBattleScene(6, 6, 0, `doubt`)) },
   ]],
 
   // LEVEL 3 - Teenhood.
@@ -163,8 +163,8 @@ const poolScript = [
   while(++i < length) {
     const [maker, text] = poolScript.shift();
     pools.push(createPool(maker, text, [
-      i * 60 - 550,
-      700 + Math.random() * 300 | 0,
+      i * 50 - 550,
+      650 + Math.random() * 400 | 0,
     ]));
     if(maker === makeEvilPool)++i;
   }
