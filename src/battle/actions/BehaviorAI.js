@@ -102,12 +102,8 @@ export function* Skeli(character) {
 export function* Resentment(character) {
   const [{ abilities: { aiAttack: { range } } }, , position] = character;
   const nearbyGoodGuys = getNearbyAllies(position, range);
-  const nearbyBadGuys = getNearbyEnemies(position, range);
-  if(nearbyGoodGuys.length === 0) {
-    yield* AIMove(character);
-  } else {
-    yield* AIAttack(character, [...nearbyBadGuys, ...nearbyGoodGuys]);
-  }
+  if(nearbyGoodGuys.length === 0) yield* AIMove(character);
+  else yield* AIAttack(character, nearbyGoodGuys);
   yield;
 }
 
