@@ -254,14 +254,14 @@ export const render = () => {
 
   // Ending segment within map.
   if(triggerEnding) {
-    const diff = Date.now() - endingStart;
+    Scene(ending);
+    // const diff = Date.now() - endingStart;
 
-    if(diff > 3000) {
-      Scene(ending);
-      return;
-    }
+    // if(diff > 3000) {
+    //   return;
+    // }
 
-    pools.push(makeOriginalPool(25 + (diff / 3000) * (200 - 25), [350, 900]));
+    // pools.push(makeOriginalPool(25 + (diff / 3000) * (200 - 25), [350, 900]));
   }
   for(const pool of pools) {
     pool.render();
