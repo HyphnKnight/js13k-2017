@@ -7,8 +7,8 @@
     "start": "rollup --config rollup.config.dev.js --watch",
     "compile": "rollup --config rollup.config.prod.js",
     "uglify": "uglifyjs --compress --mangle -- dev/script.js > docs/script.js",
-    "zip": "bestzip Alter.zip docs",
-    "test-size": "stat Alter.zip",
+    "zip": "bestzip submission/Alter.zip docs",
+    "test-size": "stat submission/Alter.zip",
     "build": "npm run compile && npm run uglify && npm run zip && npm run test-size",
     "lint": "eslint src --fix"
   },
