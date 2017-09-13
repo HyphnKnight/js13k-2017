@@ -85,11 +85,11 @@ const poolScript = [
     // [`I'll take them with me if I can.`, avengerAuthor]
   ]],
   [makeChildPool, [
-    [`Why isn't she returning my calls, this is not like her.`, childAuthor],
+    [`Why isn't she returning my calls, it's not like her.`, childAuthor],
     // [`I'm going to do all my favorite things today.`, childAuthor]
   ]],
   [makePersecutorPool, [
-    [`She broke up with me, of course she did.`, persecutorAuthor]
+    [`She broke up with me, of course.`, persecutorAuthor]
   ]],
   [makeProtectorPool, [
     [`It takes so much effort at times, but we're worth all of it.`, protectorAuthor]
@@ -112,7 +112,7 @@ const poolScript = [
   ]],
   [makeEvilPool, [
     [`People pushed me around in college,`, originalAuthor],
-    [`until I couldn't take it anymore.`, originalAuthor],
+    [`I couldn't take it anymore.`, originalAuthor],
     () => { updateMiasma(4); Scene(createBattleScene(6, 4, 0, `resentment`)) },
   ]],
 
@@ -126,8 +126,7 @@ const poolScript = [
   ]],
   [makeEvilPool, [
     [`I think it was at highschool graduation.`, originalAuthor],
-    [`Thats when I realized,`, originalAuthor],
-    [`it was all my fault.`, originalAuthor],
+    [`It was all my fault.`, originalAuthor],
     () => { updateMiasma(2); Scene(createBattleScene(0, 4, 2, `doubt`)) },
   ]],
 
