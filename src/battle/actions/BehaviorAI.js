@@ -114,9 +114,9 @@ export function* Deceit(character) {
   const dotHotable = [...getNearbyAllies(position, magRange), ...getNearbyEnemies(position, magRange)];
   if(nearbyGoodGuys.length > 1) {
     yield* AIAttack(character, nearbyGoodGuys);
-  } else if(nearbyBadGuys.length > 1) {
+  } else if(nearbyBadGuys.length > 2) {
     yield* AIDefend(character, nearbyBadGuys);
-  } else if(dotHotable.length) {
+  } else if(dotHotable.length > 2) {
     yield* AIMagic(character, [...nearbyGoodGuys, ...nearbyBadGuys]);
   } else {
     yield* AIMove(character);
