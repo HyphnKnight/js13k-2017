@@ -136,8 +136,8 @@ export function createBattleScene(swarmers, vamps, skelis, boss) {
     yield* selectedAction(character);
     handlStatuses(character);
     // 7) Check to see if battle is over
-    const isVictory = false;//!!turnOrder.find(([data, health]) => !data.alignment && health > 0);
-    const isDefeat = false;//!isVictory && !!turnOrder.find(([data, health]) => data.alignment && health > 0);
+    const isVictory = !turnOrder.find(([data, health]) => !data.type && health > 0);
+    const isDefeat = !turnOrder.find(([data, health]) => data.type && health > 0);
     return isVictory ? 1 :
       isDefeat ? 2 :
         0;
@@ -163,14 +163,10 @@ export function createBattleScene(swarmers, vamps, skelis, boss) {
           // 9B) VICTORY
           Scene(overworld);
         } else if(done && value === 2) {
-          const characters = generateBattle(swarmers, vamps, skelis, boss);
-          initializeMap(characters);
+          Scene(createBattleScene(swarmers, vamps, skelis, boss));
         }
       };
     },
-    dismiss: () => {
-      // bgMusic.stop();
-
-    },
+    dismiss: () => {},
   };
 }
