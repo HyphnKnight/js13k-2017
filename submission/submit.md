@@ -41,6 +41,6 @@ Abilities
 Avenge: Attack adjacent enemy.
 Protect (status): Reduce damage taken.
 Forget (status): Effect over multiple turns: characters heal, enemies take damage.
-Use: Variations on the above three abilities; in limited supply.
+Use: Variations on the above three abilities; in very limited supply.
 
 Thanks to Krista, Shanshan, and Tara.
