@@ -1,6 +1,6 @@
 import { createRectangle } from 'pura/geometry/tuple';
 import { fillRectangle } from 'pura/canvas/tuple';
-import { viewWidth, viewHeight } from 'dom';
+import { viewWidth, viewHeight } from '../dom.js';
 
 const text = [
   `Crammed inside this tiny`,

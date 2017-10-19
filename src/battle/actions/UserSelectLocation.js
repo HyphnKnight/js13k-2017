@@ -1,8 +1,8 @@
 import { contains, clear } from 'pura/array';
-import { inputs } from 'controls';
-import { controlCamera } from 'camera';
-import state from 'state';
-import { getGridHexFromClick, optionHexes } from 'battle/grid';
+import { inputs } from '../../controls.js';
+import { controlCamera } from '../../camera.js';
+import state from '../../state.js';
+import { getGridHexFromClick, optionHexes } from '../grid.js';
 
 export default function* UserSelectLocation(options) {
   let selectedLocation = null;

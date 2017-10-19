@@ -1,5 +1,5 @@
 import { subtractSet, scaleToSet } from 'pura/vector/tuple';
-import { canvasOffsetLeft, canvasOffsetTop, scaleX, scaleY } from 'dom';
+import { canvasOffsetLeft, canvasOffsetTop, scaleX, scaleY } from './dom.js';
 
 const keyCodes = {
 

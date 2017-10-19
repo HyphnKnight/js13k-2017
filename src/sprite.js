@@ -12,7 +12,7 @@ import {
   pool,
   gem,
   grass,
-} from 'emoji';
+} from './emoji.js';
 
 // size is a scale relative to 16px.
 export const createSprite = (emoji, size = 1) => ([x, y], z = 0) => ([x, y, z, emoji, size]);

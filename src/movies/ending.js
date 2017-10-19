@@ -1,7 +1,7 @@
 import { createRectangle } from 'pura/geometry/tuple';
 import { fillRectangle } from 'pura/canvas/tuple';
-import { viewWidth, viewHeight } from 'dom';
-import { avenger, protector, persecutor, child, gem } from 'emoji';
+import { viewWidth, viewHeight } from '../dom.js';
+import { avenger, protector, persecutor, child, gem } from '../emoji.js';
 
 const characters = [avenger, protector, persecutor, child, gem].map((character, index)=> [
   character,

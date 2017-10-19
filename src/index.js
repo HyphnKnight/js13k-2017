@@ -1,11 +1,11 @@
-import titlescreen from 'titlescreen';
-import Scene from 'scene';
-import state from 'state';
-import loop from 'loop';
-import { updateInputs } from 'controls';
-import { render } from 'ui';
+import titlescreen from './titlescreen.js';
+import Scene from './scene.js';
+import state from './state.js';
+import loop from './loop.js';
+import { updateInputs } from './controls.js';
+import { render } from './ui.js';
 import { clear } from 'pura/canvas/tuple';
-import Shader from 'shaderRounding';
+import Shader from './shaderRounding.js';
 
 Scene(titlescreen);
 

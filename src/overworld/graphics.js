@@ -2,12 +2,12 @@ import { addSet, subtract, magnitude, rotateSet, scaleSet, mapListSet, addListSe
 import { getRectanglePoints } from 'pura/geometry/tuple';
 import { isPointInCircle } from 'pura/intersection/tuple';
 import { fillPolygon, fillRectangle, fillText, fillOval, strokeOval } from 'pura/canvas/tuple';
-import { perspective, perspective2d } from 'camera';
-import { viewWidth, viewHeight } from 'dom';
-import state from 'state';
-import { islands } from 'overworld/island';
-import { tulip } from 'emoji';
-import { createBattleScene } from 'battle';
+import { perspective, perspective2d } from '../camera.js';
+import { viewWidth, viewHeight } from '../dom.js';
+import state from '../state.js';
+import { islands } from './island.js';
+import { tulip } from '../emoji.js';
+import { createBattleScene } from '../battle/index.js';
 import {
   mkTree,
   mkTreeAlt,
@@ -19,7 +19,7 @@ import {
   mkMountain,
   mkTulip,
   mkGrass,
-} from 'sprite';
+} from '../sprite.js';
 import {
   makeAvengerPool,
   makeChildPool,
@@ -27,9 +27,9 @@ import {
   makePersecutorPool,
   makeOriginalPool,
   makeEvilPool,
-} from 'overworld/pools';
-import Scene from 'scene';
-import ending from 'ending';
+} from './pools.js';
+import Scene from '../scene.js';
+import ending from '../ending.js';
 
 export let graphics = [];
 

@@ -10,10 +10,10 @@
 
 import { createRectangle } from 'pura/geometry/tuple';
 import { ctx, fillText } from 'pura/canvas/tuple';
-import { drawBox, stroke, lineHeight, whiteFont } from 'style';
-import { inputs } from 'controls';
-import { viewHeight, viewWidth } from 'dom';
-import { pointRight } from 'emoji';
+import { drawBox, stroke, lineHeight, whiteFont } from './style.js';
+import { inputs } from './controls.js';
+import { viewHeight, viewWidth } from './dom.js';
+import { pointRight } from './emoji.js';
 
 const Menu = (commands)=> {
   // Menu dimensions.

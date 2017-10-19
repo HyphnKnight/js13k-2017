@@ -9,10 +9,10 @@ import {
 import { pathTo } from 'pura/path/pathTo';
 import { flatten, clear } from 'pura/array';
 import { set, addSet, subtractSet, scale, scaleSet } from 'pura/vector/tuple';
-import { animateFowardNoRepeat } from 'animation';
-import { easeInOutQuart } from 'easing';
-import { calcWorldPosition } from 'camera';
-import characterData from 'characters';
+import { animateFowardNoRepeat } from '../animation.js';
+import { easeInOutQuart } from '../easing.js';
+import { calcWorldPosition } from '../camera.js';
+import characterData from '../characters.js';
 
 
 export const cameraOffset = [0, -150];

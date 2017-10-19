@@ -1,10 +1,10 @@
 import { scaleToSet, add, addSet, set, subtract, magnitude, magnitudeSqr } from 'pura/vector/tuple';
 import { sign } from 'pura/math';
-import state from 'state';
-import { avngSprite, chldSprite, protSprite, persSprite, gemSprite, isOnIsland } from 'overworld/graphics';
-import { camera } from 'camera';
-import { inputs, keyboardVector } from 'controls';
-import { viewWidth } from 'dom';
+import state from '../state.js';
+import { avngSprite, chldSprite, protSprite, persSprite, gemSprite, isOnIsland } from './graphics.js';
+import { camera } from '../camera.js';
+import { inputs, keyboardVector } from '../controls.js';
+import { viewWidth } from '../dom.js';
 
 const charSpeed = () => inputs.space ? 6 : 3;
 

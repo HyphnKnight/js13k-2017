@@ -7,14 +7,14 @@ import {
   getPathToTarget,
   getGridHexFromVector2d,
   getMovementOptions,
-} from 'battle/grid';
-import { dealDamage } from 'battle/actions/utility';
-import MoveCharacterOnPath from 'battle/actions/MoveCharacterOnPath';
-import UserSelectLocation from 'battle/actions/UserSelectLocation';
-import PanCameraTo from 'battle/actions/PanCameraTo';
+} from '../grid.js';
+import { dealDamage } from './utility.js';
+import MoveCharacterOnPath from './MoveCharacterOnPath.js';
+import UserSelectLocation from './UserSelectLocation.js';
+import PanCameraTo from './PanCameraTo.js';
 
-import { uiElements } from 'ui';
-import Menu from 'menu';
+import { uiElements } from '../../ui.js';
+import Menu from '../../menu.js';
 
 function* GetUserSelectTarget(fetch, position, range) {
   const options = fetch(position, range);

@@ -1,7 +1,7 @@
 import { createRectangle } from 'pura/geometry/tuple';
 import { fillRectangle } from 'pura/canvas/tuple';
-import { viewWidth, viewHeight } from 'dom';
-import { clock0, clock1, clock2, clock3, clock4, clock5 } from 'emoji';
+import { viewWidth, viewHeight } from '../../dom.js';
+import { clock0, clock1, clock2, clock3, clock4, clock5 } from '../../emoji.js';
 
 const clocks = [clock1, clock2, clock3, clock4, clock5, clock0];
 

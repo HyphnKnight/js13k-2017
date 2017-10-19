@@ -1,4 +1,4 @@
-import { flame, flake } from 'emoji';
+import { flame, flake } from '../../emoji.js';
 
 const genFlame = (enemy)=> Array.from(Array(9).keys()).map((index, i, arr)=> [
   !enemy ? flame : flake,

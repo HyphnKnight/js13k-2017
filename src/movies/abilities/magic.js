@@ -1,4 +1,4 @@
-import { sparkle, heartPurple, shout, needle } from 'emoji';
+import { sparkle, heartPurple, shout, needle } from '../..  /emoji.js';
 import { easeOutQuad } from 'easing';
 
 const hotOrDot = (hot, enemy)=> Array(100).fill(0).map((el, index)=> [

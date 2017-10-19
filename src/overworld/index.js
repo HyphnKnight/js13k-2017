@@ -1,12 +1,12 @@
-import { uiElements } from 'ui';
+import { uiElements } from '../ui.js';
 // import Song from 'audio';
 // import overworldTheme from 'songs/overworld';
-import state from 'state';
-import Dialog from 'dialog';
-import { inputs } from 'controls';
-import { render as renderGraphics } from 'overworld/graphics';
-import logic from 'overworld/logic';
-import { calcWorldPosition } from 'camera';
+import state from '../state.js';
+import Dialog from '../dialog.js';
+import { inputs } from '../controls.js';
+import { render as renderGraphics } from './graphics.js';
+import logic from './logic.js';
+import { calcWorldPosition } from '../camera.js';
 
 // const bgMusic = new Song(overworldTheme);
 

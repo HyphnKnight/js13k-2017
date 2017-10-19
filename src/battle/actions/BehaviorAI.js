@@ -1,13 +1,13 @@
-import { dealDamage } from 'battle/actions/utility';
+import { dealDamage } from './utility.js';
 import mergeSort from 'pura/array/mergeSort';
-import PanCameraTo from 'battle/actions/PanCameraTo';
-import MoveCharacterOnPath from 'battle/actions/MoveCharacterOnPath';
+import PanCameraTo from './PanCameraTo.js';
+import MoveCharacterOnPath from './MoveCharacterOnPath.js';
 import {
   getNearbyAllies,
   getNearbyEnemies,
   getPathToTarget,
   getGridHexFromVector2d,
-} from 'battle/grid';
+} from '../grid.js';
 
 /* Abilities */
 

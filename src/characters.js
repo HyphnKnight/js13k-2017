@@ -2,7 +2,7 @@ import {
   child, avenger, protector, persecutor,
   scorpion, bat, skull,
   mask, winter, drama, dragon,
-} from 'emoji';
+} from './emoji.js';
 
 export default {
 

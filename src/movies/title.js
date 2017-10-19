@@ -1,8 +1,8 @@
 import { createRectangle } from 'pura/geometry/tuple';
 import { fillRectangle, fillPolygon } from 'pura/canvas/tuple';
-import { title_text, base_text, white } from 'style';
-import { viewWidth, viewHeight } from 'dom';
-import { gem } from 'emoji';
+import { title_text, base_text, white } from '../style.js';
+import { viewWidth, viewHeight } from '../dom.js';
+import { gem } from '../emoji.js';
 
 const bigText = {
   textBaseline: `middle`,

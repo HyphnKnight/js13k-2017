@@ -9,26 +9,26 @@ Scene(createBattleScene([
 */
 
 import { add, rotateSet, scaleSet } from 'pura/vector/tuple';
-import { camera, } from 'camera';
-import { uiElements } from 'ui';
+import { camera, } from '../camera.js';
+import { uiElements } from '../ui.js';
 // import Song from 'audio';
 // import battleMusic from 'songs/summer';
 // import finalBossMusic from 'songs/winter';
-import Menu from 'menu';
-import StatusBar from 'battle/statusBar';
-import BattleMap from 'battle/map';
-import { initializeMap, turnOrder, moveCharacter, getGridHexFromVector2d } from 'battle/grid';
+import Menu from '../menu.js';
+import StatusBar from './statusBar.js';
+import BattleMap from './map.js';
+import { initializeMap, turnOrder, moveCharacter, getGridHexFromVector2d } from './grid.js';
 import {
   Attack, Defend, Magic, Item, Move
-} from 'battle/actions/AbilitiesPlayer';
+} from './actions/AbilitiesPlayer.js';
 import {
   Swarmer, Vamp, Skeli,
   Resentment, Doubt, Deceit,
-} from 'battle/actions/BehaviorAI';
-import { handlStatuses } from 'battle/actions/utility';
-import state from 'state';
-import Scene from 'scene';
-import overworld from 'overworld';
+} from './actions/BehaviorAI.js';
+import { handlStatuses } from './actions/utility.js';
+import state from '../state.js';
+import Scene from '../scene.js';
+import overworld from '../overworld/index.js';
 
 const cameraOffset = [0, -150];
 

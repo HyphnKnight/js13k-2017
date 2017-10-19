@@ -3,11 +3,11 @@ import { createRectangle, getRectanglePoints } from 'pura/geometry/tuple';
 import { addList, mapListSet, scaleSet } from 'pura/vector/tuple';
 import { ctx, fillRectangle, strokeOval, fillText } from 'pura/canvas/tuple';
 import { hexToVector2d } from 'pura/hex';
-import { viewHeight, viewWidth } from 'dom';
-import { perspective2d } from 'camera';
-import { optionHexes, turnOrder } from 'battle/grid';
-import { makeEvilPool } from 'overworld/pools';
-import state from 'state';
+import { viewHeight, viewWidth } from '../dom.js';
+import { perspective2d } from '../camera.js';
+import { optionHexes, turnOrder } from './grid.js';
+import { makeEvilPool } from '../overworld/pools.js';
+import state from '../state.js';
 
 // const selectColor = `#fcfc68`;
 const optionColor = `#8f9e6f`;

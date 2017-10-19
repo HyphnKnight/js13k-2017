@@ -1,7 +1,7 @@
 import { getRectanglePoints } from 'pura/geometry/tuple';
 import { mapList, addList, addListSet, subtract, scaleList, magnitudeSqr } from 'pura/vector/tuple';
 import { fillOval, strokeOval } from 'pura/canvas/tuple';
-import { perspective2d } from 'camera';
+import { perspective2d } from '../camera.js';
 
 
 const createPool =

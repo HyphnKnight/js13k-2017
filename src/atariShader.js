@@ -1,5 +1,5 @@
 import { ctx } from 'pura/canvas/tuple';
-import { viewWidth, viewHeight } from 'dom';
+import { viewWidth, viewHeight } from './dom.js';
 
 const atariPalette = [
   [

@@ -1,10 +1,10 @@
-import { viewWidth, viewHeight } from 'dom';
-import { uiElements } from 'ui';
-import state from 'state';
-import Movie from 'movie';
+import { viewWidth, viewHeight } from './dom.js';
+import { uiElements } from './ui.js';
+import state from './state.js';
+import Movie from './movie.js';
 // import Song from 'audio';
 // import autumn from 'songs/autumn';
-import endingMovie from 'movies/ending';
+import endingMovie from './movies/ending.js';
 
 // const bgMusic = new Song(autumn);
 

@@ -1,4 +1,4 @@
-import { punch, eye } from 'emoji';
+import { punch, eye } from '../../emoji.js';
 
 const genPunch = (enemy)=> Array.from(Array(6).keys()).map((index, i, arr)=> [
   !enemy ? punch : eye,

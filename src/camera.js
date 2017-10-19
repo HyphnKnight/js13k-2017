@@ -1,6 +1,6 @@
-import { viewWidth, viewHeight } from 'dom';
+import { viewWidth, viewHeight } from './dom.js';
 import { addSet, subtract } from 'pura/vector/tuple';
-import { keyboardVector } from 'controls';
+import { keyboardVector } from './controls.js';
 
 export const focalLength = 500;
 export const camera = [0, 0, 240];

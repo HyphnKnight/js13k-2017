@@ -1,6 +1,6 @@
 import { mapList, mapListSet, addList, addListSet, scaleList } from 'pura/vector/tuple';
 import { getRectanglePoints } from 'pura/geometry/tuple';
-import { perspective2d } from 'camera';
+import { perspective2d } from '../camera.js';
 import { isPointInCircle } from 'pura/intersection/tuple';
 
 export const islands = [];

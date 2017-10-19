@@ -1,7 +1,7 @@
 import { renderUI } from 'pura/cEl';
 import { createRectangle, getRectanglePoints } from 'pura/geometry/tuple';
 
-import { canvas } from 'dom';
+import { canvas } from './dom.js';
 
 export const uiElements = [];
 

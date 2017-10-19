@@ -5,11 +5,11 @@ TODO:
 
 import { createRectangle } from 'pura/geometry/tuple';
 import { fillText } from 'pura/canvas/tuple';
-import { viewHeight, viewWidth } from 'dom';
-import { heartGrow, heartBlack } from 'emoji';
-import { getCharacterAtHex } from 'battle/grid';
-import { statusBarHeartFont, statusBarFont } from 'style';
-import state from 'state';
+import { viewHeight, viewWidth } from '../dom.js';
+import { heartGrow, heartBlack } from '../emoji.js';
+import { getCharacterAtHex } from './grid.js';
+import { statusBarHeartFont, statusBarFont } from '../style.js';
+import state from '../state.js';
 
 const textSize = 12;
 const lineHeight = textSize * 1.2;

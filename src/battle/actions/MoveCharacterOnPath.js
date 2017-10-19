@@ -1,10 +1,10 @@
 import { set, add } from 'pura/vector/tuple';
-import { camera } from 'camera';
+import { camera } from '../../camera.js';
 import {
   cameraOffset,
   getVector2dFromHex,
   moveCharacter,
-} from 'battle/grid';
+} from '../grid.js';
 
 export default function* MoveCharacterOnPath(position, path) {
   let i = -1;

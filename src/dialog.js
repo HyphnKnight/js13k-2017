@@ -2,10 +2,10 @@
 
 import { createRectangle } from 'pura/geometry/tuple';
 import { ctx, fillText } from 'pura/canvas/tuple';
-import { drawBox, stroke, textSize, lineHeight, whiteFont } from 'style';
-import { inputs } from 'controls';
-import { viewHeight, viewWidth } from 'dom';
-import state from 'state';
+import { drawBox, stroke, textSize, lineHeight, whiteFont } from './style.js';
+import { inputs } from './controls.js';
+import { viewHeight, viewWidth } from './dom.js';
+import state from './state.js';
 
 let textStart = null;
 let maxChar = 0;
